@@ -103,7 +103,7 @@ async function sendMessage(mod) {
 
   } catch (err) {
     document.getElementById(typingId)?.remove();
-    appendMsg(mod, 'ai', `❌ Erreur : ${err.message}. Vérifiez votre connexion et réessayez.`);
+    appendMsg(mod, 'ai', `Erreur : ${err.message}. Vérifiez votre connexion et réessayez.`);
     console.error(err);
   } finally {
     btn.disabled = false;
@@ -118,7 +118,7 @@ function appendMsg(mod, role, text, id) {
   if (!chat) return;
   const div = document.createElement('div');
   div.className = 'msg ' + role;
-  const avatar = role === 'ai' ? '✦' : '👤';
+  const avatar = role === 'ai' ? '✦' : 'Vous';
   const time = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
   div.innerHTML = `
     <div class="msg-avatar">${avatar}</div>

@@ -18,7 +18,7 @@ async function searchSiret() {
 
     if (!res.ok) return showSiretError(json.error);
     displaySiretResult(json.data);
-    showConnToast('✦ Entreprise identifiée et profil pré-rempli.', 'ok');
+    showConnToast('Entreprise identifiée et profil pré-rempli.', 'ok');
   } catch {
     showSiretError('Serveur backend inaccessible. Démarrez le backend (npm run dev).');
   } finally {
@@ -47,7 +47,7 @@ function showSiretError(msg) {
   const zone = document.getElementById('siret-result');
   if (!zone) return;
   zone.style.display = 'block';
-  zone.innerHTML = `<div class="conn-error">⚠️ ${msg}</div>`;
+  zone.innerHTML = `<div class="conn-error">${msg}</div>`;
 }
 function clearSiretResult() {
   const z = document.getElementById('siret-result');
@@ -76,7 +76,7 @@ async function handleFecInput(input) {
 async function uploadFEC(file) {
   const status = document.getElementById('fec-status');
   const result = document.getElementById('fec-result');
-  if (status) status.textContent = `⏳ Analyse de ${file.name}…`;
+  if (status) status.textContent = `Analyse de ${file.name}…`;
   if (result) result.style.display = 'none';
 
   const fd = new FormData();
@@ -91,15 +91,15 @@ async function uploadFEC(file) {
     const json = await res.json();
 
     if (!res.ok) {
-      if (status) status.textContent = `❌ ${json.error}`;
+      if (status) status.textContent = json.error;
       return;
     }
 
-    if (status) status.textContent = `✅ ${json.message}`;
+    if (status) status.textContent = json.message;
     displayFECResult(json.data);
-    showConnToast('✦ FEC analysé — données financières extraites.', 'ok');
+    showConnToast('FEC analysé — données financières extraites.', 'ok');
   } catch {
-    if (status) status.textContent = '❌ Serveur backend inaccessible.';
+    if (status) status.textContent = 'Serveur backend inaccessible.';
   }
 }
 
@@ -134,9 +134,9 @@ async function connectBanking() {
       body: JSON.stringify({ userId: getUserId() }),
     });
     const json = await res.json();
-    if (!res.ok) return showConnToast(`⚠️ ${json.error}`, 'warn');
+    if (!res.ok) return showConnToast(json.error, 'warn');
     window.open(json.authUrl, '_blank', 'width=600,height=700');
-    showConnToast('✦ Fenêtre de connexion bancaire ouverte.', 'ok');
+    showConnToast('Fenêtre de connexion bancaire ouverte.', 'ok');
   } catch {
     showConnToast('Backend inaccessible.', 'warn');
   } finally {
@@ -152,7 +152,7 @@ async function revokeBanking() {
       headers: { 'x-user-id': getUserId(), 'x-bridge-user-id': getUserId() },
     });
     const json = await res.json();
-    showConnToast(res.ok ? '✦ Accès bancaire révoqué.' : `⚠️ ${json.error}`, res.ok ? 'ok' : 'warn');
+    showConnToast(res.ok ? 'Accès bancaire révoqué.' : json.error, res.ok ? 'ok' : 'warn');
   } catch {
     showConnToast('Backend inaccessible.', 'warn');
   }
@@ -163,7 +163,7 @@ async function connectCRM(provider) {
   try {
     const res = await fetch(`${API}/crm/${provider}/auth`, { headers: { 'x-user-id': getUserId() } });
     const json = await res.json();
-    if (!res.ok) return showConnToast(`⚠️ ${json.error}`, 'warn');
+    if (!res.ok) return showConnToast(json.error, 'warn');
     window.open(json.authUrl, '_blank', 'width=600,height=700');
   } catch {
     showConnToast('Backend inaccessible.', 'warn');
@@ -175,7 +175,7 @@ async function connectSIRH(provider) {
   try {
     const res = await fetch(`${API}/sirh/${provider}/auth`, { headers: { 'x-user-id': getUserId() } });
     const json = await res.json();
-    if (!res.ok) return showConnToast(`⚠️ ${json.error}`, 'warn');
+    if (!res.ok) return showConnToast(json.error, 'warn');
     window.open(json.authUrl, '_blank', 'width=600,height=700');
   } catch {
     showConnToast('Backend inaccessible.', 'warn');
@@ -197,7 +197,7 @@ async function submitSIRHManuel(e) {
       body: JSON.stringify(data),
     });
     const json = await res.json();
-    showConnToast(res.ok ? '✦ Données RH enregistrées.' : `⚠️ ${json.error}`, res.ok ? 'ok' : 'warn');
+    showConnToast(res.ok ? 'Données RH enregistrées.' : json.error, res.ok ? 'ok' : 'warn');
   } catch {
     showConnToast('Backend inaccessible.', 'warn');
   }
@@ -214,7 +214,7 @@ async function fetchJuridique() {
   try {
     const res = await fetch(`${API}/juridique/${siren}`, { headers: { 'x-user-id': getUserId() } });
     const json = await res.json();
-    if (!res.ok) return showConnToast(`⚠️ ${json.error}`, 'warn');
+    if (!res.ok) return showConnToast(json.error, 'warn');
 
     const zone = document.getElementById('juridique-result');
     if (zone) {
@@ -228,7 +228,7 @@ async function fetchJuridique() {
         </div>
         ${json.alerts?.length ? `<div class="conn-alerts">${json.alerts.map(a => `<div class="conn-alert">${a}</div>`).join('')}</div>` : ''}`;
     }
-    showConnToast('✦ Données juridiques Infogreffe récupérées.', 'ok');
+    showConnToast('Données juridiques Infogreffe récupérées.', 'ok');
   } catch {
     showConnToast('Backend inaccessible.', 'warn');
   } finally {
@@ -282,7 +282,7 @@ function buildConnexionsHTML(mod) {
   <div class="conn-section">
     <div class="conn-section-title">2 — Fichier des Écritures Comptables (FEC)</div>
     <div class="fec-drop" id="fec-drop" onclick="document.getElementById('fec-file').click()">
-      <span class="drop-icon">📂</span>
+      <span class="drop-icon">+</span>
       <p>Glissez votre fichier FEC ici ou cliquez pour sélectionner</p>
       <span style="font-size:0.75rem;color:var(--text-muted);">Formats acceptés : .txt · .csv · Max 50 Mo · Norme DGFiP</span>
       <input id="fec-file" type="file" accept=".txt,.csv" style="display:none" onchange="handleFecInput(this)" />
@@ -296,7 +296,7 @@ function buildConnexionsHTML(mod) {
     <div class="conn-section-title">3 — Open Banking · Bridge (PSD2)</div>
     <div class="conn-card-sm" style="margin-bottom:10px;">
       <div class="cc-left">
-        <span class="cc-icon">🏦</span>
+        <span class="cc-icon"></span>
         <div>
           <h4>Compte bancaire professionnel</h4>
           <p>Solde, flux entrants/sortants 6 mois · Consentement 90 jours · Révocable à tout moment</p>
@@ -307,7 +307,7 @@ function buildConnexionsHTML(mod) {
         <button class="btn btn-secondary btn-sm" onclick="revokeBanking()" title="Révoquer l'accès">✕</button>
       </div>
     </div>
-    <div style="font-size:0.75rem;color:var(--text-muted);padding:8px 0;">🛡️ Lecture seule · Données chiffrées AES-256 · Hébergement UE · Révocable à tout moment</div>
+    <div style="font-size:0.75rem;color:var(--text-muted);padding:8px 0;">Lecture seule · Données chiffrées AES-256 · Hébergement UE · Révocable à tout moment</div>
   </div>
 
   <!-- 4. CRM & Facturation -->
@@ -315,11 +315,11 @@ function buildConnexionsHTML(mod) {
     <div class="conn-section-title">4 — CRM & Facturation</div>
     <div class="conn-cards-row">
       <div class="conn-card-sm">
-        <div class="cc-left"><span class="cc-icon">🟠</span><div><h4>HubSpot</h4><p>CA par client, pipeline, churn</p></div></div>
+        <div class="cc-left"><span class="cc-icon"></span><div><h4>HubSpot</h4><p>CA par client, pipeline, churn</p></div></div>
         <button class="btn btn-outline btn-sm" onclick="connectCRM('hubspot')">Connecter</button>
       </div>
       <div class="conn-card-sm">
-        <div class="cc-left"><span class="cc-icon">🔵</span><div><h4>Pipedrive</h4><p>Deals gagnés, clients, revenus</p></div></div>
+        <div class="cc-left"><span class="cc-icon"></span><div><h4>Pipedrive</h4><p>Deals gagnés, clients, revenus</p></div></div>
         <button class="btn btn-outline btn-sm" onclick="connectCRM('pipedrive')">Connecter</button>
       </div>
     </div>
@@ -330,11 +330,11 @@ function buildConnexionsHTML(mod) {
     <div class="conn-section-title">5 — SIRH (Capital humain)</div>
     <div class="conn-cards-row" style="margin-bottom:12px;">
       <div class="conn-card-sm">
-        <div class="cc-left"><span class="cc-icon">💼</span><div><h4>PayFit</h4><p>Effectif, ancienneté, turnover</p></div></div>
+        <div class="cc-left"><span class="cc-icon"></span><div><h4>PayFit</h4><p>Effectif, ancienneté, turnover</p></div></div>
         <button class="btn btn-outline btn-sm" onclick="connectSIRH('payfit')">Connecter</button>
       </div>
       <div class="conn-card-sm">
-        <div class="cc-left"><span class="cc-icon">🟣</span><div><h4>Lucca</h4><p>Collaborateurs, organigramme</p></div></div>
+        <div class="cc-left"><span class="cc-icon"></span><div><h4>Lucca</h4><p>Collaborateurs, organigramme</p></div></div>
         <button class="btn btn-outline btn-sm" onclick="connectSIRH('lucca')">Connecter</button>
       </div>
     </div>
@@ -405,7 +405,7 @@ function buildConnexionsHTML(mod) {
       </div>
       <button class="btn btn-primary btn-sm" onclick="invitePartner('${mod}')">Inviter →</button>
     </div>
-    <div style="font-size:0.75rem;color:var(--text-muted);margin-top:10px;">🛡️ Toutes les données sont chiffrées AES-256 · Hébergement UE · Droit à l'effacement garanti (RGPD art. 17)</div>
+    <div style="font-size:0.75rem;color:var(--text-muted);margin-top:10px;">Toutes les données sont chiffrées AES-256 · Hébergement UE · Droit à l'effacement garanti (RGPD art. 17)</div>
   </div>`;
 }
 

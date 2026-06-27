@@ -100,8 +100,15 @@ p { color: var(--text-muted); }
   font-weight: 800;
   color: var(--text-white);
   letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
 }
 .nav-logo span { color: var(--blue-light); }
+.nav-logo-img {
+  height: 44px;
+  width: auto;
+  display: block;
+}
 
 .nav-links { display: flex; align-items: center; gap: 4px; }
 .nav-links a {

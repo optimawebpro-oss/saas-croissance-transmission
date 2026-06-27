@@ -1,3 +1,6 @@
+/* ===== FONTS ===== */
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+
 /* ===== VARIABLES ===== */
 :root {
   --bg-primary: #08080f;
@@ -43,6 +46,12 @@ input, textarea, select { font-family: inherit; }
 ::-webkit-scrollbar-thumb { background: var(--blue-mid); border-radius: 3px; }
 
 /* ===== TYPOGRAPHY ===== */
+h1, h2, h3, h4,
+.plan-name, .section-label, .badge, .popular-badge,
+.hero-stat .value, .step-num, .subpage-title,
+.module-tab, .sidebar-item, .plan-price .amount {
+  font-family: 'Libre Baskerville', Georgia, serif;
+}
 h1, h2, h3, h4 { line-height: 1.2; font-weight: 700; }
 h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
 h2 { font-size: clamp(1.6rem, 4vw, 2.4rem); }

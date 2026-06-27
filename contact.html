@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — Evoluty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-logo">Evol<span>uty</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="mon-espace.html">Mon Espace</a></li>
+        <li><a href="tarifs.html">Tarifs</a></li>
+        <li><a href="contact.html" class="active">Contact</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="mon-espace.html" class="btn-nav btn-nav-primary">Commencer</a>
+      </div>
+      <button class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <div class="contact-page">
+
+    <div class="contact-hero">
+      <div class="container">
+        <span class="section-label">💬 Contact</span>
+        <h1>Parlons de <span class="gradient-text">votre entreprise</span></h1>
+        <p style="max-width:500px; margin:16px auto 0; font-size:1.05rem;">Une question, un besoin spécifique ou envie d'une démonstration ? Notre équipe vous répond sous 24h.</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="contact-grid">
+
+        <div class="contact-info">
+          <div class="contact-card">
+            <div class="c-icon">📧</div>
+            <div>
+              <h4>Email</h4>
+              <a href="mailto:a.e.l.corporation@hotmail.com">a.e.l.corporation@hotmail.com</a>
+              <p style="font-size:0.82rem; margin-top:5px; margin-bottom:0;">Réponse sous 24h ouvrées</p>
+            </div>
+          </div>
+          <div class="contact-card">
+            <div class="c-icon">📞</div>
+            <div>
+              <h4>Téléphone</h4>
+              <a href="tel:+33621642329">06 21 64 23 29</a>
+            </div>
+          </div>
+          <div class="contact-card" style="background:linear-gradient(135deg,var(--bg-card),rgba(13,31,78,0.5)); border-color:var(--border-blue);">
+            <div class="c-icon">🔒</div>
+            <div>
+              <h4>Confidentialité & RGPD</h4>
+              <p style="margin:0; font-size:0.88rem;">Vos données stratégiques sont chiffrées et hébergées en Europe. Pour toute question RGPD, contactez-nous à l'adresse ci-dessus.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-form-card">
+          <h2>Envoyez-nous un message</h2>
+          <p>Décrivez votre situation et nous vous répondrons avec les solutions adaptées.</p>
+
+          <form id="contact-form" onsubmit="submitContact(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Prénom *</label>
+                <input type="text" placeholder="Jean" required />
+              </div>
+              <div class="form-group">
+                <label>Nom *</label>
+                <input type="text" placeholder="Dupont" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Email *</label>
+              <input type="email" placeholder="jean.dupont@entreprise.fr" required />
+            </div>
+            <div class="form-group">
+              <label>Téléphone</label>
+              <input type="tel" placeholder="06 XX XX XX XX" />
+            </div>
+            <div class="form-group">
+              <label>Entreprise</label>
+              <input type="text" placeholder="Nom de votre société" />
+            </div>
+            <div class="form-group">
+              <label>Sujet *</label>
+              <select required>
+                <option value="" disabled selected>Choisissez un sujet…</option>
+                <option>Module Croissance</option>
+                <option>Module Transmission</option>
+                <option>Question sur les tarifs</option>
+                <option>Demande de démonstration</option>
+                <option>Support technique</option>
+                <option>Partenariat</option>
+                <option>Autre</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Message *</label>
+              <textarea rows="5" placeholder="Décrivez votre situation, vos objectifs ou votre question…" required></textarea>
+            </div>
+            <div class="form-group" style="display:flex; gap:10px; align-items:flex-start;">
+              <input type="checkbox" style="width:auto; margin-top:3px; accent-color:var(--blue-accent);" required />
+              <label style="font-size:0.82rem; color:var(--text-muted); font-weight:400; cursor:pointer;">
+                J'accepte que mes données soient utilisées pour traiter ma demande, conformément à la <a href="#" style="color:var(--blue-light);">politique de confidentialité</a> d'Evoluty. *
+              </label>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;" id="submit-btn">
+              <div class="spinner" id="submit-spinner"></div>
+              <span id="submit-text">Envoyer le message →</span>
+            </button>
+          </form>
+
+          <div class="form-success" id="form-success">
+            <div class="s-icon">✅</div>
+            <h3>Message envoyé !</h3>
+            <p>Merci pour votre message. Nous vous répondrons sous 24h ouvrées.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom">
+        <span>© 2025 Evoluty — Tous droits réservés</span>
+        <span>Propulsé par <strong style="color:var(--blue-light)">Mistral AI</strong></span>
+        <span><a href="#">Mentions légales</a> · <a href="#">RGPD</a> · <a href="#">CGU</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    function submitContact(e) {
+      e.preventDefault();
+      document.getElementById('submit-text').style.display = 'none';
+      document.getElementById('submit-spinner').style.display = 'inline-block';
+      document.getElementById('submit-btn').disabled = true;
+      setTimeout(() => {
+        document.getElementById('contact-form').style.display = 'none';
+        document.getElementById('form-success').style.display = 'block';
+      }, 1500);
+    }
+  </script>
+</body>
+</html>

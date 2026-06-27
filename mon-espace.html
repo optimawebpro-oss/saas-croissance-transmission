@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mon Espace — Evoluty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-logo">Evol<span>uty</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="mon-espace.html" class="active">Mon Espace</a></li>
+        <li><a href="tarifs.html">Tarifs</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="tarifs.html" class="btn-nav btn-nav-primary">Voir les tarifs</a>
+      </div>
+      <button class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <div class="espace-page">
+
+    <!-- HEADER avec tabs module -->
+    <div class="espace-header">
+      <div class="container">
+        <h1>Mon Espace <span class="gradient-text">Evoluty</span></h1>
+        <p>Diagnostic, plan stratégique et suivi personnalisé par l'IA.</p>
+        <div class="module-tabs">
+          <button class="module-tab active" data-module="croissance">📈 Croissance</button>
+          <button class="module-tab" data-module="transmission">🤝 Transmission</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE CROISSANCE -->
+    <div class="module-panel active" id="module-croissance">
+      <div class="espace-layout">
+
+        <div class="espace-sidebar" id="sidebar-croissance">
+          <button class="sidebar-item active" data-sub="connexions-c">
+            <span class="s-icon">🔗</span><span class="s-label">Connexions</span>
+          </button>
+          <button class="sidebar-item" data-sub="analyses-c">
+            <span class="s-icon">📋</span><span class="s-label">Analyse passée</span>
+          </button>
+          <button class="sidebar-item" data-sub="diagnostic-c">
+            <span class="s-icon">🤖</span><span class="s-label">Diagnostic IA</span>
+          </button>
+          <button class="sidebar-item" data-sub="suivi-c">
+            <span class="s-icon">📊</span><span class="s-label">Suivi</span>
+          </button>
+        </div>
+
+        <div class="espace-main">
+
+          <!-- CONNEXIONS -->
+          <div class="subpage active" id="connexions-c">
+            <h2 class="subpage-title">Connexions — Module Croissance</h2>
+            <p class="subpage-desc">Connectez vos sources de données pour que l'IA puisse réaliser un diagnostic complet et précis de votre entreprise.</p>
+
+            <h3 style="font-size:0.9rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); margin-bottom:16px;">Données & Outils</h3>
+            <div class="connexions-grid">
+              <div class="conn-card" onclick="toggleConn(this)">
+                <span class="conn-icon">📊</span>
+                <h4>Comptabilité</h4>
+                <p>Bilan, compte de résultat, trésorerie</p>
+                <span class="conn-status nok">⬤ Non connecté</span>
+              </div>
+              <div class="conn-card" onclick="toggleConn(this)">
+                <span class="conn-icon">👥</span>
+                <h4>CRM / Commercial</h4>
+                <p>Pipeline, clients, CA par segment</p>
+                <span class="conn-status nok">⬤ Non connecté</span>
+              </div>
+              <div class="conn-card" onclick="toggleConn(this)">
+                <span class="conn-icon">⚙️</span>
+                <h4>ERP / Opérations</h4>
+                <p>Production, stocks, projets</p>
+                <span class="conn-status nok">⬤ Non connecté</span>
+              </div>
+              <div class="conn-card" onclick="toggleConn(this)">
+                <span class="conn-icon">👤</span>
+                <h4>RH & Paie</h4>
+                <p>Effectifs, masse salariale, turnover</p>
+                <span class="conn-status nok">⬤ Non connecté</span>
+              </div>
+              <div class="conn-card" onclick="toggleConn(this)">
+                <span class="conn-icon">📈</span>
+                <h4>Marketing & Web</h4>
+                <p>Analytics, SEO, réseaux sociaux</p>
+                <span class="conn-status nok">⬤ Non connecté</span>
+              </div>
+              <div class="conn-card" onclick="toggleConn(this)">
+                <span class="conn-icon">📁</span>
+                <h4>Import manuel</h4>
+                <p>Upload CSV, Excel ou PDF</p>
+                <span class="conn-status nok">⬤ Non connecté</span>
+              </div>
+            </div>
+
+            <div class="partner-form">
+              <h3>Connexion partenaires</h3>
+              <p>Invitez un partenaire (expert-comptable, associé, consultant) à partager ses données via email.</p>
+              <div style="display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap;">
+                <div class="form-group" style="flex:1; margin:0;">
+                  <label>Email du partenaire</label>
+                  <input type="email" id="partner-email-c" placeholder="expert@cabinet.fr" />
+                </div>
+                <div class="form-group" style="margin:0;">
+                  <label>Rôle</label>
+                  <select id="partner-role-c">
+                    <option>Expert-comptable</option>
+                    <option>Associé</option>
+                    <option>Consultant</option>
+                    <option>Autre</option>
+                  </select>
+                </div>
+                <button class="btn btn-primary btn-sm" onclick="invitePartner('c')">Inviter →</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ANALYSE PASSÉE -->
+          <div class="subpage" id="analyses-c">
+            <h2 class="subpage-title">Analyse passée — Module Croissance</h2>
+            <p class="subpage-desc">Retrouvez l'historique de vos analyses mensuelles et l'évolution de votre entreprise.</p>
+            <div class="analyses-list" id="analyses-list-c">
+              <div class="empty-state">
+                <span class="e-icon">📋</span>
+                <h3 style="margin-bottom:8px;">Aucune analyse pour le moment</h3>
+                <p>Votre première analyse apparaîtra ici après votre premier diagnostic mensuel.</p>
+                <button class="btn btn-primary btn-sm" style="margin-top:20px;" onclick="goToSubpage('diagnostic-c', 'sidebar-croissance')">Démarrer mon diagnostic →</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- DIAGNOSTIC IA -->
+          <div class="subpage" id="diagnostic-c">
+            <h2 class="subpage-title">Diagnostic IA — Module Croissance</h2>
+            <p class="subpage-desc">Discutez avec l'IA pour obtenir votre diagnostic complet, vos conseils stratégiques et votre plan d'action du mois.</p>
+
+            <div class="chat-info-bar">
+              🤖 <span>Evoluty IA · Mistral Large · Spécialisé Croissance d'entreprise · Données du mois en cours</span>
+            </div>
+
+            <div class="chat-interface">
+              <div class="chat-messages" id="chat-c">
+                <div class="msg ai">
+                  <div class="msg-avatar">✦</div>
+                  <div>
+                    <div class="msg-bubble">Bonjour ! Je suis votre conseiller stratégique Evoluty, spécialisé en <strong>croissance d'entreprise</strong>.<br /><br />Pour démarrer votre diagnostic de ce mois, dites-moi : <strong>quel est le principal défi de croissance auquel vous faites face en ce moment ?</strong><br /><br />Vous pouvez aussi me demander d'analyser un aspect précis de votre entreprise (finance, commercial, RH, organisation…) ou me poser directement une question stratégique.</div>
+                    <div class="msg-time">Evoluty IA · maintenant</div>
+                  </div>
+                </div>
+              </div>
+              <div class="chat-input-area">
+                <textarea id="input-c" placeholder="Décrivez votre situation, posez une question ou demandez un diagnostic…" rows="2" onkeydown="handleKey(event,'c')"></textarea>
+                <button class="btn btn-primary" id="send-c" onclick="sendMessage('c')">
+                  <div class="spinner" id="spinner-c"></div>
+                  <span id="send-text-c">Envoyer</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUIVI -->
+          <div class="subpage" id="suivi-c">
+            <h2 class="subpage-title">Suivi du programme — Croissance</h2>
+            <p class="subpage-desc">Suivez l'avancement de votre plan de croissance, votre score d'entreprise et les étapes à venir.</p>
+
+            <div class="suivi-grid">
+              <div class="suivi-card">
+                <h4>Score de croissance</h4>
+                <div class="note-display">
+                  <div class="note-big">—</div>
+                  <div class="note-label">Démarrez votre diagnostic pour obtenir votre score</div>
+                </div>
+              </div>
+              <div class="suivi-card">
+                <h4>Progression du plan</h4>
+                <div class="progress-item">
+                  <div class="progress-label"><span>Structuration financière</span><span class="val">0%</span></div>
+                  <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+                </div>
+                <div class="progress-item">
+                  <div class="progress-label"><span>Développement commercial</span><span class="val">0%</span></div>
+                  <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+                </div>
+                <div class="progress-item">
+                  <div class="progress-label"><span>Organisation & RH</span><span class="val">0%</span></div>
+                  <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+                </div>
+                <div class="progress-item">
+                  <div class="progress-label"><span>Opérations & Processus</span><span class="val">0%</span></div>
+                  <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="suivi-card" style="margin-bottom:24px;">
+              <h4>Feuille de route</h4>
+              <div class="timeline" style="margin-top:16px;">
+                <div class="timeline-item">
+                  <div class="tl-dot pending"></div>
+                  <div class="tl-content">
+                    <h5>Mois 1 — Diagnostic initial & cadrage</h5>
+                    <p>Analyse complète de la structure. Identification des points forts, freins et priorités.</p>
+                  </div>
+                </div>
+                <div class="timeline-item">
+                  <div class="tl-dot future"></div>
+                  <div class="tl-content">
+                    <h5>Mois 2-3 — Actions prioritaires</h5>
+                    <p>Mise en œuvre des premières actions à fort impact. Premiers indicateurs de résultat.</p>
+                  </div>
+                </div>
+                <div class="timeline-item">
+                  <div class="tl-dot future"></div>
+                  <div class="tl-content">
+                    <h5>Mois 4-6 — Consolidation</h5>
+                    <p>Ancrage des nouvelles pratiques. Revue mi-parcours et ajustement du plan.</p>
+                  </div>
+                </div>
+                <div class="timeline-item">
+                  <div class="tl-dot future"></div>
+                  <div class="tl-content">
+                    <h5>Mois 7-12 — Accélération</h5>
+                    <p>Phase d'accélération basée sur les fondations consolidées. Nouveaux objectifs de croissance.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="text-align:center;">
+              <button class="btn btn-primary" onclick="goToSubpage('diagnostic-c', 'sidebar-croissance')">🤖 Démarrer mon diagnostic pour activer le suivi →</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE TRANSMISSION -->
+    <div class="module-panel" id="module-transmission">
+      <div class="espace-layout">
+
+        <div class="espace-sidebar" id="sidebar-transmission">
+          <button class="sidebar-item active" data-sub="connexions-t">
+            <span class="s-icon">🔗</span><span class="s-label">Connexions</span>
+          </button>
+          <button class="sidebar-item" data-sub="analyses-t">
+            <span class="s-icon">📋</span><span class="s-label">Analyse passée</span>
+          </button>
+          <button class="sidebar-item" data-sub="diagnostic-t">
+            <span class="s-icon">🤖</span><span class="s-label">Diagnostic IA</span>
+          </button>
+          <button class="sidebar-item" data-sub="suivi-t">
+            <span class="s-icon">📊</span><span class="s-label">Suivi</span>
+          </button>
+        </div>
+
+        <div class="espace-main">
+
+          <!-- CONNEXIONS -->
+          <div class="subpage active" id="connexions-t">
+            <h2 class="subpage-title">Connexions — Module Transmission</h2>
+            <p class="subpage-desc">Connectez vos données pour que l'IA évalue la valeur de votre entreprise et prépare votre dossier de cession.</p>
+
+            <h3 style="font-size:0.9rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); margin-bottom:16px;">Données & Outils</h3>
+            <div class="connexions-grid">
+              <div class="conn-card" onclick="toggleConn(this)">
+                <span class="conn-icon">📊</span>
+                <h4>Comptabilité (3 ans)</h4>
+                <p>Bilans, SIG, trésorerie historique</p>
+                <span class="conn-status nok">⬤ Non connecté</span>
+              </div>
+              <div class="conn-card" onclick="toggleConn(this)">
+                <span class="conn-icon">⚖️</span>
+                <h4>Juridique & Statuts</h4>
+                <p>Statuts, pactes, contrats clés</p>
+                <span class="conn-status nok">⬤ Non connecté</span>
+              </div>
+              <div class="conn-card" onclick="toggleConn(this)">
+                <span class="conn-icon">👥</span>
+                <h4>Clientèle & Contrats</h4>
+                <p>Base clients, contrats récurrents</p>
+                <span class="conn-status nok">⬤ Non connecté</span>
+              </div>
+              <div class="conn-card" onclick="toggleConn(this)">
+                <span class="conn-icon">🏢</span>
+                <h4>Actifs & Patrimoine</h4>
+                <p>Immobilier, équipements, brevets</p>
+                <span class="conn-status nok">⬤ Non connecté</span>
+              </div>
+              <div class="conn-card" onclick="toggleConn(this)">
+                <span class="conn-icon">👤</span>
+                <h4>RH & Organisation</h4>
+                <p>Organigramme, compétences clés</p>
+                <span class="conn-status nok">⬤ Non connecté</span>
+              </div>
+              <div class="conn-card" onclick="toggleConn(this)">
+                <span class="conn-icon">📁</span>
+                <h4>Import manuel</h4>
+                <p>Upload CSV, Excel ou PDF</p>
+                <span class="conn-status nok">⬤ Non connecté</span>
+              </div>
+            </div>
+
+            <div class="partner-form">
+              <h3>Connexion partenaires</h3>
+              <p>Invitez votre expert-comptable, avocat ou conseiller en transmission à partager ses données via email.</p>
+              <div style="display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap;">
+                <div class="form-group" style="flex:1; margin:0;">
+                  <label>Email du partenaire</label>
+                  <input type="email" id="partner-email-t" placeholder="avocat@cabinet.fr" />
+                </div>
+                <div class="form-group" style="margin:0;">
+                  <label>Rôle</label>
+                  <select id="partner-role-t">
+                    <option>Expert-comptable</option>
+                    <option>Avocat</option>
+                    <option>Conseiller en cession</option>
+                    <option>Notaire</option>
+                    <option>Autre</option>
+                  </select>
+                </div>
+                <button class="btn btn-primary btn-sm" onclick="invitePartner('t')">Inviter →</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ANALYSE PASSÉE -->
+          <div class="subpage" id="analyses-t">
+            <h2 class="subpage-title">Analyse passée — Module Transmission</h2>
+            <p class="subpage-desc">Retrouvez l'historique de vos audits de cédabilité et l'évolution de la valeur de votre entreprise.</p>
+            <div class="analyses-list">
+              <div class="empty-state">
+                <span class="e-icon">📋</span>
+                <h3 style="margin-bottom:8px;">Aucune analyse pour le moment</h3>
+                <p>Votre premier audit de cédabilité apparaîtra ici après votre premier diagnostic.</p>
+                <button class="btn btn-primary btn-sm" style="margin-top:20px;" onclick="goToSubpage('diagnostic-t', 'sidebar-transmission')">Démarrer mon audit →</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- DIAGNOSTIC IA -->
+          <div class="subpage" id="diagnostic-t">
+            <h2 class="subpage-title">Diagnostic IA — Module Transmission</h2>
+            <p class="subpage-desc">Discutez avec l'IA pour obtenir votre audit de cédabilité, la valorisation de votre entreprise et votre plan de préparation à la vente.</p>
+
+            <div class="chat-info-bar">
+              🤖 <span>Evoluty IA · Mistral Large · Spécialisé Transmission & Cession d'entreprise · Données du mois en cours</span>
+            </div>
+
+            <div class="chat-interface">
+              <div class="chat-messages" id="chat-t">
+                <div class="msg ai">
+                  <div class="msg-avatar">✦</div>
+                  <div>
+                    <div class="msg-bubble">Bonjour ! Je suis votre conseiller stratégique Evoluty, spécialisé en <strong>transmission et cession d'entreprise</strong>.<br /><br />Pour commencer votre audit de cédabilité, dites-moi : <strong>dans quel délai envisagez-vous de céder votre entreprise ?</strong> Et quel est votre secteur d'activité ?<br /><br />Je vais analyser chaque dimension de votre société pour maximiser sa valeur de cession.</div>
+                    <div class="msg-time">Evoluty IA · maintenant</div>
+                  </div>
+                </div>
+              </div>
+              <div class="chat-input-area">
+                <textarea id="input-t" placeholder="Décrivez votre entreprise, votre projet de cession ou posez une question…" rows="2" onkeydown="handleKey(event,'t')"></textarea>
+                <button class="btn btn-primary" id="send-t" onclick="sendMessage('t')">
+                  <div class="spinner" id="spinner-t"></div>
+                  <span id="send-text-t">Envoyer</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUIVI -->
+          <div class="subpage" id="suivi-t">
+            <h2 class="subpage-title">Suivi du programme — Transmission</h2>
+            <p class="subpage-desc">Suivez l'évolution du score de cédabilité de votre entreprise et les étapes de préparation à la vente.</p>
+
+            <div class="suivi-grid">
+              <div class="suivi-card">
+                <h4>Score de cédabilité</h4>
+                <div class="note-display">
+                  <div class="note-big">—</div>
+                  <div class="note-label">Démarrez votre audit pour obtenir votre score</div>
+                </div>
+              </div>
+              <div class="suivi-card">
+                <h4>Axes de valorisation</h4>
+                <div class="progress-item">
+                  <div class="progress-label"><span>Solidité financière</span><span class="val">0%</span></div>
+                  <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+                </div>
+                <div class="progress-item">
+                  <div class="progress-label"><span>Autonomie & organisation</span><span class="val">0%</span></div>
+                  <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+                </div>
+                <div class="progress-item">
+                  <div class="progress-label"><span>Récurrence du CA</span><span class="val">0%</span></div>
+                  <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+                </div>
+                <div class="progress-item">
+                  <div class="progress-label"><span>Clarté juridique</span><span class="val">0%</span></div>
+                  <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="suivi-card" style="margin-bottom:24px;">
+              <h4>Feuille de route de transmission</h4>
+              <div class="timeline" style="margin-top:16px;">
+                <div class="timeline-item">
+                  <div class="tl-dot pending"></div>
+                  <div class="tl-content">
+                    <h5>Phase 1 — Audit de cédabilité</h5>
+                    <p>Diagnostic complet. Score initial. Identification des points bloquants pour la cession.</p>
+                  </div>
+                </div>
+                <div class="timeline-item">
+                  <div class="tl-dot future"></div>
+                  <div class="tl-content">
+                    <h5>Phase 2 — Mise en valeur</h5>
+                    <p>Actions pour renforcer les points faibles et maximiser la valorisation.</p>
+                  </div>
+                </div>
+                <div class="timeline-item">
+                  <div class="tl-dot future"></div>
+                  <div class="tl-content">
+                    <h5>Phase 3 — Documentation cession</h5>
+                    <p>Préparation du dossier de présentation, mémo d'information, data room.</p>
+                  </div>
+                </div>
+                <div class="timeline-item">
+                  <div class="tl-dot future"></div>
+                  <div class="tl-content">
+                    <h5>Phase 4 — Mise sur le marché</h5>
+                    <p>Entreprise prête pour la cession. Score optimal atteint.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="text-align:center;">
+              <button class="btn btn-primary" onclick="goToSubpage('diagnostic-t', 'sidebar-transmission')">🤖 Démarrer mon audit pour activer le suivi →</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="toast" id="toast"><span class="t-icon">✦</span><span id="toast-msg"></span></div>
+
+  <script src="js/main.js"></script>
+  <script src="js/ia.js"></script>
+</body>
+</html>

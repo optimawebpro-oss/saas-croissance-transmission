@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tarifs — Evoluty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-logo">Evol<span>uty</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="mon-espace.html">Mon Espace</a></li>
+        <li><a href="tarifs.html" class="active">Tarifs</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="mon-espace.html" class="btn-nav btn-nav-primary">Commencer</a>
+      </div>
+      <button class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <div class="pricing-page">
+
+    <div class="pricing-hero">
+      <div class="container">
+        <span class="section-label">💳 Tarifs</span>
+        <h1>Un investissement <span class="gradient-text">à la hauteur de vos ambitions</span></h1>
+        <p style="max-width:540px; margin:16px auto 0; font-size:1.05rem;">Sans engagement. Sans frais cachés. Résiliez à tout moment.</p>
+        <div class="pricing-toggle" style="margin-top:28px;">
+          <span style="font-size:0.9rem; color:var(--text-muted);">Mensuel</span>
+          <div style="width:44px; height:24px; background:var(--bg-card); border:1px solid var(--border); border-radius:12px; cursor:pointer; position:relative; transition:var(--transition);" id="billing-toggle" onclick="toggleBilling()">
+            <div style="width:16px; height:16px; background:#fff; border-radius:50%; position:absolute; top:3px; left:3px; transition:var(--transition);" id="toggle-knob"></div>
+          </div>
+          <span style="font-size:0.9rem; color:var(--text-muted);">Annuel</span>
+          <span class="badge badge-blue">−20%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pricing-cards">
+
+      <!-- STARTER -->
+      <div class="pricing-card">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price">
+          <span class="currency">€</span>
+          <span class="amount" data-monthly="49" data-annual="39">49</span>
+          <span class="period">/mois</span>
+        </div>
+        <p class="plan-desc">Pour les dirigeants qui veulent découvrir la puissance du diagnostic IA sans engagement.</p>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li class="plan-feature active"><span class="check">✦</span> 1 module au choix (Croissance ou Transmission)</li>
+          <li class="plan-feature active"><span class="check">✦</span> 1 diagnostic IA par mois</li>
+          <li class="plan-feature active"><span class="check">✦</span> Historique 3 mois</li>
+          <li class="plan-feature active"><span class="check">✦</span> Suivi de base</li>
+          <li class="plan-feature active"><span class="check">✦</span> Export PDF du plan</li>
+          <li class="plan-feature"><span class="cross">✗</span> Connexion outils externes</li>
+          <li class="plan-feature"><span class="cross">✗</span> Connexion partenaires</li>
+          <li class="plan-feature"><span class="cross">✗</span> Diagnostics illimités</li>
+          <li class="plan-feature"><span class="cross">✗</span> Les 2 modules</li>
+        </ul>
+        <a href="contact.html" class="btn btn-outline" style="width:100%; justify-content:center;">Démarrer</a>
+      </div>
+
+      <!-- PRO -->
+      <div class="pricing-card featured">
+        <div class="popular-badge">✦ Le plus populaire</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">
+          <span class="currency">€</span>
+          <span class="amount" data-monthly="129" data-annual="103">129</span>
+          <span class="period">/mois</span>
+        </div>
+        <p class="plan-desc">Pour les dirigeants sérieux qui veulent un accompagnement complet et un suivi mensuel rigoureux.</p>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li class="plan-feature active"><span class="check">✦</span> Les 2 modules (Croissance + Transmission)</li>
+          <li class="plan-feature active"><span class="check">✦</span> Diagnostics IA illimités</li>
+          <li class="plan-feature active"><span class="check">✦</span> Historique complet</li>
+          <li class="plan-feature active"><span class="check">✦</span> Suivi avancé + score mensuel</li>
+          <li class="plan-feature active"><span class="check">✦</span> Export PDF & Word</li>
+          <li class="plan-feature active"><span class="check">✦</span> Connexion 3 outils externes</li>
+          <li class="plan-feature active"><span class="check">✦</span> Connexion 2 partenaires</li>
+          <li class="plan-feature active"><span class="check">✦</span> Alertes et recommandations IA</li>
+          <li class="plan-feature"><span class="cross">✗</span> Connexions illimitées</li>
+        </ul>
+        <a href="contact.html" class="btn btn-primary" style="width:100%; justify-content:center;">Démarrer</a>
+      </div>
+
+      <!-- EXPERT -->
+      <div class="pricing-card">
+        <div class="plan-name">Expert</div>
+        <div class="plan-price">
+          <span class="currency">€</span>
+          <span class="amount" data-monthly="299" data-annual="239">299</span>
+          <span class="period">/mois</span>
+        </div>
+        <p class="plan-desc">Pour les dirigeants qui veulent le niveau de service le plus complet et un accompagnement dédié.</p>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li class="plan-feature active"><span class="check">✦</span> Les 2 modules illimités</li>
+          <li class="plan-feature active"><span class="check">✦</span> Diagnostics IA illimités</li>
+          <li class="plan-feature active"><span class="check">✦</span> Historique illimité</li>
+          <li class="plan-feature active"><span class="check">✦</span> Suivi premium + projections</li>
+          <li class="plan-feature active"><span class="check">✦</span> Tous formats d'export</li>
+          <li class="plan-feature active"><span class="check">✦</span> Connexions outils illimitées</li>
+          <li class="plan-feature active"><span class="check">✦</span> Partenaires illimités</li>
+          <li class="plan-feature active"><span class="check">✦</span> Alertes IA en temps réel</li>
+          <li class="plan-feature active"><span class="check">✦</span> Support prioritaire dédié</li>
+        </ul>
+        <a href="contact.html" class="btn btn-outline" style="width:100%; justify-content:center;">Nous contacter</a>
+      </div>
+
+    </div>
+
+    <!-- GARANTIES -->
+    <div style="background:var(--bg-secondary); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:48px 0;">
+      <div class="container">
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:28px; text-align:center;">
+          <div><div style="font-size:1.8rem; margin-bottom:10px;">🔓</div><h4 style="font-size:0.95rem; margin-bottom:6px;">Sans engagement</h4><p style="font-size:0.83rem;">Résiliez à tout moment.</p></div>
+          <div><div style="font-size:1.8rem; margin-bottom:10px;">🎁</div><h4 style="font-size:0.95rem; margin-bottom:6px;">7 jours gratuits</h4><p style="font-size:0.83rem;">Testez sans carte bancaire.</p></div>
+          <div><div style="font-size:1.8rem; margin-bottom:10px;">💳</div><h4 style="font-size:0.95rem; margin-bottom:6px;">Paiement sécurisé</h4><p style="font-size:0.83rem;">Stripe · CB · Virement</p></div>
+          <div><div style="font-size:1.8rem; margin-bottom:10px;">🔒</div><h4 style="font-size:0.95rem; margin-bottom:6px;">100% confidentiel</h4><p style="font-size:0.83rem;">Données chiffrées, RGPD.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div style="padding:80px 0;">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">❓ FAQ</span>
+          <h2>Questions fréquentes</h2>
+        </div>
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">Puis-je utiliser les deux modules simultanément ? <span class="arrow">▼</span></div>
+            <div class="faq-answer">Oui, avec les plans Pro et Expert vous avez accès aux deux modules Croissance et Transmission simultanément depuis votre Mon Espace.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">Comment fonctionne la période d'essai ? <span class="arrow">▼</span></div>
+            <div class="faq-answer">Vous avez 7 jours d'accès complet à toutes les fonctionnalités du plan choisi, sans carte bancaire requise. À l'issue de la période d'essai, vous choisissez de continuer ou non.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">Mes données stratégiques sont-elles en sécurité ? <span class="arrow">▼</span></div>
+            <div class="faq-answer">Absolument. Toutes vos données sont chiffrées (TLS + AES-256), hébergées en Europe et ne sont jamais partagées ni revendues. Evoluty est 100% conforme au RGPD.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">Sur quelle durée fonctionne le plan stratégique ? <span class="arrow">▼</span></div>
+            <div class="faq-answer">La durée est totalement personnalisable selon vos objectifs : 6, 12, 24 ou 36 mois. L'IA adapte le rythme et les actions à votre horizon choisi.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">Puis-je changer de plan à tout moment ? <span class="arrow">▼</span></div>
+            <div class="faq-answer">Oui, vous pouvez upgrader ou downgrader votre plan à tout moment depuis votre espace client. La facturation est ajustée au prorata.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom">
+        <span>© 2025 Evoluty — Tous droits réservés</span>
+        <span>Propulsé par <strong style="color:var(--blue-light)">Mistral AI</strong></span>
+        <span><a href="#">Mentions légales</a> · <a href="#">RGPD</a> · <a href="#">CGU</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    let isAnnual = false;
+    function toggleBilling() {
+      isAnnual = !isAnnual;
+      const toggle = document.getElementById('billing-toggle');
+      const knob = document.getElementById('toggle-knob');
+      toggle.style.background = isAnnual ? 'var(--blue-accent)' : 'var(--bg-card)';
+      toggle.style.borderColor = isAnnual ? 'var(--blue-accent)' : 'var(--border)';
+      knob.style.transform = isAnnual ? 'translateX(20px)' : 'translateX(0)';
+      document.querySelectorAll('.plan-price .amount').forEach(el => {
+        el.textContent = isAnnual ? el.dataset.annual : el.dataset.monthly;
+      });
+    }
+    function toggleFaq(el) { el.parentElement.classList.toggle('open'); }
+  </script>
+</body>
+</html>

@@ -196,40 +196,68 @@ p { color: var(--text-muted); }
   position: relative;
   overflow: hidden;
 }
-/* Layout 2 colonnes hero */
-.hero-layout {
+/* ── Cinématique en section ── */
+.cinematic-section {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - var(--nav-height));
+  min-height: 500px;
+  background: #08080f;
+  overflow: hidden;
+}
+.cinematic-section canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.cinematic-overlay-text {
+  position: absolute;
+  bottom: 48px;
+  left: 0; right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+.cinematic-overlay-text .hero-actions { pointer-events: all; }
+
+/* ── Cerveau 3D sous la cinématique ── */
+.brain-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 60px;
   align-items: center;
+  padding: 80px var(--container-px, 24px);
+  max-width: 1200px;
+  margin: 0 auto;
 }
-.hero-text { text-align: left; }
-.hero-text .hero-sub { margin: 0 0 40px; }
-.hero-text .hero-actions { justify-content: flex-start; }
-.hero-text .hero-stats { justify-content: flex-start; gap: 40px; }
-.hero-brain-wrap {
+.brain-wrap {
   position: relative;
-  height: 420px;
+  height: 400px;
+  background: #08080f;
   border-radius: var(--radius);
   overflow: hidden;
-  background: #0b0f1a;
 }
-.hero-brain-wrap canvas { position: absolute; inset: 0; }
+.brain-wrap canvas { position: absolute; inset: 0; }
+.brain-caption h2 { margin-bottom: 16px; }
+.brain-caption p { font-size: 1.05rem; }
 @media (max-width: 900px) {
-  .hero-layout { grid-template-columns: 1fr; }
-  .hero-text { text-align: center; }
-  .hero-text .hero-sub { margin: 0 auto 40px; }
-  .hero-text .hero-actions { justify-content: center; }
-  .hero-text .hero-stats { justify-content: center; }
-  .hero-brain-wrap { height: 300px; }
+  .brain-section { grid-template-columns: 1fr; padding: 48px 20px; }
+  .brain-wrap { height: 280px; }
+  .brain-caption { text-align: center; }
+  .brain-caption .hero-stats { justify-content: center !important; }
 }
-/* Scènes d'animation génériques */
+
+/* ── Scènes d'animation génériques ── */
 .anim-scene {
   position: relative;
   width: 100%;
   border-radius: var(--radius);
   overflow: hidden;
-  background: #0b0f1a;
+  background: #08080f;
 }
 .hero::before {
   content: '';

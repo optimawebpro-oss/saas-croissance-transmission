@@ -106,10 +106,10 @@
         cx.textAlign = 'center';
         cx.font = 'bold ' + Math.round(30 * dpr) + 'px Inter,sans-serif';
         cx.fillStyle = 'rgba(240,240,248,' + to.toFixed(3) + ')';
-        cx.fillText('Evoluty', mx, my + 175 * dpr);
+        cx.fillText('Evoluty', mx, my + 20 * dpr);
         cx.font = Math.round(13 * dpr) + 'px Inter,sans-serif';
         cx.fillStyle = 'rgba(78,137,232,' + to.toFixed(3) + ')';
-        cx.fillText("Croissance & Transmission d'entreprise par l'IA", mx, my + 200 * dpr);
+        cx.fillText("Croissance & Transmission d'entreprise par l'IA", mx, my + 48 * dpr);
       }
     }
 

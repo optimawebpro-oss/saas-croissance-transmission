@@ -213,16 +213,16 @@ p { color: var(--text-muted); }
 }
 .cinematic-overlay-text {
   position: absolute;
-  bottom: 48px;
+  bottom: 56px;
   left: 0; right: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0;
+  gap: 20px;
   pointer-events: none;
   z-index: 10;
 }
-.cinematic-overlay-text .hero-actions { pointer-events: all; }
+.cinematic-overlay-text .hero-actions { pointer-events: all; margin-top: 0; margin-bottom: 0; }
 
 /* ── Cerveau 3D sous la cinématique ── */
 .brain-section {

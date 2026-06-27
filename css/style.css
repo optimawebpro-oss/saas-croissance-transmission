@@ -700,6 +700,10 @@ footer {
   padding: 24px;
 }
 .suivi-card h4 { margin-bottom: 16px; font-size: 0.92rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; }
+.chart-legend { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 14px; }
+.leg-item { display: flex; align-items: center; gap: 7px; font-size: 0.78rem; color: var(--text-muted); }
+.leg-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+.leg-dashed { background: transparent !important; border: 2px dashed; width: 14px; height: 0; border-radius: 0; }
 .progress-item { margin-bottom: 16px; }
 .progress-label { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px; }
 .progress-label .val { color: var(--blue-light); font-weight: 700; }

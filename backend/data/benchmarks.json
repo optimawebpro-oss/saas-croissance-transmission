@@ -1,0 +1,104 @@
+{
+  "_comment": "Multiples EBE par secteur/code NAF — à mettre à jour manuellement. Structure extensible pour branchement API Epsilon Research.",
+  "_schema": {
+    "secteur": "Libellé du secteur",
+    "codes_naf": "Codes NAF couverts (* = défaut universel)",
+    "multiple_bas": "Multiple EBE en bas de fourchette",
+    "multiple_moyen": "Multiple EBE médian",
+    "multiple_haut": "Multiple EBE en haut de fourchette",
+    "source": "Source de référence",
+    "date_maj": "Date de dernière mise à jour (YYYY-MM)"
+  },
+  "secteurs": [
+    {
+      "secteur": "Bâtiment & Travaux Publics (BTP)",
+      "codes_naf": ["41", "42", "43", "4120Z", "4321A", "4322A", "4391A"],
+      "multiple_bas": 3.5,
+      "multiple_moyen": 5.0,
+      "multiple_haut": 7.0,
+      "source": "Observatoire CMS Francis Lefebvre 2023",
+      "date_maj": "2024-01"
+    },
+    {
+      "secteur": "Commerce de détail",
+      "codes_naf": ["47", "4711F", "4719A", "4719B"],
+      "multiple_bas": 3.0,
+      "multiple_moyen": 4.5,
+      "multiple_haut": 6.0,
+      "source": "Estimation sectorielle BPI France 2023",
+      "date_maj": "2024-01"
+    },
+    {
+      "secteur": "Restauration & Hôtellerie",
+      "codes_naf": ["56", "5610A", "5610B", "5630Z", "5510Z"],
+      "multiple_bas": 3.0,
+      "multiple_moyen": 5.0,
+      "multiple_haut": 7.5,
+      "source": "Estimation sectorielle Banque de France 2023",
+      "date_maj": "2024-01"
+    },
+    {
+      "secteur": "Services aux entreprises / Consulting",
+      "codes_naf": ["70", "7010Z", "7022Z", "7311Z", "7320Z"],
+      "multiple_bas": 5.0,
+      "multiple_moyen": 7.0,
+      "multiple_haut": 10.0,
+      "source": "Estimation sectorielle France Invest 2023",
+      "date_maj": "2024-01"
+    },
+    {
+      "secteur": "Technologies & Logiciels (SaaS)",
+      "codes_naf": ["62", "6201Z", "6202A", "6203Z", "6209Z"],
+      "multiple_bas": 6.0,
+      "multiple_moyen": 9.0,
+      "multiple_haut": 15.0,
+      "source": "Estimation sectorielle AFIC / France Invest 2023",
+      "date_maj": "2024-01"
+    },
+    {
+      "secteur": "Transport & Logistique",
+      "codes_naf": ["49", "4941A", "4941B", "4942Z", "5210B"],
+      "multiple_bas": 4.0,
+      "multiple_moyen": 5.5,
+      "multiple_haut": 7.5,
+      "source": "Estimation sectorielle Banque de France 2023",
+      "date_maj": "2024-01"
+    },
+    {
+      "secteur": "Santé & Médico-social",
+      "codes_naf": ["86", "87", "8610Z", "8621Z", "8690A"],
+      "multiple_bas": 6.0,
+      "multiple_moyen": 8.5,
+      "multiple_haut": 12.0,
+      "source": "Estimation sectorielle Xerfi 2023",
+      "date_maj": "2024-01"
+    },
+    {
+      "secteur": "Industrie manufacturière",
+      "codes_naf": ["10", "20", "25", "28", "1011Z", "2511Z", "2812Z"],
+      "multiple_bas": 4.0,
+      "multiple_moyen": 6.0,
+      "multiple_haut": 8.0,
+      "source": "Estimation sectorielle BPI France 2023",
+      "date_maj": "2024-01"
+    },
+    {
+      "secteur": "Immobilier & Gestion de biens",
+      "codes_naf": ["68", "6810Z", "6820A", "6820B", "6831Z"],
+      "multiple_bas": 8.0,
+      "multiple_moyen": 12.0,
+      "multiple_haut": 18.0,
+      "source": "Estimation sectorielle CBRE / Cushman 2023",
+      "date_maj": "2024-01"
+    },
+    {
+      "secteur": "Tous secteurs (défaut)",
+      "codes_naf": ["*"],
+      "multiple_bas": 3.5,
+      "multiple_moyen": 5.5,
+      "multiple_haut": 8.0,
+      "source": "Moyenne marché France — CMS Francis Lefebvre 2023",
+      "date_maj": "2024-01"
+    }
+  ]
+}

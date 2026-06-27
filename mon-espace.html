@@ -66,67 +66,7 @@
           <div class="subpage active" id="connexions-c">
             <h2 class="subpage-title">Connexions — Module Croissance</h2>
             <p class="subpage-desc">Connectez vos sources de données pour que l'IA puisse réaliser un diagnostic complet et précis de votre entreprise.</p>
-
-            <h3 style="font-size:0.9rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); margin-bottom:16px;">Données & Outils</h3>
-            <div class="connexions-grid">
-              <div class="conn-card" onclick="toggleConn(this)">
-                <span class="conn-icon">📊</span>
-                <h4>Comptabilité</h4>
-                <p>Bilan, compte de résultat, trésorerie</p>
-                <span class="conn-status nok">⬤ Non connecté</span>
-              </div>
-              <div class="conn-card" onclick="toggleConn(this)">
-                <span class="conn-icon">👥</span>
-                <h4>CRM / Commercial</h4>
-                <p>Pipeline, clients, CA par segment</p>
-                <span class="conn-status nok">⬤ Non connecté</span>
-              </div>
-              <div class="conn-card" onclick="toggleConn(this)">
-                <span class="conn-icon">⚙️</span>
-                <h4>ERP / Opérations</h4>
-                <p>Production, stocks, projets</p>
-                <span class="conn-status nok">⬤ Non connecté</span>
-              </div>
-              <div class="conn-card" onclick="toggleConn(this)">
-                <span class="conn-icon">👤</span>
-                <h4>RH & Paie</h4>
-                <p>Effectifs, masse salariale, turnover</p>
-                <span class="conn-status nok">⬤ Non connecté</span>
-              </div>
-              <div class="conn-card" onclick="toggleConn(this)">
-                <span class="conn-icon">📈</span>
-                <h4>Marketing & Web</h4>
-                <p>Analytics, SEO, réseaux sociaux</p>
-                <span class="conn-status nok">⬤ Non connecté</span>
-              </div>
-              <div class="conn-card" onclick="toggleConn(this)">
-                <span class="conn-icon">📁</span>
-                <h4>Import manuel</h4>
-                <p>Upload CSV, Excel ou PDF</p>
-                <span class="conn-status nok">⬤ Non connecté</span>
-              </div>
-            </div>
-
-            <div class="partner-form">
-              <h3>Connexion partenaires</h3>
-              <p>Invitez un partenaire (expert-comptable, associé, consultant) à partager ses données via email.</p>
-              <div style="display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap;">
-                <div class="form-group" style="flex:1; margin:0;">
-                  <label>Email du partenaire</label>
-                  <input type="email" id="partner-email-c" placeholder="expert@cabinet.fr" />
-                </div>
-                <div class="form-group" style="margin:0;">
-                  <label>Rôle</label>
-                  <select id="partner-role-c">
-                    <option>Expert-comptable</option>
-                    <option>Associé</option>
-                    <option>Consultant</option>
-                    <option>Autre</option>
-                  </select>
-                </div>
-                <button class="btn btn-primary btn-sm" onclick="invitePartner('c')">Inviter →</button>
-              </div>
-            </div>
+            <div id="connexions-content-c"></div>
           </div>
 
           <!-- ANALYSE PASSÉE -->
@@ -274,68 +214,7 @@
           <div class="subpage active" id="connexions-t">
             <h2 class="subpage-title">Connexions — Module Transmission</h2>
             <p class="subpage-desc">Connectez vos données pour que l'IA évalue la valeur de votre entreprise et prépare votre dossier de cession.</p>
-
-            <h3 style="font-size:0.9rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); margin-bottom:16px;">Données & Outils</h3>
-            <div class="connexions-grid">
-              <div class="conn-card" onclick="toggleConn(this)">
-                <span class="conn-icon">📊</span>
-                <h4>Comptabilité (3 ans)</h4>
-                <p>Bilans, SIG, trésorerie historique</p>
-                <span class="conn-status nok">⬤ Non connecté</span>
-              </div>
-              <div class="conn-card" onclick="toggleConn(this)">
-                <span class="conn-icon">⚖️</span>
-                <h4>Juridique & Statuts</h4>
-                <p>Statuts, pactes, contrats clés</p>
-                <span class="conn-status nok">⬤ Non connecté</span>
-              </div>
-              <div class="conn-card" onclick="toggleConn(this)">
-                <span class="conn-icon">👥</span>
-                <h4>Clientèle & Contrats</h4>
-                <p>Base clients, contrats récurrents</p>
-                <span class="conn-status nok">⬤ Non connecté</span>
-              </div>
-              <div class="conn-card" onclick="toggleConn(this)">
-                <span class="conn-icon">🏢</span>
-                <h4>Actifs & Patrimoine</h4>
-                <p>Immobilier, équipements, brevets</p>
-                <span class="conn-status nok">⬤ Non connecté</span>
-              </div>
-              <div class="conn-card" onclick="toggleConn(this)">
-                <span class="conn-icon">👤</span>
-                <h4>RH & Organisation</h4>
-                <p>Organigramme, compétences clés</p>
-                <span class="conn-status nok">⬤ Non connecté</span>
-              </div>
-              <div class="conn-card" onclick="toggleConn(this)">
-                <span class="conn-icon">📁</span>
-                <h4>Import manuel</h4>
-                <p>Upload CSV, Excel ou PDF</p>
-                <span class="conn-status nok">⬤ Non connecté</span>
-              </div>
-            </div>
-
-            <div class="partner-form">
-              <h3>Connexion partenaires</h3>
-              <p>Invitez votre expert-comptable, avocat ou conseiller en transmission à partager ses données via email.</p>
-              <div style="display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap;">
-                <div class="form-group" style="flex:1; margin:0;">
-                  <label>Email du partenaire</label>
-                  <input type="email" id="partner-email-t" placeholder="avocat@cabinet.fr" />
-                </div>
-                <div class="form-group" style="margin:0;">
-                  <label>Rôle</label>
-                  <select id="partner-role-t">
-                    <option>Expert-comptable</option>
-                    <option>Avocat</option>
-                    <option>Conseiller en cession</option>
-                    <option>Notaire</option>
-                    <option>Autre</option>
-                  </select>
-                </div>
-                <button class="btn btn-primary btn-sm" onclick="invitePartner('t')">Inviter →</button>
-              </div>
-            </div>
+            <div id="connexions-content-t"></div>
           </div>
 
           <!-- ANALYSE PASSÉE -->
@@ -464,5 +343,6 @@
 
   <script src="js/main.js"></script>
   <script src="js/ia.js"></script>
+  <script src="js/connexions.js"></script>
 </body>
 </html>

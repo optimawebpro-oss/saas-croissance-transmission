@@ -13,18 +13,23 @@
 </head>
 <body>
 
+  <!-- Overlay cinématique d'ouverture (première visite) -->
+  <div id="opening-overlay" style="position:fixed;inset:0;z-index:99998;background:#08080f;display:none;">
+    <canvas id="opening-cv" style="position:absolute;inset:0;"></canvas>
+  </div>
+
   <nav class="navbar">
     <div class="container">
       <a href="index.html" class="nav-logo"><img src="img/ael-logo.png" alt="AEL Corporation" class="nav-logo-img" /></a>
       <ul class="nav-links">
-        <li><a href="index.html" class="active">Accueil</a></li>
-        <li><a href="mon-espace.html">Mon Espace</a></li>
-        <li><a href="tarifs.html">Tarifs</a></li>
-        <li><a href="contact.html">Contact</a></li>
+        <li><a href="index.html" class="active page-link">Accueil</a></li>
+        <li><a href="mon-espace.html" class="page-link">Mon Espace</a></li>
+        <li><a href="tarifs.html" class="page-link">Tarifs</a></li>
+        <li><a href="contact.html" class="page-link">Contact</a></li>
       </ul>
       <div class="nav-cta">
-        <a href="contact.html" class="btn-nav">Nous contacter</a>
-        <a href="mon-espace.html" class="btn-nav btn-nav-primary">Commencer</a>
+        <a href="contact.html" class="btn-nav page-link">Nous contacter</a>
+        <a href="mon-espace.html" class="btn-nav btn-nav-primary page-link">Commencer</a>
       </div>
       <button class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></button>
     </div>
@@ -33,18 +38,25 @@
   <!-- HERO -->
   <section class="hero">
     <div class="container">
-      <div class="hero-badge fade-in"><span class="badge badge-blue">Propulsé par Mistral AI</span></div>
-      <h1 class="fade-in d1">Votre entreprise mérite<br /><span class="gradient-text">un plan à sa hauteur</span></h1>
-      <p class="hero-sub fade-in d2">Evoluty analyse en profondeur la structure de votre entreprise et génère un plan stratégique ultra-détaillé — pour accélérer votre croissance ou préparer une transmission réussie.</p>
-      <div class="hero-actions fade-in d3">
-        <a href="mon-espace.html" class="btn btn-primary btn-lg">Démarrer mon diagnostic →</a>
-        <a href="#modules" class="btn btn-secondary btn-lg">Voir les modules</a>
-      </div>
-      <div class="hero-stats fade-in">
-        <div class="hero-stat"><div class="value">2</div><div class="label">Modules stratégiques</div></div>
-        <div class="hero-stat"><div class="value">360°</div><div class="label">Diagnostic complet</div></div>
-        <div class="hero-stat"><div class="value">IA</div><div class="label">Plan ultra-détaillé</div></div>
-        <div class="hero-stat"><div class="value">100%</div><div class="label">Personnalisé</div></div>
+      <div class="hero-layout">
+        <div class="hero-text">
+          <div class="hero-badge fade-in"><span class="badge badge-blue">Propulsé par Mistral AI</span></div>
+          <h1 class="fade-in d1">Votre entreprise mérite<br /><span class="gradient-text">un plan à sa hauteur</span></h1>
+          <p class="hero-sub fade-in d2">Evoluty analyse en profondeur la structure de votre entreprise et génère un plan stratégique ultra-détaillé — pour accélérer votre croissance ou préparer une transmission réussie.</p>
+          <div class="hero-actions fade-in d3">
+            <a href="mon-espace.html" class="btn btn-primary btn-lg page-link">Démarrer mon diagnostic →</a>
+            <a href="#modules" class="btn btn-secondary btn-lg">Voir les modules</a>
+          </div>
+          <div class="hero-stats fade-in">
+            <div class="hero-stat"><div class="value">2</div><div class="label">Modules stratégiques</div></div>
+            <div class="hero-stat"><div class="value">360°</div><div class="label">Diagnostic complet</div></div>
+            <div class="hero-stat"><div class="value">IA</div><div class="label">Plan ultra-détaillé</div></div>
+            <div class="hero-stat"><div class="value">100%</div><div class="label">Personnalisé</div></div>
+          </div>
+        </div>
+        <div class="hero-brain-wrap">
+          <canvas id="hero-brain"></canvas>
+        </div>
       </div>
     </div>
   </section>
@@ -59,34 +71,32 @@
         <h2>La plupart des dirigeants avancent <span class="gradient-text">sans cap précis</span></h2>
         <p>Sans diagnostic solide ni plan structuré, croître durablement ou céder son entreprise au bon prix relève du hasard.</p>
       </div>
+      <!-- Animation cube éclaté -->
+      <div class="anim-scene" style="height:300px; margin-bottom:48px;">
+        <canvas id="cube-cv" style="position:absolute;inset:0;"></canvas>
+      </div>
       <div class="features-grid">
         <div class="feature-card">
-          <div class="f-icon"></div>
           <h3>Pas de vision claire</h3>
           <p>Sans analyse objective de leur structure, les dirigeants ne savent pas où concentrer leurs efforts pour avoir le plus d'impact.</p>
         </div>
         <div class="feature-card">
-          <div class="f-icon"></div>
           <h3>Plans trop génériques</h3>
           <p>Les plans stratégiques classiques sont coûteux, longs à produire et rarement adaptés à la réalité terrain de l'entreprise.</p>
         </div>
         <div class="feature-card">
-          <div class="f-icon"></div>
           <h3>Transmission mal préparée</h3>
           <p>80% des cessions échouent ou perdent de la valeur faute d'une préparation sérieuse 2 à 3 ans en amont.</p>
         </div>
         <div class="feature-card">
-          <div class="f-icon"></div>
           <h3>Accompagnement inaccessible</h3>
           <p>Cabinets de conseil, experts-comptables, coachs : des solutions efficaces mais hors de prix pour la majorité des PME.</p>
         </div>
         <div class="feature-card">
-          <div class="f-icon"></div>
           <h3>Suivi inexistant</h3>
           <p>Sans suivi régulier et mesurable, même les meilleurs plans tombent aux oubliettes après quelques semaines.</p>
         </div>
         <div class="feature-card">
-          <div class="f-icon"></div>
           <h3>Données éparpillées</h3>
           <p>Les données de l'entreprise sont dispersées entre plusieurs outils, rendant toute analyse globale longue et approximative.</p>
         </div>
@@ -104,6 +114,8 @@
         <h2>De l'analyse au plan en <span class="gradient-text">4 étapes</span></h2>
         <p>Un processus structuré qui transforme vos données brutes en plan stratégique actionnable.</p>
       </div>
+      <!-- Animation pipeline -->
+      <div id="pipeline-container" style="width:100%;height:280px;margin-bottom:40px;background:#0b0f1a;border-radius:var(--radius);overflow:hidden;"></div>
       <div class="steps-grid">
         <div class="step-card">
           <div class="step-num">1</div>
@@ -138,6 +150,10 @@
         <span class="section-label">Modules</span>
         <h2>Deux modules, <span class="gradient-text">un seul objectif</span> : votre réussite</h2>
         <p>Choisissez le programme adapté à votre situation actuelle.</p>
+      </div>
+      <!-- Animation orbites -->
+      <div class="anim-scene" style="height:340px; margin-bottom:48px;">
+        <canvas id="orbits-cv" style="position:absolute;inset:0;"></canvas>
       </div>
       <div class="modules-grid">
         <div class="module-card">
@@ -216,8 +232,8 @@
         <h2>Démarrez votre diagnostic <span class="gradient-text">aujourd'hui</span></h2>
         <p>Rejoignez les dirigeants qui ont choisi de piloter leur avenir avec précision.</p>
         <div class="cta-actions">
-          <a href="mon-espace.html" class="btn btn-primary btn-lg">Démarrer mon diagnostic →</a>
-          <a href="tarifs.html" class="btn btn-secondary btn-lg">Voir les tarifs</a>
+          <a href="mon-espace.html" class="btn btn-primary btn-lg page-link">Démarrer mon diagnostic →</a>
+          <a href="tarifs.html" class="btn btn-secondary btn-lg page-link">Voir les tarifs</a>
         </div>
       </div>
     </div>
@@ -227,21 +243,21 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <a href="index.html" class="nav-logo" style="margin-bottom:12px;"><img src="img/ael-logo.png" alt="AEL Corporation" class="nav-logo-img" style="height:48px;" /></a>
+          <a href="index.html" class="nav-logo page-link" style="margin-bottom:12px;"><img src="img/ael-logo.png" alt="AEL Corporation" class="nav-logo-img" style="height:48px;" /></a>
           <p>La plateforme stratégique IA pour les dirigeants qui veulent piloter leur croissance ou préparer leur transmission.</p>
           <div style="margin-top:16px;"><span class="badge badge-blue">RGPD</span></div>
         </div>
         <div class="footer-col">
           <h5>Produit</h5>
-          <a href="mon-espace.html">Mon Espace</a>
-          <a href="mon-espace.html">Module Croissance</a>
-          <a href="mon-espace.html">Module Transmission</a>
-          <a href="tarifs.html">Tarifs</a>
+          <a href="mon-espace.html" class="page-link">Mon Espace</a>
+          <a href="mon-espace.html" class="page-link">Module Croissance</a>
+          <a href="mon-espace.html" class="page-link">Module Transmission</a>
+          <a href="tarifs.html" class="page-link">Tarifs</a>
         </div>
         <div class="footer-col">
           <h5>Entreprise</h5>
-          <a href="index.html">À propos</a>
-          <a href="contact.html">Contact</a>
+          <a href="index.html" class="page-link">À propos</a>
+          <a href="contact.html" class="page-link">Contact</a>
           <a href="#">Mentions légales</a>
           <a href="#">Politique de confidentialité</a>
         </div>
@@ -260,5 +276,8 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/pipeline-animation.js"></script>
+  <script src="js/page-transition.js"></script>
 </body>
 </html>

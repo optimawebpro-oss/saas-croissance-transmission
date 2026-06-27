@@ -192,10 +192,44 @@ p { color: var(--text-muted); }
 
 /* ===== HERO ===== */
 .hero {
-  padding: calc(var(--nav-height) + 90px) 0 100px;
-  text-align: center;
+  padding: calc(var(--nav-height) + 70px) 0 80px;
   position: relative;
   overflow: hidden;
+}
+/* Layout 2 colonnes hero */
+.hero-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+.hero-text { text-align: left; }
+.hero-text .hero-sub { margin: 0 0 40px; }
+.hero-text .hero-actions { justify-content: flex-start; }
+.hero-text .hero-stats { justify-content: flex-start; gap: 40px; }
+.hero-brain-wrap {
+  position: relative;
+  height: 420px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #0b0f1a;
+}
+.hero-brain-wrap canvas { position: absolute; inset: 0; }
+@media (max-width: 900px) {
+  .hero-layout { grid-template-columns: 1fr; }
+  .hero-text { text-align: center; }
+  .hero-text .hero-sub { margin: 0 auto 40px; }
+  .hero-text .hero-actions { justify-content: center; }
+  .hero-text .hero-stats { justify-content: center; }
+  .hero-brain-wrap { height: 300px; }
+}
+/* Scènes d'animation génériques */
+.anim-scene {
+  position: relative;
+  width: 100%;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #0b0f1a;
 }
 .hero::before {
   content: '';

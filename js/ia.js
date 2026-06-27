@@ -13,7 +13,7 @@ Tu fournis des conseils concrets, chiffrés et actionnables. Tu poses des questi
 Tu attribues un score de croissance sur 100 après chaque diagnostic complet.
 Réponds toujours en français, de façon structurée, professionnelle et bienveillante.`,
 
-  t: `Tu es un conseiller expert en transmission et cession d'entreprise, intégré à la plateforme Evoluty.
+  t: `Tu es un conseiller expert en cession d'entreprise, intégré à la plateforme Evoluty.
 Tu réalises des audits de cédabilité complets et génères des plans de préparation à la vente pour maximiser la valeur de cession des entreprises.
 Ton analyse couvre : valorisation financière, récurrence du CA, autonomie de l'entreprise (dépendance au dirigeant), clarté juridique, attractivité du dossier, marché et acquéreurs potentiels.
 Tu identifies les points bloquants pour une cession réussie et proposes des actions concrètes pour les résoudre.
@@ -61,7 +61,7 @@ Tu dois générer un plan mensuel ultra-détaillé, structuré EXACTEMENT comme 
 
 Sois précis, concret et actif. Ce plan sera exporté en PDF et utilisé comme référence tout le mois. Réponds uniquement en français.`,
 
-  t: (mois) => `Tu es un conseiller expert en transmission et cession d'entreprise, intégré à la plateforme Evoluty.
+  t: (mois) => `Tu es un conseiller expert en cession d'entreprise, intégré à la plateforme Evoluty.
 L'entreprise du dirigeant vient de te demander son PLAN MENSUEL DE PRÉPARATION À LA CESSION pour ${mois}.
 
 Tu dois générer un plan mensuel ultra-détaillé, structuré EXACTEMENT comme suit (respecte ces titres de section à la lettre) :
@@ -124,7 +124,7 @@ Si le dirigeant te demande à nouveau le plan, rappelle-lui qu'il est déjà gé
 
 Réponds toujours en français, de façon concise, concrète et motivante.`,
 
-  t: (mois, planText) => `Tu es un conseiller expert en transmission et cession d'entreprise, intégré à la plateforme Evoluty.
+  t: (mois, planText) => `Tu es un conseiller expert en cession d'entreprise, intégré à la plateforme Evoluty.
 
 Le dirigeant a déjà son PLAN MENSUEL DE PRÉPARATION À LA CESSION pour ${mois}. Voici ce plan :
 
@@ -418,7 +418,7 @@ function generatePDF(mod, planText, mois) {
   // Titre
   doc.setFontSize(22);
   doc.setTextColor(...WHITE);
-  const titre = mod === 'c' ? `Plan Mensuel de Croissance` : `Plan Mensuel de Transmission`;
+  const titre = mod === 'c' ? `Plan Mensuel de Croissance` : `Plan Mensuel de Cession`;
   doc.text(titre, ML, 63);
 
   // Mois
@@ -574,7 +574,7 @@ function generatePDF(mod, planText, mois) {
   }
 
   // ── Téléchargement ────────────────────────────────────────────────────────
-  const filename = `Evoluty_Plan_${mod === 'c' ? 'Croissance' : 'Transmission'}_${mois.replace(' ', '_')}.pdf`;
+  const filename = `Evoluty_Plan_${mod === 'c' ? 'Croissance' : 'Cession'}_${mois.replace(' ', '_')}.pdf`;
   doc.save(filename);
 }
 

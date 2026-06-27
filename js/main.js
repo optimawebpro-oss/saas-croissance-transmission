@@ -18,7 +18,7 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 3000);
 }
 
-// ===== MODULE TABS (Croissance / Transmission) =====
+// ===== MODULE TABS (Croissance / Cession) =====
 document.querySelectorAll('.module-tab').forEach(tab => {
   tab.addEventListener('click', () => {
     document.querySelectorAll('.module-tab').forEach(t => t.classList.remove('active'));

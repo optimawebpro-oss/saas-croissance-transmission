@@ -109,7 +109,7 @@
         cx.fillText('Evoluty', mx, my + 20 * dpr);
         cx.font = Math.round(13 * dpr) + 'px Inter,sans-serif';
         cx.fillStyle = 'rgba(78,137,232,' + to.toFixed(3) + ')';
-        cx.fillText("Croissance & Transmission d'entreprise par l'IA", mx, my + 48 * dpr);
+        cx.fillText("Croissance & Cession d'entreprise par l'IA", mx, my + 48 * dpr);
       }
     }
 
@@ -213,7 +213,7 @@
     var cx = cv.getContext('2d');
     var s = fitCanvas(cv), W = s.w, H = s.h, mx = W/2, my = H/2;
 
-    var labels = ['Pas de vision','Plans génériques','Transmission\nmal préparée','Accompagnement\ninaccessible','Suivi\ninexistant','Données\néparpillées'];
+    var labels = ['Pas de vision','Plans génériques','Cession\nmal préparée','Accompagnement\ninaccessible','Suivi\ninexistant','Données\néparpillées'];
     var faceColors = [[99,102,241],[59,130,246],[139,92,246],[236,72,153],[34,211,238],[245,158,11]];
     var S = 48 * dpr;
     var facesDef = [
@@ -395,7 +395,7 @@
       cx.fillStyle='rgba(196,181,253,0.95)'; cx.font='500 '+lblSize+'px Inter,sans-serif'; cx.textAlign='center'; cx.textBaseline='middle'; cx.fillText('Croissance',mx,ly1);
       var ly2=my-R2*tilt2-22*dpr;
       cx.fillStyle='rgba(8,8,15,0.85)'; var bw2=140*dpr,bh2=30*dpr; cx.beginPath(); cx.roundRect(mx-bw2/2,ly2-bh2/2,bw2,bh2,6*dpr); cx.fill(); cx.strokeStyle='rgba(59,130,246,0.45)'; cx.lineWidth=1*dpr; cx.stroke();
-      cx.fillStyle='rgba(147,197,253,0.95)'; cx.font='500 '+lblSize+'px Inter,sans-serif'; cx.fillText('Transmission',mx,ly2);
+      cx.fillStyle='rgba(147,197,253,0.95)'; cx.font='500 '+lblSize+'px Inter,sans-serif'; cx.fillText('Cession',mx,ly2);
       cx.fillStyle='rgba(200,210,255,0.55)'; cx.font=subSize+'px Inter,sans-serif'; cx.fillText('Votre entreprise',mx,my+30*dpr);
       requestAnimationFrame(orbitsLoop);
     }

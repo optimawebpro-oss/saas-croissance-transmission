@@ -64,11 +64,16 @@ function httpsGet(url, headers) {
 
 // ── Auth Routes ──────────────────────────────────────────
 
+function randomState() {
+  return Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
+}
+
 // GET /login → redirige vers Kinde login
 app.get('/login', (req, res) => {
   const url = `${KINDE_DOMAIN}/oauth2/auth?` + new URLSearchParams({
     client_id: CLIENT_ID, redirect_uri: REDIRECT_URI,
     response_type: 'code', scope: 'openid profile email',
+    state: randomState(),
   });
   res.redirect(url);
 });
@@ -78,7 +83,7 @@ app.get('/register', (req, res) => {
   const url = `${KINDE_DOMAIN}/oauth2/auth?` + new URLSearchParams({
     client_id: CLIENT_ID, redirect_uri: REDIRECT_URI,
     response_type: 'code', scope: 'openid profile email',
-    prompt: 'create',
+    prompt: 'create', state: randomState(),
   });
   res.redirect(url);
 });

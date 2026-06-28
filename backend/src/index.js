@@ -15,10 +15,12 @@ const PORT = process.env.PORT || 3001;
 
 // ── Sécurité ──────────────────────────────────────────────
 app.use(helmet({ contentSecurityPolicy: false }));
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5500',
-  credentials: true,
-}));
+// Extrait uniquement le domaine (sans chemin) pour le CORS
+const frontendOrigin = (() => {
+  try { return new URL(process.env.FRONTEND_URL || 'http://localhost:5500').origin; }
+  catch { return 'http://localhost:5500'; }
+})();
+app.use(cors({ origin: frontendOrigin, credentials: true }));
 
 // ── Session (requise par Kinde) ────────────────────────────
 app.use(session({

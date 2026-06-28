@@ -3,95 +3,140 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const session = require('express-session');
-const cookieParser = require('cookie-parser');
-const path = require('path');
-const { setupKinde } = require('@kinde-oss/kinde-node-express');
-
+const jwt = require('jsonwebtoken');
+const https = require('https');
 const { auditLog } = require('./middleware/audit');
+const { getUserPlan } = require('./services/subscriptionDb');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// ── Sécurité ──────────────────────────────────────────────
+const KINDE_DOMAIN      = process.env.KINDE_DOMAIN;
+const CLIENT_ID         = process.env.KINDE_CLIENT_ID;
+const CLIENT_SECRET     = process.env.KINDE_CLIENT_SECRET;
+const REDIRECT_URI      = process.env.KINDE_REDIRECT_URI || `http://localhost:${PORT}/callback`;
+const FRONTEND_URL      = process.env.FRONTEND_URL || 'http://localhost:5500';
+const JWT_SECRET        = process.env.SESSION_SECRET || 'evoluty-secret';
+
+// ── Sécurité ─────────────────────────────────────────────
 app.use(helmet({ contentSecurityPolicy: false }));
-// Extrait uniquement le domaine (sans chemin) pour le CORS
 const frontendOrigin = (() => {
-  try { return new URL(process.env.FRONTEND_URL || 'http://localhost:5500').origin; }
-  catch { return 'http://localhost:5500'; }
+  try { return new URL(FRONTEND_URL).origin; } catch { return FRONTEND_URL; }
 })();
 app.use(cors({ origin: frontendOrigin, credentials: true }));
-
-// ── Session (requise par Kinde) ────────────────────────────
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'evoluty-secret-change-in-prod',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: process.env.NODE_ENV === 'production',
-    httpOnly: true,
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 jours
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-  },
-}));
-
-app.use(cookieParser());
-
-// Webhook Stripe doit recevoir le raw body AVANT express.json()
 app.use('/api/stripe/webhook', express.raw({ type: 'application/json' }));
-
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
-
-// Intercepte /callback pour forcer la sauvegarde de session avant la redirection
-app.get('/callback', (req, res, next) => {
-  const orig = res.redirect.bind(res);
-  res.redirect = function (url) {
-    req.session.save(() => orig(url));
-  };
-  next();
-});
-
-// ── Kinde Auth (v1.7.0 — paramètres snake_case) ───────────
-const kindeConfig = {
-  grantType:              'AUTHORIZATION_CODE',
-  clientId:               process.env.KINDE_CLIENT_ID,
-  issuerBaseUrl:          process.env.KINDE_DOMAIN,
-  siteUrl:                (process.env.BACKEND_URL || `http://localhost:${PORT}`) + '/auth/post-auth',
-  secret:                 process.env.KINDE_CLIENT_SECRET,
-  redirectUrl:            process.env.KINDE_REDIRECT_URI || `http://localhost:${PORT}/callback`,
-  unAuthorisedUrl:        (process.env.FRONTEND_URL || 'http://localhost:5500') + '/tarifs.html',
-  postLogoutRedirectUrl:  process.env.FRONTEND_URL || 'http://localhost:5500',
-};
-setupKinde(kindeConfig, app);
-
-// Routes Kinde (automatiquement créées par setupKinde) :
-// GET /login   → redirige vers Kinde login
-// GET /register → redirige vers Kinde register
-// GET /callback → callback OAuth2 Kinde
-// GET /logout  → déconnecte et redirige vers FRONTEND_URL
-
-// ── Rate limiting ─────────────────────────────────────────
-app.use(rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  message: { error: 'Trop de requêtes, veuillez réessayer dans 15 minutes.' },
-}));
-const strictLimit = rateLimit({
-  windowMs: 60 * 1000,
-  max: 10,
-  message: { error: 'Limite atteinte pour cette ressource sensible.' },
-});
-
-// ── Middleware d'audit ────────────────────────────────────
+app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 200 }));
 app.use(auditLog);
 
-// ── Routes ────────────────────────────────────────────────
-const authRouter = require('./routes/auth');
-app.use('/api/auth', authRouter);
-app.use('/auth',     authRouter);
-app.use('/api/stripe',     require('./routes/stripe'));
+// ── Helper : appel HTTPS simple ──────────────────────────
+function httpsPost(url, data, headers) {
+  return new Promise((resolve, reject) => {
+    const body = typeof data === 'string' ? data : new URLSearchParams(data).toString();
+    const u = new URL(url);
+    const req = https.request({
+      hostname: u.hostname, path: u.pathname + u.search,
+      method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Content-Length': Buffer.byteLength(body), ...headers },
+    }, res => {
+      let raw = '';
+      res.on('data', c => raw += c);
+      res.on('end', () => { try { resolve(JSON.parse(raw)); } catch { resolve(raw); } });
+    });
+    req.on('error', reject);
+    req.write(body);
+    req.end();
+  });
+}
 
+function httpsGet(url, headers) {
+  return new Promise((resolve, reject) => {
+    const u = new URL(url);
+    const req = https.request({ hostname: u.hostname, path: u.pathname + u.search, method: 'GET', headers }, res => {
+      let raw = '';
+      res.on('data', c => raw += c);
+      res.on('end', () => { try { resolve(JSON.parse(raw)); } catch { resolve(raw); } });
+    });
+    req.on('error', reject);
+    req.end();
+  });
+}
+
+// ── Auth Routes ──────────────────────────────────────────
+
+// GET /login → redirige vers Kinde login
+app.get('/login', (req, res) => {
+  const url = `${KINDE_DOMAIN}/oauth2/auth?` + new URLSearchParams({
+    client_id: CLIENT_ID, redirect_uri: REDIRECT_URI,
+    response_type: 'code', scope: 'openid profile email',
+  });
+  res.redirect(url);
+});
+
+// GET /register → redirige vers Kinde register
+app.get('/register', (req, res) => {
+  const url = `${KINDE_DOMAIN}/oauth2/auth?` + new URLSearchParams({
+    client_id: CLIENT_ID, redirect_uri: REDIRECT_URI,
+    response_type: 'code', scope: 'openid profile email',
+    prompt: 'create',
+  });
+  res.redirect(url);
+});
+
+// GET /callback → échange le code, génère JWT, redirige vers frontend
+app.get('/callback', async (req, res) => {
+  const { code, error } = req.query;
+  if (error || !code) return res.redirect(FRONTEND_URL + '?auth=error');
+
+  try {
+    // 1. Échanger le code contre des tokens
+    const tokens = await httpsPost(`${KINDE_DOMAIN}/oauth2/token`, {
+      grant_type: 'authorization_code',
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET,
+      redirect_uri: REDIRECT_URI,
+      code,
+    });
+
+    if (!tokens.access_token) return res.redirect(FRONTEND_URL + '?auth=error');
+
+    // 2. Récupérer le profil utilisateur
+    const profile = await httpsGet(`${KINDE_DOMAIN}/oauth2/v2/user_profile`, {
+      Authorization: `Bearer ${tokens.access_token}`,
+    });
+
+    if (!profile.id) return res.redirect(FRONTEND_URL + '?auth=error');
+
+    // 3. Générer un JWT signé
+    const subscription = getUserPlan(profile.id) || { plan: 'gratuit', billing: null, status: 'active' };
+    const token = jwt.sign({
+      id: profile.id,
+      email: profile.email,
+      given_name: profile.given_name || profile.first_name || '',
+      family_name: profile.family_name || profile.last_name || '',
+      plan: subscription.plan,
+      billing: subscription.billing,
+    }, JWT_SECRET, { expiresIn: '7d' });
+
+    // 4. Rediriger vers le frontend avec le token
+    res.redirect(FRONTEND_URL + '/?auth_token=' + token);
+  } catch (err) {
+    console.error('[/callback]', err.message);
+    res.redirect(FRONTEND_URL + '?auth=error');
+  }
+});
+
+// GET /logout
+app.get('/logout', (req, res) => {
+  const url = `${KINDE_DOMAIN}/logout?` + new URLSearchParams({ redirect: FRONTEND_URL });
+  res.redirect(url);
+});
+
+// ── API Routes ───────────────────────────────────────────
+app.use('/api/auth',   require('./routes/auth'));
+app.use('/api/stripe', require('./routes/stripe'));
+
+const strictLimit = rateLimit({ windowMs: 60 * 1000, max: 10 });
 app.use('/api/entreprise', strictLimit, require('./routes/entreprise'));
 app.use('/api/fec',        strictLimit, require('./routes/fec'));
 app.use('/api/banking',    require('./routes/banking'));
@@ -101,18 +146,11 @@ app.use('/api/benchmarks', require('./routes/benchmarks'));
 app.use('/api/juridique',  strictLimit, require('./routes/juridique'));
 app.use('/api/rgpd',       strictLimit, require('./routes/rgpd'));
 
-// Health check
 app.get('/health', (req, res) => res.json({ status: 'ok', env: process.env.NODE_ENV }));
 
-// ── Gestionnaire d'erreurs global ─────────────────────────
 app.use((err, req, res, next) => {
   console.error('[ERROR]', err.message);
-  const status = err.status || 500;
-  res.status(status).json({
-    error: process.env.NODE_ENV === 'production'
-      ? 'Erreur interne du serveur.'
-      : err.message,
-  });
+  res.status(err.status || 500).json({ error: process.env.NODE_ENV === 'production' ? 'Erreur interne.' : err.message });
 });
 
 app.listen(PORT, () => {

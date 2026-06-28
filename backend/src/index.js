@@ -46,7 +46,7 @@ const kindeConfig = {
   grantType:              'AUTHORIZATION_CODE',
   clientId:               process.env.KINDE_CLIENT_ID,
   issuerBaseUrl:          process.env.KINDE_DOMAIN,
-  siteUrl:                process.env.BACKEND_URL || `http://localhost:${PORT}`,
+  siteUrl:                process.env.FRONTEND_URL || 'http://localhost:5500',
   secret:                 process.env.KINDE_CLIENT_SECRET,
   redirectUrl:            process.env.KINDE_REDIRECT_URI || `http://localhost:${PORT}/callback`,
   unAuthorisedUrl:        (process.env.FRONTEND_URL || 'http://localhost:5500') + '/tarifs.html',

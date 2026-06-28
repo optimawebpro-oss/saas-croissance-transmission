@@ -1,5 +1,5 @@
 // ===== EVOLUTY — Connexions Frontend =====
-const API = 'http://localhost:3001/api';
+const API = 'https://saas-croissance-transmission-production.up.railway.app/api';
 
 // ── 1. SIRET / Pappers ──────────────────────────────────
 async function searchSiret() {

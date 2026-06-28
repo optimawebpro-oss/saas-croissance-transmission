@@ -1,31 +1,27 @@
 const express = require('express');
 const router = express.Router();
-const { login, register, logout, callback, getKindeSession } = require('@kinde-oss/kinde-node-express');
+const { getKindeUser } = require('../middleware/kindeAuth');
 const { getUserPlan } = require('../services/subscriptionDb');
 
-// ── Kinde auth routes ──────────────────────────────────────
-// Ces routes sont montées à la racine (/login, /register, etc.)
-// via setupKinde() dans index.js
-
-/**
- * GET /api/auth/me
- * Retourne l'utilisateur connecté + son plan.
- * Appelé par le frontend pour savoir si l'utilisateur est authentifié.
- */
+// GET /api/auth/me
 router.get('/me', async (req, res) => {
   try {
-    const session = await getKindeSession(req, res);
-    if (!session || !session.isAuthenticated) {
-      return res.json({ authenticated: false });
-    }
-    const { id, email, given_name, family_name, picture } = session.user;
-    const planInfo = getUserPlan(id);
+    const user = await getKindeUser(req, res);
+    if (!user) return res.json({ authenticated: false });
+    const subscription = getUserPlan(user.id);
     return res.json({
       authenticated: true,
-      user: { id, email, given_name, family_name, picture },
-      subscription: planInfo,
+      user: {
+        id:          user.id,
+        email:       user.email,
+        given_name:  user.given_name,
+        family_name: user.family_name,
+        picture:     user.picture,
+      },
+      subscription: subscription || { plan: 'gratuit', billing: null, status: 'active' },
     });
   } catch (err) {
+    console.error('[/api/auth/me]', err.message);
     return res.json({ authenticated: false });
   }
 });

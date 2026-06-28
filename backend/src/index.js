@@ -6,7 +6,7 @@ const rateLimit = require('express-rate-limit');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const path = require('path');
-const { setupKinde, login, logout, register, callback } = require('@kinde-oss/kinde-node-express');
+const { setupKinde } = require('@kinde-oss/kinde-node-express');
 
 const { auditLog } = require('./middleware/audit');
 
@@ -41,15 +41,16 @@ app.use('/api/stripe/webhook', express.raw({ type: 'application/json' }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// ── Kinde Auth ────────────────────────────────────────────
+// ── Kinde Auth (v1.7.0 — paramètres snake_case) ───────────
 const kindeConfig = {
-  clientId:            process.env.KINDE_CLIENT_ID,
-  issuerBaseUrl:       process.env.KINDE_DOMAIN,
-  siteUrl:             process.env.BACKEND_URL || `http://localhost:${PORT}`,
-  secret:              process.env.KINDE_CLIENT_SECRET,
-  redirectURL:         process.env.KINDE_REDIRECT_URI || `http://localhost:${PORT}/callback`,
-  unAuthorisedUrl:     (process.env.FRONTEND_URL || 'http://localhost:5500') + '/tarifs.html',
-  postLogoutRedirectURL: process.env.FRONTEND_URL || 'http://localhost:5500',
+  grantType:              'AUTHORIZATION_CODE',
+  clientId:               process.env.KINDE_CLIENT_ID,
+  issuerBaseUrl:          process.env.KINDE_DOMAIN,
+  siteUrl:                process.env.BACKEND_URL || `http://localhost:${PORT}`,
+  secret:                 process.env.KINDE_CLIENT_SECRET,
+  redirectUrl:            process.env.KINDE_REDIRECT_URI || `http://localhost:${PORT}/callback`,
+  unAuthorisedUrl:        (process.env.FRONTEND_URL || 'http://localhost:5500') + '/tarifs.html',
+  postLogoutRedirectUrl:  process.env.FRONTEND_URL || 'http://localhost:5500',
 };
 setupKinde(kindeConfig, app);
 

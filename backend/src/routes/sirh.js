@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { fetchSIRHData, getAdapter, computeManual } = require('../services/sirh/index');
-const { encrypt } = require('../services/encryption');
+
 const { v4: uuid } = require('uuid');
 const { requireAuth } = require('../middleware/kindeAuth');
 const { requirePlan } = require('../middleware/requirePlan');
@@ -32,7 +32,7 @@ router.get('/:provider/data', requireAuth, requirePlan('croissance'), async (req
     const result = await fetchSIRHData(req.params.provider, accessToken);
     if (!result.ok) return res.status(502).json({ error: result.error });
 
-    res.json({ success: true, data: result.data, _encrypted: encrypt(result.data) });
+    res.json({ success: true, data: result.data });
   } catch (err) { next(err); }
 });
 
@@ -42,7 +42,7 @@ router.post('/manual', requireAuth, requirePlan('croissance'), (req, res, next) 
     const { effectif, ancienneteMoyenneMois, turnover12mois, hasDirectionN1 } = req.body;
     if (effectif == null) return res.status(400).json({ error: 'effectif requis.' });
     const data = computeManual({ effectif, ancienneteMoyenneMois, turnover12mois, hasDirectionN1 });
-    res.json({ success: true, data, _encrypted: encrypt(data) });
+    res.json({ success: true, data });
   } catch (err) { next(err); }
 });
 

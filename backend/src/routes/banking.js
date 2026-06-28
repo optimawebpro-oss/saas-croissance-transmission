@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const bridge = require('../services/banking/bridge');
-const { encrypt } = require('../services/encryption');
+
 const { requireAuth } = require('../middleware/kindeAuth');
 const { requirePlan } = require('../middleware/requirePlan');
 
@@ -29,8 +29,7 @@ router.get('/data', requireAuth, requirePlan('croissance'), async (req, res, nex
     const userId = req.user.id; // ownership : on utilise l'ID du token, jamais d'un header
     const result = await bridge.fetchBankData(userId);
     if (!result.ok) return res.status(502).json({ error: result.error });
-    const encrypted = encrypt(result.data);
-    res.json({ success: true, data: result.data, _encrypted: encrypted });
+    res.json({ success: true, data: result.data });
   } catch (err) { next(err); }
 });
 

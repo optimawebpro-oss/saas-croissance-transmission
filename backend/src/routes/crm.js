@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { fetchCRMData, getAdapter } = require('../services/crm/index');
-const { encrypt } = require('../services/encryption');
+
 const { v4: uuid } = require('uuid');
 const { requireAuth } = require('../middleware/kindeAuth');
 const { requirePlan } = require('../middleware/requirePlan');
@@ -20,8 +20,7 @@ router.get('/:provider/callback', async (req, res, next) => {
     const { code, error } = req.query;
     if (error) return res.redirect(`${process.env.FRONTEND_URL}/mon-espace.html?crm_error=${error}`);
     const adapter = getAdapter(req.params.provider);
-    const tokens = await adapter.exchangeCode(code);
-    const encrypted = encrypt(tokens);
+    await adapter.exchangeCode(code);
     res.redirect(`${process.env.FRONTEND_URL}/mon-espace.html?crm_success=${req.params.provider}`);
   } catch (err) { next(err); }
 });
@@ -36,7 +35,7 @@ router.get('/:provider/data', requireAuth, requirePlan('croissance'), async (req
     const result = await fetchCRMData(req.params.provider, accessToken);
     if (!result.ok) return res.status(502).json({ error: result.error });
 
-    res.json({ success: true, data: result.data, _encrypted: encrypt(result.data) });
+    res.json({ success: true, data: result.data });
   } catch (err) { next(err); }
 });
 

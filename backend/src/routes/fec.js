@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const multer = require('multer');
 const { parseFEC } = require('../services/fecParser');
-const { encrypt } = require('../services/encryption');
+
 const { requireAuth } = require('../middleware/kindeAuth');
 const { requirePlan } = require('../middleware/requirePlan');
 
@@ -29,13 +29,9 @@ router.post('/upload', requireAuth, requirePlan('croissance'), upload.single('fe
       return res.status(422).json({ error: result.error });
     }
 
-    // Chiffrer les données financières avant stockage (données sensibles)
-    const encrypted = encrypt(result.data);
-
     res.json({
       success: true,
       data: result.data,
-      _encrypted: encrypted,
       message: `FEC analysé : ${result.data.nbExercices} exercice(s) trouvé(s).`,
     });
   } catch (err) { next(err); }

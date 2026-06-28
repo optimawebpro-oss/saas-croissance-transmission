@@ -1,21 +1,42 @@
-// ===== EVOLUTY — Auth & Abonnement (Kinde + Stripe) =====
+// ===== EVOLUTY — Auth & Abonnement (Kinde + Stripe JWT) =====
 (function () {
   var BACKEND = (window.EVOLUTY_BACKEND_URL || 'http://localhost:3001');
+  var TOKEN_KEY = 'evoluty_auth_token';
 
-  // ── État global ────────────────────────────────────────
   var currentUser = null;
   var currentPlan = null;
 
-  // ── Init ───────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', function () {
+    // Récupère le token depuis l'URL si on revient de Kinde
+    var params = new URLSearchParams(window.location.search);
+    var token = params.get('auth_token');
+    if (token) {
+      localStorage.setItem(TOKEN_KEY, token);
+      // Nettoie l'URL
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+    if (params.get('auth') === 'error') {
+      showToast('Erreur de connexion. Veuillez réessayer.', 'error');
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+
     checkAuth();
     bindPlanButtons();
     showAlerts();
+    wireStaticButtons();
   });
 
-  // ── Vérification auth ──────────────────────────────────
+  function getStoredToken() {
+    return localStorage.getItem(TOKEN_KEY);
+  }
+
   function checkAuth() {
-    fetch(BACKEND + '/api/auth/me', { credentials: 'include' })
+    var token = getStoredToken();
+    if (!token) { updateNavAuth(false); return; }
+
+    fetch(BACKEND + '/api/auth/me', {
+      headers: { 'Authorization': 'Bearer ' + token },
+    })
       .then(function (r) { return r.json(); })
       .then(function (data) {
         if (data.authenticated) {
@@ -24,75 +45,45 @@
           updateNavAuth(true);
           updatePlanBadges();
         } else {
+          localStorage.removeItem(TOKEN_KEY);
           updateNavAuth(false);
         }
       })
       .catch(function () { updateNavAuth(false); });
   }
 
-  // ── Mise à jour navbar selon état auth ─────────────────
   function updateNavAuth(isAuth) {
-    var loginBtns  = document.querySelectorAll('[data-auth="login"]');
-    var registerBtns = document.querySelectorAll('[data-auth="register"]');
-    var logoutBtns = document.querySelectorAll('[data-auth="logout"]');
-    var userInfos  = document.querySelectorAll('[data-auth="user"]');
-    var navCta     = document.querySelector('.nav-cta');
+    var navCta = document.querySelector('.nav-cta');
+    if (!navCta) return;
 
     if (isAuth && currentUser) {
-      // Cacher login/register, afficher logout + user
-      loginBtns.forEach(function (el) { el.style.display = 'none'; });
-      registerBtns.forEach(function (el) { el.style.display = 'none'; });
-      logoutBtns.forEach(function (el) { el.style.display = ''; });
-      userInfos.forEach(function (el) {
-        el.style.display = '';
-        el.textContent = currentUser.given_name || currentUser.email;
+      var planLabel = currentPlan ? capitalise(currentPlan.plan) : 'Gratuit';
+      var planClass = currentPlan ? currentPlan.plan : 'gratuit';
+      navCta.innerHTML =
+        '<span class="nav-user-name">' + (currentUser.given_name || currentUser.email) + '</span>' +
+        '<span class="nav-plan-badge nav-plan-' + planClass + '">' + planLabel + '</span>' +
+        '<a href="#" class="btn-nav" id="logout-btn">Se déconnecter</a>';
+      document.getElementById('logout-btn').addEventListener('click', function (e) {
+        e.preventDefault();
+        localStorage.removeItem(TOKEN_KEY);
+        window.location.href = BACKEND + '/logout';
       });
-
-      // Injecter dynamiquement si non déjà présent
-      if (navCta && !navCta.querySelector('[data-auth="logout"]')) {
-        navCta.innerHTML =
-          '<span class="nav-user-name" data-auth="user">' + (currentUser.given_name || currentUser.email) + '</span>' +
-          '<span class="nav-plan-badge nav-plan-' + (currentPlan ? currentPlan.plan : 'gratuit') + '">' +
-            capitalise(currentPlan ? currentPlan.plan : 'Gratuit') +
-          '</span>' +
-          '<a href="' + BACKEND + '/logout" class="btn-nav" data-auth="logout">Se déconnecter</a>';
-      }
     } else {
-      loginBtns.forEach(function (el) { el.style.display = ''; });
-      registerBtns.forEach(function (el) { el.style.display = ''; });
-      logoutBtns.forEach(function (el) { el.style.display = 'none'; });
-      userInfos.forEach(function (el) { el.style.display = 'none'; });
-
-      // Remettre les boutons par défaut si besoin
-      if (navCta && !navCta.querySelector('[data-auth="login"]')) {
-        navCta.innerHTML =
-          '<a href="' + BACKEND + '/login" class="btn-nav" data-auth="login">Se connecter</a>' +
-          '<a href="' + BACKEND + '/register" class="btn-nav btn-nav-primary" data-auth="register">S\'inscrire</a>';
-      }
+      navCta.innerHTML =
+        '<a href="' + BACKEND + '/login" class="btn-nav">Se connecter</a>' +
+        '<a href="' + BACKEND + '/register" class="btn-nav btn-nav-primary">S\'inscrire</a>';
     }
   }
 
-  // ── Boutons "Se connecter" / "S'inscrire" dans le DOM ──
-  // Remplace les href="#" par les vraies URLs Kinde
-  (function wireStaticButtons() {
-    document.addEventListener('DOMContentLoaded', function () {
-      document.querySelectorAll('a.btn-nav, a.btn').forEach(function (el) {
-        var text = el.textContent.trim();
-        if (text === 'Se connecter') {
-          el.href = BACKEND + '/login';
-          el.setAttribute('data-auth', 'login');
-        } else if (text === "S'inscrire" || text === 'S\'inscrire') {
-          el.href = BACKEND + '/register';
-          el.setAttribute('data-auth', 'register');
-        } else if (text === 'S\'inscrire gratuitement →' || text === 'S\'inscrire gratuitement') {
-          el.href = BACKEND + '/register';
-          el.setAttribute('data-auth', 'register');
-        }
-      });
+  function wireStaticButtons() {
+    document.querySelectorAll('a.btn-nav, a.btn').forEach(function (el) {
+      var text = el.textContent.trim();
+      if (text === 'Se connecter') el.href = BACKEND + '/login';
+      else if (text === "S'inscrire") el.href = BACKEND + '/register';
+      else if (text === "S'inscrire gratuitement →" || text === "S'inscrire gratuitement") el.href = BACKEND + '/register';
     });
-  })();
+  }
 
-  // ── Boutons d'abonnement sur tarifs.html ───────────────
   function bindPlanButtons() {
     document.querySelectorAll('[data-plan]').forEach(function (btn) {
       btn.addEventListener('click', function (e) {
@@ -105,46 +96,33 @@
   }
 
   function subscribeToPlan(plan, billing) {
-    // Vérifier si l'utilisateur est connecté
-    if (!currentUser) {
-      window.location.href = BACKEND + '/register?post_login_redirect=tarifs';
-      return;
-    }
-    // Rediriger vers la Stripe Checkout Session créée par le backend
-    window.location.href = BACKEND + '/api/stripe/checkout?plan=' + plan + '&billing=' + billing;
+    if (plan === 'gratuit') { window.location.href = BACKEND + '/register'; return; }
+    var token = getStoredToken();
+    if (!token) { window.location.href = BACKEND + '/register'; return; }
+    window.location.href = BACKEND + '/api/stripe/checkout?plan=' + plan + '&billing=' + billing + '&token=' + encodeURIComponent(token);
   }
 
-  // ── Badge plan sur tarifs.html (si déjà abonné) ────────
   function updatePlanBadges() {
     if (!currentPlan || currentPlan.plan === 'gratuit') return;
-    var planName = currentPlan.plan; // 'croissance' ou 'cession'
-    document.querySelectorAll('[data-plan="' + planName + '"]').forEach(function (btn) {
+    document.querySelectorAll('[data-plan="' + currentPlan.plan + '"]').forEach(function (btn) {
       btn.textContent = 'Plan actif ✓';
       btn.classList.add('btn-success');
       btn.style.pointerEvents = 'none';
     });
   }
 
-  // ── Alertes URL params (?subscription=success, ?error=...) ──
   function showAlerts() {
     var params = new URLSearchParams(window.location.search);
     if (params.get('subscription') === 'success') {
-      var plan = params.get('plan') || 'votre plan';
-      showToast('Abonnement ' + capitalise(plan) + ' activé avec succès !', 'success');
-      // Nettoyer l'URL
+      showToast('Abonnement activé avec succès !', 'success');
       window.history.replaceState({}, '', window.location.pathname);
     }
     if (params.get('subscription') === 'cancelled') {
-      showToast('Paiement annulé. Vous pouvez réessayer à tout moment.', 'info');
-      window.history.replaceState({}, '', window.location.pathname);
-    }
-    if (params.get('error') === 'login_required') {
-      showToast('Veuillez vous connecter pour accéder à ce plan.', 'warning');
+      showToast('Paiement annulé.', 'info');
       window.history.replaceState({}, '', window.location.pathname);
     }
   }
 
-  // ── Toast notification ─────────────────────────────────
   function showToast(msg, type) {
     var t = document.getElementById('ev-toast');
     if (!t) {
@@ -160,11 +138,12 @@
     setTimeout(function () { t.style.opacity = '0'; }, 4000);
   }
 
-  function capitalise(str) {
-    if (!str) return '';
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
+  function capitalise(str) { return str ? str.charAt(0).toUpperCase() + str.slice(1) : ''; }
 
-  // ── Exposer pour usage externe ─────────────────────────
-  window.EvolutyAuth = { subscribeToPlan: subscribeToPlan, getUser: function () { return currentUser; }, getPlan: function () { return currentPlan; } };
+  window.EvolutyAuth = {
+    subscribeToPlan: subscribeToPlan,
+    getUser: function () { return currentUser; },
+    getPlan: function () { return currentPlan; },
+    getToken: getStoredToken,
+  };
 })();

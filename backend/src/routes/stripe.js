@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Stripe = require('stripe');
-const { getKindeSession } = require('@kinde-oss/kinde-node-express');
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.SESSION_SECRET || 'evoluty-secret';
 const { setUserPlan, findUserByStripeSubscription, findUserByStripeCustomer } = require('../services/subscriptionDb');
 const { logger } = require('../middleware/audit');
 
@@ -25,10 +26,12 @@ function getPriceId(plan, billing) {
  */
 router.get('/checkout', async (req, res) => {
   try {
-    const session = await getKindeSession(req, res);
-    if (!session || !session.isAuthenticated) {
-      return res.redirect(`${FRONTEND_URL}/tarifs.html?error=login_required`);
-    }
+    // Authentification via JWT (token passé en query param)
+    const token = req.query.token || (req.headers.authorization || '').replace('Bearer ', '');
+    if (!token) return res.redirect(`${FRONTEND_URL}/tarifs.html?error=login_required`);
+    let payload;
+    try { payload = jwt.verify(token, JWT_SECRET); }
+    catch { return res.redirect(`${FRONTEND_URL}/tarifs.html?error=login_required`); }
 
     const { plan, billing = 'monthly' } = req.query;
     if (!['croissance', 'cession'].includes(plan)) {
@@ -40,7 +43,8 @@ router.get('/checkout', async (req, res) => {
       return res.status(400).json({ error: `Prix Stripe non configuré pour ${plan}/${billing}.` });
     }
 
-    const { id: kindeUserId, email } = session.user;
+    const kindeUserId = payload.id;
+    const email = payload.email;
 
     const checkoutSession = await stripe.checkout.sessions.create({
       mode: 'subscription',

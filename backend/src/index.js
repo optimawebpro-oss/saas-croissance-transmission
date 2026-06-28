@@ -48,7 +48,7 @@ const kindeConfig = {
   grantType:              'AUTHORIZATION_CODE',
   clientId:               process.env.KINDE_CLIENT_ID,
   issuerBaseUrl:          process.env.KINDE_DOMAIN,
-  siteUrl:                process.env.FRONTEND_URL || 'http://localhost:5500',
+  siteUrl:                (process.env.BACKEND_URL || `http://localhost:${PORT}`) + '/auth/post-auth',
   secret:                 process.env.KINDE_CLIENT_SECRET,
   redirectUrl:            process.env.KINDE_REDIRECT_URI || `http://localhost:${PORT}/callback`,
   unAuthorisedUrl:        (process.env.FRONTEND_URL || 'http://localhost:5500') + '/tarifs.html',
@@ -78,7 +78,9 @@ const strictLimit = rateLimit({
 app.use(auditLog);
 
 // ── Routes ────────────────────────────────────────────────
-app.use('/api/auth',       require('./routes/auth'));
+const authRouter = require('./routes/auth');
+app.use('/api/auth', authRouter);
+app.use('/auth',     authRouter);
 app.use('/api/stripe',     require('./routes/stripe'));
 
 app.use('/api/entreprise', strictLimit, require('./routes/entreprise'));

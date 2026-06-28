@@ -2,29 +2,28 @@ const router = require('express').Router();
 const { fetchSIRHData, getAdapter, computeManual } = require('../services/sirh/index');
 const { encrypt } = require('../services/encryption');
 const { v4: uuid } = require('uuid');
+const { requireAuth } = require('../middleware/kindeAuth');
 
 // GET /api/sirh/:provider/auth
-router.get('/:provider/auth', (req, res, next) => {
+router.get('/:provider/auth', requireAuth, (req, res, next) => {
   try {
     const adapter = getAdapter(req.params.provider);
-    const state = uuid();
-    res.json({ authUrl: adapter.getAuthUrl(state), state });
+    res.json({ authUrl: adapter.getAuthUrl(uuid()), state: uuid() });
   } catch (err) { next(err); }
 });
 
-// GET /api/sirh/:provider/callback
+// GET /api/sirh/:provider/callback — flux OAuth externe
 router.get('/:provider/callback', async (req, res, next) => {
   try {
     const { code, error } = req.query;
     if (error) return res.redirect(`${process.env.FRONTEND_URL}/mon-espace.html?sirh_error=${error}`);
-    const adapter = getAdapter(req.params.provider);
-    await adapter.exchangeCode(code);
+    await getAdapter(req.params.provider).exchangeCode(code);
     res.redirect(`${process.env.FRONTEND_URL}/mon-espace.html?sirh_success=${req.params.provider}`);
   } catch (err) { next(err); }
 });
 
 // GET /api/sirh/:provider/data
-router.get('/:provider/data', async (req, res, next) => {
+router.get('/:provider/data', requireAuth, async (req, res, next) => {
   try {
     const accessToken = req.headers['x-sirh-token'];
     if (!accessToken) return res.status(400).json({ error: 'x-sirh-token manquant.' });
@@ -36,12 +35,11 @@ router.get('/:provider/data', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
-// POST /api/sirh/manual — saisie manuelle (fallback TPE)
-router.post('/manual', (req, res, next) => {
+// POST /api/sirh/manual
+router.post('/manual', requireAuth, (req, res, next) => {
   try {
     const { effectif, ancienneteMoyenneMois, turnover12mois, hasDirectionN1 } = req.body;
     if (effectif == null) return res.status(400).json({ error: 'effectif requis.' });
-
     const data = computeManual({ effectif, ancienneteMoyenneMois, turnover12mois, hasDirectionN1 });
     res.json({ success: true, data, _encrypted: encrypt(data) });
   } catch (err) { next(err); }

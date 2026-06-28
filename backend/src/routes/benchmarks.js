@@ -23,8 +23,12 @@ router.get('/', (req, res) => {
   res.json({ success: true, data: data.secteurs });
 });
 
-// POST /api/benchmarks/refresh — invalide le cache après mise à jour du fichier
+// POST /api/benchmarks/refresh — réservé (pas d'accès public)
 router.post('/refresh', (req, res) => {
+  const adminKey = req.headers['x-admin-key'];
+  if (!adminKey || adminKey !== process.env.ADMIN_KEY) {
+    return res.status(403).json({ error: 'Accès refusé.' });
+  }
   invalidateCache();
   res.json({ success: true, message: 'Cache benchmarks invalidé.' });
 });

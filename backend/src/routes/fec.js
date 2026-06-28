@@ -2,6 +2,7 @@ const router = require('express').Router();
 const multer = require('multer');
 const { parseFEC } = require('../services/fecParser');
 const { encrypt } = require('../services/encryption');
+const { requireAuth } = require('../middleware/kindeAuth');
 
 // Multer : mémoire uniquement, max 50Mo, .txt/.csv uniquement
 const upload = multer({
@@ -17,7 +18,7 @@ const upload = multer({
 });
 
 // POST /api/fec/upload
-router.post('/upload', upload.single('fec'), (req, res, next) => {
+router.post('/upload', requireAuth, upload.single('fec'), (req, res, next) => {
   try {
     if (!req.file) return res.status(400).json({ error: 'Aucun fichier reçu.' });
 

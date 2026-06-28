@@ -1,14 +1,17 @@
 const router = require('express').Router();
 const { logger } = require('../middleware/audit');
+const { requireAuth } = require('../middleware/kindeAuth');
 
-/**
- * RGPD — Droit à l'effacement (art. 17 RGPD)
- * En production : supprimer toutes les données chiffrées en base liées à l'entreprise
- */
-router.delete('/entreprise/:entrepriseId', async (req, res, next) => {
+// DELETE /api/rgpd/entreprise/:entrepriseId — Droit à l'effacement (art. 17 RGPD)
+router.delete('/entreprise/:entrepriseId', requireAuth, async (req, res, next) => {
   try {
     const { entrepriseId } = req.params;
     const { confirmation } = req.body;
+
+    // Ownership : l'entrepriseId doit correspondre à l'utilisateur connecté
+    if (entrepriseId !== req.user.id) {
+      return res.status(403).json({ error: 'Accès refusé : vous ne pouvez supprimer que vos propres données.' });
+    }
 
     if (confirmation !== `SUPPRIMER_${entrepriseId}`) {
       return res.status(400).json({
@@ -16,41 +19,43 @@ router.delete('/entreprise/:entrepriseId', async (req, res, next) => {
       });
     }
 
-    // En production : supprimer de la base de données
-    // await db.deleteAllByEntrepriseId(entrepriseId);
-
     logger.info({
       event: 'RGPD_ERASURE',
       entrepriseId,
-      requestedBy: req.headers['x-user-id'] || 'anonymous',
+      requestedBy: req.user.id,
+      requestedByEmail: req.user.email,
       timestamp: new Date().toISOString(),
     });
 
     res.json({
       success: true,
-      message: `Toutes les données associées à l'entreprise ${entrepriseId} ont été supprimées.`,
+      message: `Toutes les données associées à votre compte ont été supprimées.`,
       timestamp: new Date().toISOString(),
     });
   } catch (err) { next(err); }
 });
 
 // GET /api/rgpd/export/:entrepriseId — Droit d'accès (art. 15 RGPD)
-router.get('/export/:entrepriseId', async (req, res, next) => {
+router.get('/export/:entrepriseId', requireAuth, async (req, res, next) => {
   try {
-    // En production : récupérer et décrypter toutes les données de l'entreprise
-    // const data = await db.getAllByEntrepriseId(req.params.entrepriseId);
+    const { entrepriseId } = req.params;
+
+    if (entrepriseId !== req.user.id) {
+      return res.status(403).json({ error: 'Accès refusé : vous ne pouvez exporter que vos propres données.' });
+    }
 
     logger.info({
       event: 'RGPD_EXPORT',
-      entrepriseId: req.params.entrepriseId,
-      requestedBy: req.headers['x-user-id'] || 'anonymous',
+      entrepriseId,
+      requestedBy: req.user.id,
+      requestedByEmail: req.user.email,
       timestamp: new Date().toISOString(),
     });
 
     res.json({
       success: true,
       message: 'Export RGPD (implémentation complète requiert une base de données).',
-      entrepriseId: req.params.entrepriseId,
+      entrepriseId,
     });
   } catch (err) { next(err); }
 });

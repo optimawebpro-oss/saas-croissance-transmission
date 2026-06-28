@@ -1,52 +1,44 @@
 const router = require('express').Router();
 const bridge = require('../services/banking/bridge');
 const { encrypt } = require('../services/encryption');
+const { requireAuth } = require('../middleware/kindeAuth');
 
-// POST /api/banking/connect — démarre la session Bridge
-router.post('/connect', async (req, res, next) => {
+// POST /api/banking/connect
+router.post('/connect', requireAuth, async (req, res, next) => {
   try {
-    const userId = req.headers['x-user-id'] || req.body.userId;
-    if (!userId) return res.status(400).json({ error: 'userId requis.' });
-
+    const userId = req.user.id; // userId toujours depuis le JWT, jamais du client
     const result = await bridge.createAuthUrl(userId);
     if (!result.ok) return res.status(502).json({ error: result.error });
-
     res.json({ success: true, authUrl: result.authUrl, expiresAt: result.expiresAt });
   } catch (err) { next(err); }
 });
 
-// GET /api/banking/callback — redirect OAuth Bridge
+// GET /api/banking/callback — redirect OAuth Bridge (pas de JWT requis ici, flux OAuth externe)
 router.get('/callback', async (req, res, next) => {
   try {
-    const { state, error } = req.query;
+    const { error } = req.query;
     if (error) return res.redirect(`${process.env.FRONTEND_URL}/mon-espace.html?banking_error=${error}`);
     res.redirect(`${process.env.FRONTEND_URL}/mon-espace.html?banking_success=1`);
   } catch (err) { next(err); }
 });
 
-// GET /api/banking/data — récupère soldes + flux
-router.get('/data', async (req, res, next) => {
+// GET /api/banking/data
+router.get('/data', requireAuth, async (req, res, next) => {
   try {
-    const bridgeUserId = req.headers['x-bridge-user-id'];
-    if (!bridgeUserId) return res.status(400).json({ error: 'x-bridge-user-id manquant.' });
-
-    const result = await bridge.fetchBankData(bridgeUserId);
+    const userId = req.user.id; // ownership : on utilise l'ID du token, jamais d'un header
+    const result = await bridge.fetchBankData(userId);
     if (!result.ok) return res.status(502).json({ error: result.error });
-
     const encrypted = encrypt(result.data);
     res.json({ success: true, data: result.data, _encrypted: encrypted });
   } catch (err) { next(err); }
 });
 
-// DELETE /api/banking/revoke — révocation RGPD/PSD2
-router.delete('/revoke', async (req, res, next) => {
+// DELETE /api/banking/revoke
+router.delete('/revoke', requireAuth, async (req, res, next) => {
   try {
-    const bridgeUserId = req.headers['x-bridge-user-id'] || req.body.bridgeUserId;
-    if (!bridgeUserId) return res.status(400).json({ error: 'bridgeUserId requis.' });
-
-    const result = await bridge.revokeAccess(bridgeUserId);
+    const userId = req.user.id;
+    const result = await bridge.revokeAccess(userId);
     if (!result.ok) return res.status(502).json({ error: result.error });
-
     res.json({ success: true, message: 'Accès bancaire révoqué. Données supprimées.' });
   } catch (err) { next(err); }
 });

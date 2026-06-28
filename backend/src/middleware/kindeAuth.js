@@ -1,50 +1,17 @@
-const { getUser } = require('@kinde-oss/kinde-node-express');
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.SESSION_SECRET || 'evoluty-secret';
 
-/**
- * Récupère l'utilisateur Kinde depuis la session sans rediriger.
- * Retourne l'objet user ou null si non authentifié.
- */
-function getKindeUser(req, res) {
-  return new Promise((resolve) => {
-    const origRedirect = res.redirect.bind(res);
-    // Intercepte la redirection que getUser fait si non connecté
-    res.redirect = () => {
-      res.redirect = origRedirect;
-      resolve(null);
-    };
-    getUser(req, res, () => {
-      res.redirect = origRedirect;
-      resolve(req.user || null);
-    });
-  });
-}
-
-/**
- * Middleware — vérifie que l'utilisateur est connecté via Kinde.
- * Retourne 401 JSON si non authentifié (pas de redirection).
- */
-async function requireAuth(req, res, next) {
+function requireAuth(req, res, next) {
+  const header = req.headers.authorization;
+  if (!header || !header.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Non authentifié.' });
+  }
   try {
-    const user = await getKindeUser(req, res);
-    if (!user) {
-      return res.status(401).json({ error: 'Non authentifié. Veuillez vous connecter.' });
-    }
-    req.user = user;
+    req.user = jwt.verify(header.slice(7), JWT_SECRET);
     next();
-  } catch (err) {
-    return res.status(401).json({ error: 'Session invalide.' });
+  } catch {
+    return res.status(401).json({ error: 'Token invalide ou expiré.' });
   }
 }
 
-/**
- * Middleware optionnel — attache req.user si connecté, continue sinon.
- */
-async function optionalAuth(req, res, next) {
-  try {
-    const user = await getKindeUser(req, res);
-    if (user) req.user = user;
-  } catch (_) {}
-  next();
-}
-
-module.exports = { requireAuth, optionalAuth, getKindeUser };
+module.exports = { requireAuth };

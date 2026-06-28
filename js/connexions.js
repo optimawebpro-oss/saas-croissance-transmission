@@ -1,6 +1,11 @@
 // ===== EVOLUTY — Connexions Frontend =====
 const API = 'https://saas-croissance-transmission-production.up.railway.app/api';
 
+function authHeaders(extra) {
+  const token = localStorage.getItem('evoluty_auth_token');
+  return { ...(token ? { 'Authorization': 'Bearer ' + token } : {}), ...extra };
+}
+
 // ── 1. SIRET / Pappers ──────────────────────────────────
 async function searchSiret() {
   const siret = document.getElementById('siret-input')?.value?.trim();
@@ -12,7 +17,7 @@ async function searchSiret() {
 
   try {
     const res = await fetch(`${API}/entreprise/siret/${siret}`, {
-      headers: { 'x-user-id': getUserId() },
+      headers: authHeaders(),
     });
     const json = await res.json();
 
@@ -85,7 +90,7 @@ async function uploadFEC(file) {
   try {
     const res = await fetch(`${API}/fec/upload`, {
       method: 'POST',
-      headers: { 'x-user-id': getUserId() },
+      headers: authHeaders(),
       body: fd,
     });
     const json = await res.json();
@@ -130,8 +135,8 @@ async function connectBanking() {
   try {
     const res = await fetch(`${API}/banking/connect`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-user-id': getUserId() },
-      body: JSON.stringify({ userId: getUserId() }),
+      headers: authHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({}),
     });
     const json = await res.json();
     if (!res.ok) return showConnToast(json.error, 'warn');
@@ -149,7 +154,7 @@ async function revokeBanking() {
   try {
     const res = await fetch(`${API}/banking/revoke`, {
       method: 'DELETE',
-      headers: { 'x-user-id': getUserId(), 'x-bridge-user-id': getUserId() },
+      headers: authHeaders(),
     });
     const json = await res.json();
     showConnToast(res.ok ? 'Accès bancaire révoqué.' : json.error, res.ok ? 'ok' : 'warn');
@@ -161,7 +166,7 @@ async function revokeBanking() {
 // ── 4. CRM ──────────────────────────────────────────────
 async function connectCRM(provider) {
   try {
-    const res = await fetch(`${API}/crm/${provider}/auth`, { headers: { 'x-user-id': getUserId() } });
+    const res = await fetch(`${API}/crm/${provider}/auth`, { headers: authHeaders() });
     const json = await res.json();
     if (!res.ok) return showConnToast(json.error, 'warn');
     window.open(json.authUrl, '_blank', 'width=600,height=700');
@@ -173,7 +178,7 @@ async function connectCRM(provider) {
 // ── 5. SIRH ─────────────────────────────────────────────
 async function connectSIRH(provider) {
   try {
-    const res = await fetch(`${API}/sirh/${provider}/auth`, { headers: { 'x-user-id': getUserId() } });
+    const res = await fetch(`${API}/sirh/${provider}/auth`, { headers: authHeaders() });
     const json = await res.json();
     if (!res.ok) return showConnToast(json.error, 'warn');
     window.open(json.authUrl, '_blank', 'width=600,height=700');
@@ -193,7 +198,7 @@ async function submitSIRHManuel(e) {
   try {
     const res = await fetch(`${API}/sirh/manual`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-user-id': getUserId() },
+      headers: authHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(data),
     });
     const json = await res.json();
@@ -212,7 +217,7 @@ async function fetchJuridique() {
   setLoading(btn, true);
 
   try {
-    const res = await fetch(`${API}/juridique/${siren}`, { headers: { 'x-user-id': getUserId() } });
+    const res = await fetch(`${API}/juridique/${siren}`, { headers: authHeaders() });
     const json = await res.json();
     if (!res.ok) return showConnToast(json.error, 'warn');
 
@@ -237,12 +242,6 @@ async function fetchJuridique() {
 }
 
 // ── UTILS ───────────────────────────────────────────────
-function getUserId() {
-  let id = localStorage.getItem('evoluty_uid');
-  if (!id) { id = 'user_' + Math.random().toString(36).substr(2, 9); localStorage.setItem('evoluty_uid', id); }
-  return id;
-}
-
 function setLoading(btn, loading) {
   if (!btn) return;
   btn.disabled = loading;

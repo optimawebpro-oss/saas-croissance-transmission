@@ -3,9 +3,10 @@ const { fetchCRMData, getAdapter } = require('../services/crm/index');
 const { encrypt } = require('../services/encryption');
 const { v4: uuid } = require('uuid');
 const { requireAuth } = require('../middleware/kindeAuth');
+const { requirePlan } = require('../middleware/requirePlan');
 
 // GET /api/crm/:provider/auth
-router.get('/:provider/auth', requireAuth, (req, res, next) => {
+router.get('/:provider/auth', requireAuth, requirePlan('croissance'), (req, res, next) => {
   try {
     const adapter = getAdapter(req.params.provider);
     const state = uuid();
@@ -26,7 +27,7 @@ router.get('/:provider/callback', async (req, res, next) => {
 });
 
 // GET /api/crm/:provider/data
-router.get('/:provider/data', requireAuth, async (req, res, next) => {
+router.get('/:provider/data', requireAuth, requirePlan('croissance'), async (req, res, next) => {
   try {
     // Le token CRM doit être lié à l'utilisateur en base (en prod) — ici on valide a minima le JWT
     const accessToken = req.headers['x-crm-token'];

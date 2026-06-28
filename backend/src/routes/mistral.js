@@ -1,11 +1,12 @@
 const router = require('express').Router();
 const https = require('https');
 const { requireAuth } = require('../middleware/kindeAuth');
+const { requirePlan } = require('../middleware/requirePlan');
 
 const MISTRAL_API_KEY = process.env.MISTRAL_API_KEY;
 
-// POST /api/mistral/chat — proxy streaming vers Mistral, clé jamais exposée côté client
-router.post('/chat', requireAuth, (req, res) => {
+// POST /api/mistral/chat — réservé aux plans payants (croissance ou cession)
+router.post('/chat', requireAuth, requirePlan('croissance'), (req, res) => {
   const { messages, model, temperature, max_tokens } = req.body;
 
   if (!messages || !Array.isArray(messages)) {

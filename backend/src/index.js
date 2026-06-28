@@ -43,6 +43,15 @@ app.use('/api/stripe/webhook', express.raw({ type: 'application/json' }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
+// Intercepte /callback pour forcer la sauvegarde de session avant la redirection
+app.get('/callback', (req, res, next) => {
+  const orig = res.redirect.bind(res);
+  res.redirect = function (url) {
+    req.session.save(() => orig(url));
+  };
+  next();
+});
+
 // ── Kinde Auth (v1.7.0 — paramètres snake_case) ───────────
 const kindeConfig = {
   grantType:              'AUTHORIZATION_CODE',

@@ -67,7 +67,7 @@
           <li class="plan-feature"><span class="cross">✗</span> Connexion outils et partenaires</li>
           <li class="plan-feature"><span class="cross">✗</span> Historique des analyses</li>
         </ul>
-        <a href="#" class="btn btn-outline" style="width:100%; justify-content:center;">S'inscrire gratuitement</a>
+        <a href="#" class="btn btn-outline" style="width:100%; justify-content:center;" data-plan="gratuit">S'inscrire gratuitement</a>
       </div>
 
       <!-- CROISSANCE -->
@@ -91,7 +91,7 @@
           <li class="plan-feature active"><span class="check">✦</span> Historique complet</li>
           <li class="plan-feature active"><span class="check">✦</span> Alertes et recommandations IA</li>
         </ul>
-        <a href="#" class="btn btn-primary" style="width:100%; justify-content:center;">S'inscrire →</a>
+        <a href="#" class="btn btn-primary" style="width:100%; justify-content:center;" data-plan="croissance" data-billing="monthly">S'inscrire →</a>
       </div>
 
       <!-- CESSION -->
@@ -114,7 +114,7 @@
           <li class="plan-feature active"><span class="check">✦</span> Historique complet</li>
           <li class="plan-feature active"><span class="check">✦</span> Alertes et recommandations IA</li>
         </ul>
-        <a href="contact.html" class="btn btn-outline" style="width:100%; justify-content:center;">Démarrer →</a>
+        <a href="#" class="btn btn-outline" style="width:100%; justify-content:center;" data-plan="cession" data-billing="monthly">S'inscrire →</a>
       </div>
 
     </div>
@@ -175,7 +175,9 @@
     </div>
   </footer>
 
+  <script>window.EVOLUTY_BACKEND_URL = 'http://localhost:3001';</script>
   <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
   <script>
     let isAnnual = false;
     function toggleBilling() {
@@ -193,6 +195,10 @@
       labelA.style.fontWeight = isAnnual ? '600' : '400';
       document.querySelectorAll('.plan-price .amount[data-monthly]').forEach(el => {
         el.textContent = isAnnual ? el.dataset.annual : el.dataset.monthly;
+      });
+      // Synchronise le billing sur les boutons d'abonnement
+      document.querySelectorAll('[data-plan][data-billing]').forEach(el => {
+        el.dataset.billing = isAnnual ? 'annual' : 'monthly';
       });
     }
     function toggleFaq(el) { el.parentElement.classList.toggle('open'); }

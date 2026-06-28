@@ -1,7 +1,5 @@
 // ===== MISTRAL AI — EVOLUTY =====
-// ⚠️ Clé API exposée côté client — à sécuriser via un backend en production.
-const MISTRAL_KEY = 'qoubbydVESrPU5VePMzIxmoN47ngEMny';
-const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
+const MISTRAL_BACKEND_URL = (window.EVOLUTY_BACKEND_URL || 'http://localhost:3001') + '/api/mistral/chat';
 const MISTRAL_MODEL = 'mistral-large-latest';
 
 // ── Prompts de base (hors plan) ──────────────────────────────────────────────
@@ -242,15 +240,18 @@ async function sendMessage(mod) {
   appendTyping(mod, typingId);
 
   try {
-    const res = await fetch(MISTRAL_URL, {
+    const token = localStorage.getItem('evoluty_auth_token');
+    const res = await fetch(MISTRAL_BACKEND_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${MISTRAL_KEY}` },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { 'Authorization': 'Bearer ' + token } : {}),
+      },
       body: JSON.stringify({
         model: MISTRAL_MODEL,
         messages: [{ role: 'system', content: systemPrompt }, ...histories[mod]],
         temperature: isPlanGen ? 0.4 : 0.55,
         max_tokens: isPlanGen ? 3200 : 1800,
-        stream: true,
       }),
     });
 

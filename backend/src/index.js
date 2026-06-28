@@ -138,8 +138,9 @@ app.get('/logout', (req, res) => {
 });
 
 // ── API Routes ───────────────────────────────────────────
-app.use('/api/auth',   require('./routes/auth'));
-app.use('/api/stripe', require('./routes/stripe'));
+app.use('/api/auth',    require('./routes/auth'));
+app.use('/api/stripe',  require('./routes/stripe'));
+app.use('/api/mistral', require('./routes/mistral'));
 
 const strictLimit = rateLimit({ windowMs: 60 * 1000, max: 10 });
 app.use('/api/entreprise', strictLimit, require('./routes/entreprise'));

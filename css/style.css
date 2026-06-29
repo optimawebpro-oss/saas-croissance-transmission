@@ -257,76 +257,57 @@ p { color: var(--text-muted); }
   align-items: center;
   justify-content: center;
 }
-/* Orbes lumineux */
-.bv-glow-orb {
+/* ── Courbe de valorisation (er-card) ── */
+.er-card {
+  position: relative;
+  background: #0d0f17;
+  border: 1px solid rgba(91,134,255,0.14);
+  border-radius: 20px;
+  padding: 40px 32px 28px;
+  overflow: hidden;
+  width: 100%;
+}
+.er-glow {
   position: absolute;
-  border-radius: 50%;
+  top: -120px; right: -100px;
+  width: 360px; height: 360px;
+  background: radial-gradient(circle, rgba(52,211,153,0.28) 0%, rgba(52,211,153,0) 70%);
+  filter: blur(10px);
   pointer-events: none;
+  animation: er-pulse 7s ease-in-out infinite;
 }
-.bv-glow-orb:nth-child(1) {
-  width: 340px; height: 340px;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(33,84,200,0.22) 0%, rgba(99,102,241,0.08) 45%, transparent 70%);
-  animation: bv-breathe 5s ease-in-out infinite;
+@keyframes er-pulse {
+  0%,100% { transform: scale(1);    opacity: 0.7; }
+  50%      { transform: scale(1.12); opacity: 1;   }
 }
-.bv-orb-2 {
-  width: 200px; height: 200px;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(139,92,246,0.18) 0%, transparent 65%);
-  animation: bv-breathe 7s ease-in-out infinite reverse;
-}
-.bv-orb-3 {
-  width: 120px; height: 120px;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(59,130,246,0.35) 0%, transparent 70%);
-  animation: bv-breathe 4s ease-in-out infinite;
-}
-@keyframes bv-breathe {
-  0%, 100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1);   }
-  50%       { opacity: 1;   transform: translate(-50%, -50%) scale(1.12); }
-}
-
-/* Cards flottantes de stats */
-.bv-stat-card {
+.er-chart { width: 100%; height: auto; display: block; position: relative; z-index: 1; }
+.er-label {
   position: absolute;
+  z-index: 2;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   gap: 2px;
-  background: rgba(13,13,28,0.75);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(33,84,200,0.25);
-  border-radius: 10px;
-  padding: 12px 18px;
-  animation: bv-float ease-in-out infinite;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
 }
-.bv-card-val {
-  font-family: 'Libre Baskerville', Georgia, serif;
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: var(--blue-light);
+.er-label.is-visible { opacity: 1; transform: translateY(0); }
+.er-label-tag  { font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; }
+.er-label-value {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 28px;
   line-height: 1;
 }
-.bv-card-label {
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-.bv-card-1 { top: 18%; left: 8%;  animation-duration: 5.5s; animation-delay: 0s;   }
-.bv-card-2 { top: 12%; right: 8%; animation-duration: 6.5s; animation-delay: 1.2s; }
-.bv-card-3 { bottom: 16%; left: 50%; transform: translateX(-50%); animation-duration: 7s; animation-delay: 0.6s; }
-@keyframes bv-float {
-  0%, 100% { transform: translateY(0);    }
-  50%       { transform: translateY(-8px); }
-}
-.bv-card-3 { animation-name: bv-float-center; }
-@keyframes bv-float-center {
-  0%, 100% { transform: translateX(-50%) translateY(0);    }
-  50%       { transform: translateX(-50%) translateY(-8px); }
+.er-label-avec { top: 6%; right: 4%; text-align: right; }
+.er-label-avec .er-label-tag   { color: rgba(52,211,153,0.7); }
+.er-label-avec .er-label-value { color: #34D399; }
+.er-label-sans { bottom: 18%; left: 4%; }
+.er-label-sans .er-label-tag   { color: rgba(251,191,36,0.7); }
+.er-label-sans .er-label-value { color: #FBBF24; }
+@media (prefers-reduced-motion: reduce) {
+  .er-glow  { animation: none; }
+  .er-label { transition: none; }
 }
 
 .brain-caption h2 { margin-bottom: 16px; }

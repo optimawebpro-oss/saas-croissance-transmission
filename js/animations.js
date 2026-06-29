@@ -406,8 +406,76 @@
   // ─────────────────────────────────────────────────────────
   // INIT
   // ─────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────
+  // 2. COURBE DE VALORISATION AU SCROLL
+  // ─────────────────────────────────────────────────────────
+  function initScrollCurve() {
+    var card      = document.getElementById('erCard');
+    var pathSans  = document.getElementById('erPathSans');
+    var pathAvec  = document.getElementById('erPathAvec');
+    var area      = document.getElementById('erArea');
+    var dotSans   = document.getElementById('erDotSans');
+    var dotAvec   = document.getElementById('erDotAvec');
+    var labelSans = document.getElementById('erLabelSans');
+    var labelAvec = document.getElementById('erLabelAvec');
+    if (!card || !pathSans) return;
+
+    var lenSans = pathSans.getTotalLength();
+    var lenAvec = pathAvec.getTotalLength();
+    pathSans.style.strokeDasharray  = lenSans;
+    pathAvec.style.strokeDasharray  = lenAvec;
+    pathSans.style.strokeDashoffset = lenSans;
+    pathAvec.style.strokeDashoffset = lenAvec;
+
+    var maxProgress = 0, ticking = false;
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+    function computeProgress() {
+      var rect = card.getBoundingClientRect();
+      var vh   = window.innerHeight;
+      return clamp((vh - rect.top) / (vh + rect.height), 0, 1);
+    }
+
+    function apply(p) {
+      pathSans.style.strokeDashoffset = lenSans * (1 - p);
+      pathAvec.style.strokeDashoffset = lenAvec * (1 - p);
+      if (p > 0.01) {
+        var ps = pathSans.getPointAtLength(lenSans * p);
+        var pa = pathAvec.getPointAtLength(lenAvec * p);
+        dotSans.setAttribute('cx', ps.x); dotSans.setAttribute('cy', ps.y); dotSans.setAttribute('opacity', 1);
+        dotAvec.setAttribute('cx', pa.x); dotAvec.setAttribute('cy', pa.y); dotAvec.setAttribute('opacity', 1);
+      } else {
+        dotSans.setAttribute('opacity', 0); dotAvec.setAttribute('opacity', 0);
+      }
+      area.setAttribute('opacity', clamp(p / 0.4, 0, 1));
+      labelSans.classList.toggle('is-visible', p >= 0.65);
+      labelAvec.classList.toggle('is-visible', p >= 0.80);
+    }
+
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () {
+        maxProgress = Math.max(maxProgress, computeProgress());
+        apply(maxProgress);
+        ticking = false;
+      });
+    }
+
+    if (reduceMotion) {
+      apply(1);
+    } else {
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll);
+      onScroll();
+    }
+  }
+
   function init() {
     initCinematic();
+    initScrollCurve();
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

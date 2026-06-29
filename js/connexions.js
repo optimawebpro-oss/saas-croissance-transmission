@@ -1,4 +1,4 @@
-// ===== EVOLUTY — Connexions Frontend =====
+﻿// ===== EVOLUTY — Connexions Frontend =====
 const API = 'https://saas-croissance-transmission-production.up.railway.app/api';
 
 function authHeaders(extra) {
@@ -372,131 +372,9 @@ function showConnToast(msg, type = 'ok') {
 // ── HTML TEMPLATE CONNEXIONS ────────────────────────────
 function buildConnexionsHTML(mod) {
   return `
-  <!-- 1. Identité entreprise -->
+  <!-- 1. Stripe / Facturation — CA récurrent -->
   <div class="conn-section">
-    <div class="conn-section-title">1 — Identité entreprise (Pappers / INSEE)</div>
-    <div style="display:flex;gap:10px;align-items:center;">
-      <input id="siret-input" type="text" placeholder="SIRET (14 chiffres)"
-        style="flex:1;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;color:var(--text-white);font-size:0.9rem;"
-        onkeydown="if(event.key==='Enter')searchSiret()" />
-      <button id="btn-siret" class="btn btn-primary btn-sm" onclick="searchSiret()">Rechercher →</button>
-    </div>
-    <div id="siret-result" style="display:none;margin-top:12px;"></div>
-  </div>
-
-  <!-- 2. FEC -->
-  <div class="conn-section">
-    <div class="conn-section-title">2 — Fichier des Écritures Comptables (FEC)</div>
-    <div class="fec-drop" id="fec-drop" onclick="document.getElementById('fec-file').click()">
-      <span class="drop-icon">+</span>
-      <p>Glissez votre fichier FEC ici ou cliquez pour sélectionner</p>
-      <span style="font-size:0.75rem;color:var(--text-muted);">Formats acceptés : .txt · .csv · Max 50 Mo · Norme DGFiP</span>
-      <input id="fec-file" type="file" accept=".txt,.csv" style="display:none" onchange="handleFecInput(this)" />
-    </div>
-    <div class="fec-status" id="fec-status"></div>
-    <div id="fec-result" style="display:none;margin-top:12px;"></div>
-  </div>
-
-  <!-- 3. Open Banking -->
-  <div class="conn-section">
-    <div class="conn-section-title">3 — Open Banking · Bridge (PSD2)</div>
-    <div class="conn-card-sm" style="margin-bottom:10px;">
-      <div class="cc-left">
-        <span class="cc-icon"></span>
-        <div>
-          <h4>Compte bancaire professionnel</h4>
-          <p>Solde, flux entrants/sortants 6 mois · Consentement 90 jours · Révocable à tout moment</p>
-        </div>
-      </div>
-      <div style="display:flex;gap:8px;">
-        <button id="btn-banking" class="btn btn-primary btn-sm" onclick="connectBanking()">Connecter</button>
-        <button class="btn btn-secondary btn-sm" onclick="revokeBanking()" title="Révoquer l'accès">✕</button>
-      </div>
-    </div>
-    <div style="font-size:0.75rem;color:var(--text-muted);padding:8px 0;">Lecture seule · Données chiffrées AES-256 · Hébergement UE · Révocable à tout moment</div>
-  </div>
-
-  <!-- 4. CRM & Facturation -->
-  <div class="conn-section">
-    <div class="conn-section-title">4 — CRM & Facturation</div>
-    <div class="conn-cards-row">
-      <div class="conn-card-sm">
-        <div class="cc-left"><span class="cc-icon"></span><div><h4>HubSpot</h4><p>CA par client, pipeline, churn</p></div></div>
-        <button class="btn btn-outline btn-sm" onclick="connectCRM('hubspot')">Connecter</button>
-      </div>
-      <div class="conn-card-sm">
-        <div class="cc-left"><span class="cc-icon"></span><div><h4>Pipedrive</h4><p>Deals gagnés, clients, revenus</p></div></div>
-        <button class="btn btn-outline btn-sm" onclick="connectCRM('pipedrive')">Connecter</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 5. SIRH -->
-  <div class="conn-section">
-    <div class="conn-section-title">5 — SIRH (Capital humain)</div>
-    <div class="conn-cards-row" style="margin-bottom:12px;">
-      <div class="conn-card-sm">
-        <div class="cc-left"><span class="cc-icon"></span><div><h4>PayFit</h4><p>Effectif, ancienneté, turnover</p></div></div>
-        <button class="btn btn-outline btn-sm" onclick="connectSIRH('payfit')">Connecter</button>
-      </div>
-      <div class="conn-card-sm">
-        <div class="cc-left"><span class="cc-icon"></span><div><h4>Lucca</h4><p>Collaborateurs, organigramme</p></div></div>
-        <button class="btn btn-outline btn-sm" onclick="connectSIRH('lucca')">Connecter</button>
-      </div>
-    </div>
-    <details>
-      <summary style="font-size:0.83rem;color:var(--text-muted);cursor:pointer;padding:8px 0;">Pas de SIRH ? Saisie manuelle →</summary>
-      <form class="sirh-manual" onsubmit="submitSIRHManuel(event)" style="margin-top:8px;">
-        <h4>Saisie manuelle (TPE / PME sans SIRH)</h4>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Effectif total</label>
-            <input id="sirh-effectif" type="number" min="1" placeholder="Ex : 12" required />
-          </div>
-          <div class="form-group">
-            <label>Ancienneté moyenne (mois)</label>
-            <input id="sirh-anciennete" type="number" min="0" placeholder="Ex : 36" />
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Turnover 12 mois (%)</label>
-            <input id="sirh-turnover" type="number" min="0" max="100" placeholder="Ex : 15" />
-          </div>
-          <div class="form-group" style="display:flex;align-items:center;gap:10px;padding-top:24px;">
-            <input id="sirh-n1" type="checkbox" style="width:auto;accent-color:var(--blue-accent);" />
-            <label for="sirh-n1" style="font-weight:400;font-size:0.88rem;cursor:pointer;">Direction N-1 en place</label>
-          </div>
-        </div>
-        <button type="submit" class="btn btn-primary btn-sm">Enregistrer →</button>
-      </form>
-    </details>
-  </div>
-
-  <!-- 6. Benchmarks sectoriels -->
-  <div class="conn-section">
-    <div class="conn-section-title">6 — Benchmarks sectoriels</div>
-    <div class="conn-card-sm">
-      <div class="cc-left"><span class="cc-icon">📊</span>
-        <div><h4>Multiples EBE par secteur</h4><p>Table interne mise à jour manuellement · 9 secteurs couverts · Extensible API Epsilon</p></div>
-      </div>
-      <span class="badge badge-blue">✦ Actif</span>
-    </div>
-  </div>
-
-  <!-- 7. Infogreffe -->
-  <div class="conn-section">
-    <div class="conn-section-title">7 — Conformité juridique (Infogreffe)</div>
-    <div style="display:flex;gap:10px;align-items:center;">
-      <div style="flex:1;font-size:0.85rem;color:var(--text-muted);">Actes déposés, nantissements, procédures collectives — alimentés par le SIREN de votre entreprise (étape 1).</div>
-      <button id="btn-juridique" class="btn btn-primary btn-sm" onclick="fetchJuridique()">Analyser →</button>
-    </div>
-    <div id="juridique-result" style="display:none;margin-top:12px;"></div>
-  </div>
-
-  <!-- 8. Stripe / Facturation — CA récurrent -->
-  <div class="conn-section">
-    <div class="conn-section-title">8 — Facturation & CA récurrent (Stripe)</div>
+    <div class="conn-section-title">1 — Facturation & CA récurrent (Stripe)</div>
     <div class="conn-cards-row">
       <div class="conn-card-sm">
         <div class="cc-left"><span class="cc-icon"></span><div><h4>Stripe</h4><p>% CA récurrent, MRR, ARR, contrats actifs</p></div></div>
@@ -512,7 +390,7 @@ function buildConnexionsHTML(mod) {
 
   <!-- 9. INPI — Dépôts de marque -->
   <div class="conn-section">
-    <div class="conn-section-title">9 — Propriété intellectuelle (INPI)</div>
+    <div class="conn-section-title">2 — Propriété intellectuelle (INPI)</div>
     <div style="display:flex;gap:10px;align-items:center;">
       <div style="flex:1;font-size:0.85rem;color:var(--text-muted);">Dépôts de marque, brevets et dessins — alimentés automatiquement par le SIREN (étape 1).</div>
       <button id="btn-inpi-${mod}" class="btn btn-primary btn-sm" onclick="fetchINPI('${mod}')">Analyser →</button>
@@ -522,7 +400,7 @@ function buildConnexionsHTML(mod) {
 
   <!-- 10. Import documentaire -->
   <div class="conn-section">
-    <div class="conn-section-title">10 — Import documentaire</div>
+    <div class="conn-section-title">3 — Import documentaire</div>
     <p style="font-size:0.83rem;color:var(--text-muted);margin-bottom:14px;">Déposez vos documents juridiques et contractuels. Ils sont analysés par l'IA pour enrichir le diagnostic.</p>
     <div class="doc-import-grid">
       <label class="doc-import-item">
@@ -561,7 +439,7 @@ function buildConnexionsHTML(mod) {
 
   <!-- 11. Questionnaires déclaratifs -->
   <div class="conn-section">
-    <div class="conn-section-title">11 — Questionnaires déclaratifs</div>
+    <div class="conn-section-title">4 — Questionnaires déclaratifs</div>
 
     <details style="margin-bottom:10px;">
       <summary style="font-size:0.88rem;font-weight:600;cursor:pointer;padding:10px 0;color:var(--text-white);">Dépendance dirigeant — délégation, absence, relation client</summary>

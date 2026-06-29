@@ -249,6 +249,7 @@ async function sendMessage(mod) {
       },
       body: JSON.stringify({
         model: MISTRAL_MODEL,
+        mod,
         messages: [{ role: 'system', content: systemPrompt }, ...histories[mod]],
         temperature: isPlanGen ? 0.4 : 0.55,
         max_tokens: isPlanGen ? 3200 : 1800,

@@ -257,58 +257,77 @@ p { color: var(--text-muted); }
   align-items: center;
   justify-content: center;
 }
-/* Illustration CSS — réseau de nœuds */
-.bv-illustration {
-  position: relative;
-  width: 260px;
-  height: 260px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.bv-ring {
+/* Orbes lumineux */
+.bv-glow-orb {
   position: absolute;
   border-radius: 50%;
-  border: 1px solid rgba(99,102,241,0.18);
-  animation: bv-spin linear infinite;
+  pointer-events: none;
 }
-.bv-ring-1 { width: 260px; height: 260px; animation-duration: 32s; }
-.bv-ring-2 { width: 190px; height: 190px; border-color: rgba(59,130,246,0.2); animation-duration: 24s; animation-direction: reverse; }
-.bv-ring-3 { width: 120px; height: 120px; border-color: rgba(139,92,246,0.22); animation-duration: 18s; }
-@keyframes bv-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-.bv-center {
-  position: relative;
-  z-index: 2;
-  width: 80px;
-  height: 80px;
-  background: radial-gradient(circle at 40% 40%, rgba(99,102,241,0.25), rgba(33,84,200,0.1));
-  border: 1px solid rgba(99,102,241,0.35);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: bv-pulse 3s ease-in-out infinite;
+.bv-glow-orb:nth-child(1) {
+  width: 340px; height: 340px;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(33,84,200,0.22) 0%, rgba(99,102,241,0.08) 45%, transparent 70%);
+  animation: bv-breathe 5s ease-in-out infinite;
 }
-.bv-icon { width: 44px; height: 44px; }
-@keyframes bv-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(99,102,241,0.0), 0 0 20px rgba(99,102,241,0.15); }
-  50%       { box-shadow: 0 0 0 10px rgba(99,102,241,0.06), 0 0 40px rgba(99,102,241,0.25); }
+.bv-orb-2 {
+  width: 200px; height: 200px;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(139,92,246,0.18) 0%, transparent 65%);
+  animation: bv-breathe 7s ease-in-out infinite reverse;
 }
-.bv-node {
+.bv-orb-3 {
+  width: 120px; height: 120px;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(59,130,246,0.35) 0%, transparent 70%);
+  animation: bv-breathe 4s ease-in-out infinite;
+}
+@keyframes bv-breathe {
+  0%, 100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1);   }
+  50%       { opacity: 1;   transform: translate(-50%, -50%) scale(1.12); }
+}
+
+/* Cards flottantes de stats */
+.bv-stat-card {
   position: absolute;
-  border-radius: 50%;
-  animation: bv-node-pulse ease-in-out infinite;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  background: rgba(13,13,28,0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(33,84,200,0.25);
+  border-radius: 10px;
+  padding: 12px 18px;
+  animation: bv-float ease-in-out infinite;
 }
-.bv-n1 { width: 10px; height: 10px; background: rgba(129,140,248,0.85); top: 20px; left: 50%; transform: translateX(-50%); animation-duration: 2.8s; animation-delay: 0s; }
-.bv-n2 { width: 8px; height: 8px; background: rgba(59,130,246,0.85); bottom: 30px; left: 22px; animation-duration: 3.4s; animation-delay: 0.6s; }
-.bv-n3 { width: 8px; height: 8px; background: rgba(139,92,246,0.85); bottom: 30px; right: 22px; animation-duration: 3.1s; animation-delay: 1.2s; }
-.bv-n4 { width: 7px; height: 7px; background: rgba(34,211,238,0.75); top: 70px; left: 10px; animation-duration: 4s; animation-delay: 0.4s; }
-.bv-n5 { width: 7px; height: 7px; background: rgba(245,158,11,0.75); top: 70px; right: 10px; animation-duration: 3.7s; animation-delay: 1.8s; }
-@keyframes bv-node-pulse {
-  0%, 100% { opacity: 0.6; transform: scale(1); }
-  50%       { opacity: 1;   transform: scale(1.35); }
+.bv-card-val {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--blue-light);
+  line-height: 1;
 }
-.bv-n1 { animation-name: bv-node-pulse; }
+.bv-card-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.bv-card-1 { top: 18%; left: 8%;  animation-duration: 5.5s; animation-delay: 0s;   }
+.bv-card-2 { top: 12%; right: 8%; animation-duration: 6.5s; animation-delay: 1.2s; }
+.bv-card-3 { bottom: 16%; left: 50%; transform: translateX(-50%); animation-duration: 7s; animation-delay: 0.6s; }
+@keyframes bv-float {
+  0%, 100% { transform: translateY(0);    }
+  50%       { transform: translateY(-8px); }
+}
+.bv-card-3 { animation-name: bv-float-center; }
+@keyframes bv-float-center {
+  0%, 100% { transform: translateX(-50%) translateY(0);    }
+  50%       { transform: translateX(-50%) translateY(-8px); }
+}
 
 .brain-caption h2 { margin-bottom: 16px; }
 .brain-caption p { font-size: 1.05rem; line-height: 1.75; }

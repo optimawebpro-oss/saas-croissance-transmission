@@ -96,8 +96,25 @@ function buildContext(mod, lastUserMessage) {
 
   const sections = [];
 
-  // 1. Toujours : règles anti-hallucination + charte + disclaimers
-  sections.push('# RÈGLES ABSOLUES\n' + KB.core.antiHallucination);
+  // 1. Toujours : règles anti-hallucination + charte + disclaimers + function calling
+  const fcInstruction = `# RÈGLE DE CALCUL — OBLIGATOIRE
+
+Tu disposes de 5 outils de calcul déterministes. Tu DOIS les utiliser pour TOUT chiffre :
+
+| Outil | Usage |
+|---|---|
+| \`calculate_transmissibility_score\` | Score de transmissibilité (22 critères, 8 axes) |
+| \`compute_ebe_normatif\` | EBE normatif / EBITDA retraité |
+| \`calculate_valuation\` | Fourchette de valorisation |
+| \`get_sector_multiples\` | Multiples sectoriels par code NAF |
+| \`run_fiscal_simulation\` | Scénarios fiscaux (PFU, retraite, apport-cession, Dutreil) |
+
+**INTERDIT** : calculer toi-même un score, un multiple, une valorisation ou un impact fiscal.
+**OBLIGATOIRE** : appeler l'outil approprié, puis présenter les résultats à l'utilisateur.
+Si une donnée manque pour appeler l'outil, demande-la à l'utilisateur avant de répondre.`;
+
+  sections.push(fcInstruction);
+  sections.push('# RÈGLES ANTI-HALLUCINATION\n' + KB.core.antiHallucination);
   sections.push('# CHARTE DE TON\n' + KB.core.charte);
   sections.push('# DISCLAIMERS OBLIGATOIRES\n' + KB.core.disclaimers);
 

@@ -46,7 +46,7 @@
       });
     }
 
-    var t0 = Date.now(), dur = 3400, done = false, idleAngle = 0;
+    var t0 = Date.now(), dur = 3400, done = false, idleAngle = Math.PI * 0.5;
 
     function draw(p) {
       cx.fillStyle = BG; cx.fillRect(0, 0, W, H);
@@ -408,9 +408,6 @@
   // ─────────────────────────────────────────────────────────
   function init() {
     initCinematic();
-    initBrain();
-    initCube();
-    initOrbits();
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

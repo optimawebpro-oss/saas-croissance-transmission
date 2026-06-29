@@ -15,7 +15,7 @@
 
   <nav class="navbar">
     <div class="container">
-      <a href="index.html" class="nav-logo"><img src="img/ael-logo.png" alt="AEL Corporation" class="nav-logo-img" /></a>
+      <a href="index.html" class="nav-logo"><span class="nav-logo-wordmark">A.E.L <span>Corporation</span></span></a>
       <ul class="nav-links">
         <li><a href="index.html" class="active">Accueil</a></li>
         <li><a href="mon-espace.html">Mon Espace</a></li>
@@ -34,7 +34,6 @@
   <section class="cinematic-section">
     <canvas id="opening-cv"></canvas>
     <div class="cinematic-overlay-text">
-      <div class="hero-badge"><span class="badge badge-blue">Propulsé par Mistral AI</span></div>
       <div class="hero-actions" style="justify-content:center; margin-top:32px;">
         <a href="#" class="btn btn-primary btn-lg">S'inscrire gratuitement →</a>
         <a href="#modules" class="btn btn-secondary btn-lg">Voir les modules</a>
@@ -42,14 +41,37 @@
     </div>
   </section>
 
-  <!-- CERVEAU 3D — juste sous la cinématique -->
+  <!-- VISION — section illustration + texte -->
   <section class="brain-section">
     <div class="brain-wrap">
-      <canvas id="hero-brain"></canvas>
+      <div class="bv-illustration">
+        <div class="bv-ring bv-ring-1"></div>
+        <div class="bv-ring bv-ring-2"></div>
+        <div class="bv-ring bv-ring-3"></div>
+        <div class="bv-center">
+          <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" class="bv-icon">
+            <circle cx="30" cy="30" r="28" stroke="rgba(99,102,241,0.4)" stroke-width="1.5"/>
+            <circle cx="30" cy="18" r="4" fill="rgba(129,140,248,0.9)"/>
+            <circle cx="18" cy="36" r="4" fill="rgba(59,130,246,0.9)"/>
+            <circle cx="42" cy="36" r="4" fill="rgba(139,92,246,0.9)"/>
+            <circle cx="30" cy="44" r="3" fill="rgba(34,211,238,0.8)"/>
+            <line x1="30" y1="22" x2="18" y2="33" stroke="rgba(129,140,248,0.35)" stroke-width="1"/>
+            <line x1="30" y1="22" x2="42" y2="33" stroke="rgba(139,92,246,0.35)" stroke-width="1"/>
+            <line x1="20" y1="38" x2="28" y2="42" stroke="rgba(59,130,246,0.35)" stroke-width="1"/>
+            <line x1="40" y1="38" x2="32" y2="42" stroke="rgba(139,92,246,0.35)" stroke-width="1"/>
+            <line x1="20" y1="36" x2="40" y2="36" stroke="rgba(99,102,241,0.2)" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="bv-node bv-n1"></div>
+        <div class="bv-node bv-n2"></div>
+        <div class="bv-node bv-n3"></div>
+        <div class="bv-node bv-n4"></div>
+        <div class="bv-node bv-n5"></div>
+      </div>
     </div>
     <div class="brain-caption">
       <h2>Votre entreprise mérite <span class="gradient-text">un plan à sa hauteur</span></h2>
-      <p>Evoluty analyse en profondeur la structure de votre entreprise et génère un plan stratégique ultra-détaillé — pour accélérer votre croissance ou préparer une cession réussie.</p>
+      <p>Nous aidons les entreprises à faire croître leur valeur dans le but de connaître une croissance saine et régulière pour augmenter son pouvoir sur le marché ou pour céder cette dernière à un prix bien plus important qu'initialement.</p>
       <div class="hero-stats" style="justify-content:flex-start; margin-top:28px;">
         <div class="hero-stat"><div class="value">2</div><div class="label">Modules</div></div>
         <div class="hero-stat"><div class="value">360°</div><div class="label">Diagnostic</div></div>
@@ -67,10 +89,7 @@
       <div class="section-header">
         <span class="section-label">Le Constat</span>
         <h2>La plupart des dirigeants avancent <span class="gradient-text">sans cap précis</span></h2>
-        <p>Sans diagnostic solide ni plan structuré, croître durablement ou céder son entreprise au bon prix relève du hasard.</p>
-      </div>
-      <div class="anim-scene" style="height:300px; margin-bottom:48px;">
-        <canvas id="cube-cv" style="position:absolute;inset:0;"></canvas>
+        <p>Sans diagnostic solide ni plan structuré, croître durablement ou céder son entreprise au bon prix relève du hasard. Un manque de clarté dans son plan et dans ses objectifs peut nuire au bon fonctionnement de l'entreprise.</p>
       </div>
       <div class="features-grid">
         <div class="feature-card">
@@ -146,8 +165,14 @@
         <h2>Deux modules, <span class="gradient-text">un seul objectif</span> : votre réussite</h2>
         <p>Choisissez le programme adapté à votre situation actuelle.</p>
       </div>
-      <div class="anim-scene" style="height:340px; margin-bottom:48px;">
-        <canvas id="orbits-cv" style="position:absolute;inset:0;"></canvas>
+      <div class="modules-separator">
+        <div class="ms-line"></div>
+        <div class="ms-orbs">
+          <div class="ms-orb ms-orb-c"><span>Croissance</span></div>
+          <div class="ms-divot"></div>
+          <div class="ms-orb ms-orb-s"><span>Cession</span></div>
+        </div>
+        <div class="ms-line"></div>
       </div>
       <div class="modules-grid">
         <div class="module-card">
@@ -237,7 +262,7 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <a href="index.html" class="nav-logo" style="margin-bottom:12px;"><img src="img/ael-logo.png" alt="AEL Corporation" class="nav-logo-img" style="height:48px;" /></a>
+          <a href="index.html" class="nav-logo" style="margin-bottom:12px;"><span class="nav-logo-wordmark">A.E.L <span>Corporation</span></span></a>
           <p>La plateforme stratégique IA pour les dirigeants qui veulent piloter leur croissance ou préparer leur cession.</p>
           <div style="margin-top:16px;"><span class="badge badge-blue">RGPD</span></div>
         </div>
@@ -262,8 +287,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <span>© 2025 Evoluty — Tous droits réservés</span>
-        <span>Propulsé par <strong style="color:var(--blue-light)">Mistral AI</strong></span>
+        <span>© 2025 A.E.L Corporation — Tous droits réservés</span>
         <span><a href="#">Mentions légales</a> · <a href="#">RGPD</a> · <a href="#">CGU</a></span>
       </div>
     </div>

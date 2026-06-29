@@ -112,12 +112,15 @@ p { color: var(--text-muted); }
   display: flex;
   align-items: center;
 }
-.nav-logo span { color: var(--blue-light); }
-.nav-logo-img {
-  height: 44px;
-  width: auto;
-  display: block;
+.nav-logo-wordmark {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-white);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
 }
+.nav-logo-wordmark span { color: var(--blue-light); }
 
 .nav-links { display: flex; align-items: center; gap: 4px; }
 .nav-links a {
@@ -233,7 +236,7 @@ p { color: var(--text-muted); }
 }
 .cinematic-overlay-text .hero-actions { pointer-events: all; margin-top: 0; margin-bottom: 0; }
 
-/* ── Cerveau 3D sous la cinématique ── */
+/* ── Section vision (remplace cerveau 3D) ── */
 .brain-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -246,18 +249,120 @@ p { color: var(--text-muted); }
 .brain-wrap {
   position: relative;
   height: 400px;
-  background: #08080f;
   border-radius: var(--radius);
   overflow: hidden;
+  background: linear-gradient(135deg, #0d0d1c 0%, #0a0a18 100%);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.brain-wrap canvas { position: absolute; inset: 0; }
+/* Illustration CSS — réseau de nœuds */
+.bv-illustration {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bv-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(99,102,241,0.18);
+  animation: bv-spin linear infinite;
+}
+.bv-ring-1 { width: 260px; height: 260px; animation-duration: 32s; }
+.bv-ring-2 { width: 190px; height: 190px; border-color: rgba(59,130,246,0.2); animation-duration: 24s; animation-direction: reverse; }
+.bv-ring-3 { width: 120px; height: 120px; border-color: rgba(139,92,246,0.22); animation-duration: 18s; }
+@keyframes bv-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.bv-center {
+  position: relative;
+  z-index: 2;
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle at 40% 40%, rgba(99,102,241,0.25), rgba(33,84,200,0.1));
+  border: 1px solid rgba(99,102,241,0.35);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: bv-pulse 3s ease-in-out infinite;
+}
+.bv-icon { width: 44px; height: 44px; }
+@keyframes bv-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(99,102,241,0.0), 0 0 20px rgba(99,102,241,0.15); }
+  50%       { box-shadow: 0 0 0 10px rgba(99,102,241,0.06), 0 0 40px rgba(99,102,241,0.25); }
+}
+.bv-node {
+  position: absolute;
+  border-radius: 50%;
+  animation: bv-node-pulse ease-in-out infinite;
+}
+.bv-n1 { width: 10px; height: 10px; background: rgba(129,140,248,0.85); top: 20px; left: 50%; transform: translateX(-50%); animation-duration: 2.8s; animation-delay: 0s; }
+.bv-n2 { width: 8px; height: 8px; background: rgba(59,130,246,0.85); bottom: 30px; left: 22px; animation-duration: 3.4s; animation-delay: 0.6s; }
+.bv-n3 { width: 8px; height: 8px; background: rgba(139,92,246,0.85); bottom: 30px; right: 22px; animation-duration: 3.1s; animation-delay: 1.2s; }
+.bv-n4 { width: 7px; height: 7px; background: rgba(34,211,238,0.75); top: 70px; left: 10px; animation-duration: 4s; animation-delay: 0.4s; }
+.bv-n5 { width: 7px; height: 7px; background: rgba(245,158,11,0.75); top: 70px; right: 10px; animation-duration: 3.7s; animation-delay: 1.8s; }
+@keyframes bv-node-pulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.35); }
+}
+.bv-n1 { animation-name: bv-node-pulse; }
+
 .brain-caption h2 { margin-bottom: 16px; }
-.brain-caption p { font-size: 1.05rem; }
+.brain-caption p { font-size: 1.05rem; line-height: 1.75; }
+
 @media (max-width: 900px) {
   .brain-section { grid-template-columns: 1fr; padding: 48px 20px; }
   .brain-wrap { height: 280px; }
   .brain-caption { text-align: center; }
   .brain-caption .hero-stats { justify-content: center !important; }
+}
+
+/* ── Séparateur modules ── */
+.modules-separator {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+.ms-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-blue), transparent);
+}
+.ms-orbs {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.ms-orb {
+  padding: 8px 22px;
+  border-radius: 100px;
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.ms-orb-c {
+  background: rgba(139,92,246,0.1);
+  border: 1px solid rgba(139,92,246,0.35);
+  color: rgba(196,181,253,0.95);
+}
+.ms-orb-s {
+  background: rgba(59,130,246,0.1);
+  border: 1px solid rgba(59,130,246,0.35);
+  color: rgba(147,197,253,0.95);
+}
+.ms-divot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border-blue);
+  opacity: 0.5;
 }
 
 /* ── Scènes d'animation génériques ── */

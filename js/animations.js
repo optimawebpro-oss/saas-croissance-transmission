@@ -407,9 +407,9 @@
   // INIT
   // ─────────────────────────────────────────────────────────
   // ─────────────────────────────────────────────────────────
-  // 2. COURBE DE VALORISATION AU SCROLL
+  // 2. (supprimé — courbe remplacée par bloc texte)
   // ─────────────────────────────────────────────────────────
-  function initScrollCurve() {
+  function initScrollCurve() { return; // désactivé
     var card      = document.getElementById('erCard');
     var pathSans  = document.getElementById('erPathSans');
     var pathAvec  = document.getElementById('erPathAvec');

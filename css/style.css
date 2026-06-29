@@ -257,57 +257,38 @@ p { color: var(--text-muted); }
   align-items: center;
   justify-content: center;
 }
-/* ── Courbe de valorisation (er-card) ── */
-.er-card {
-  position: relative;
+/* ── Bloc stats gauche (section vision) ── */
+.vision-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
   background: #0d0f17;
   border: 1px solid rgba(91,134,255,0.14);
   border-radius: 20px;
-  padding: 56px 48px 40px;
-  overflow: hidden;
-  width: 100%;
+  padding: 56px 40px;
+  text-align: center;
 }
-.er-glow {
-  position: absolute;
-  top: -120px; right: -100px;
-  width: 360px; height: 360px;
-  background: radial-gradient(circle, rgba(52,211,153,0.28) 0%, rgba(52,211,153,0) 70%);
-  filter: blur(10px);
-  pointer-events: none;
-  animation: er-pulse 7s ease-in-out infinite;
-}
-@keyframes er-pulse {
-  0%,100% { transform: scale(1);    opacity: 0.7; }
-  50%      { transform: scale(1.12); opacity: 1;   }
-}
-.er-chart { width: 100%; height: auto; display: block; position: relative; z-index: 1; }
-.er-label {
-  position: absolute;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  opacity: 0;
-  transform: translateY(6px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-.er-label.is-visible { opacity: 1; transform: translateY(0); }
-.er-label-tag  { font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; }
-.er-label-value {
-  font-family: 'Fraunces', serif;
-  font-weight: 600;
-  font-size: 28px;
+.vision-stat { display: flex; flex-direction: column; gap: 8px; }
+.vision-val {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: clamp(2.8rem, 5vw, 4rem);
+  font-weight: 700;
+  color: var(--blue-light);
   line-height: 1;
 }
-.er-label-avec { top: 6%; right: 4%; text-align: right; }
-.er-label-avec .er-label-tag   { color: rgba(52,211,153,0.7); }
-.er-label-avec .er-label-value { color: #34D399; }
-.er-label-sans { bottom: 18%; left: 4%; }
-.er-label-sans .er-label-tag   { color: rgba(251,191,36,0.7); }
-.er-label-sans .er-label-value { color: #FBBF24; }
-@media (prefers-reduced-motion: reduce) {
-  .er-glow  { animation: none; }
-  .er-label { transition: none; }
+.vision-lbl {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+.vision-divider {
+  width: 40px;
+  height: 1px;
+  background: var(--border-blue);
+  opacity: 0.4;
 }
 
 .brain-caption h2 { margin-bottom: 16px; }

@@ -241,6 +241,113 @@ async function fetchJuridique() {
   }
 }
 
+// ── 8. Stripe / Facturation ─────────────────────────────
+async function connectFacturation(provider) {
+  try {
+    const res = await fetch(`${API}/facturation/${provider}/auth`, { headers: authHeaders() });
+    const json = await res.json();
+    if (!res.ok) return showConnToast(json.error, 'warn');
+    window.open(json.authUrl, '_blank', 'width=600,height=700');
+  } catch {
+    showConnToast('Backend inaccessible.', 'warn');
+  }
+}
+
+async function uploadContrats(input, mod) {
+  const file = input.files[0];
+  if (!file) return;
+  const fd = new FormData();
+  fd.append('file', file);
+  fd.append('type', 'contrats');
+  try {
+    const res = await fetch(`${API}/documents/upload`, { method: 'POST', headers: authHeaders(), body: fd });
+    const json = await res.json();
+    showConnToast(res.ok ? 'Contrats importés.' : json.error, res.ok ? 'ok' : 'warn');
+  } catch { showConnToast('Backend inaccessible.', 'warn'); }
+}
+
+// ── 9. INPI ─────────────────────────────────────────────
+async function fetchINPI(mod) {
+  const siren = document.getElementById('siret-input')?.value?.replace(/\s/g, '').substring(0, 9);
+  if (!siren || siren.length !== 9) return showConnToast("Identifiez d'abord votre entreprise avec le SIRET (étape 1).", 'warn');
+  const btn = document.getElementById(`btn-inpi-${mod}`);
+  setLoading(btn, true);
+  try {
+    const res = await fetch(`${API}/inpi/${siren}`, { headers: authHeaders() });
+    const json = await res.json();
+    const zone = document.getElementById(`inpi-result-${mod}`);
+    if (zone) {
+      zone.style.display = 'block';
+      zone.innerHTML = res.ok
+        ? `<div class="conn-result-grid">
+            <div class="conn-result-item"><span class="cr-label">Marques déposées</span><span class="cr-value">${json.marques ?? '—'}</span></div>
+            <div class="conn-result-item"><span class="cr-label">Brevets</span><span class="cr-value">${json.brevets ?? '—'}</span></div>
+            <div class="conn-result-item"><span class="cr-label">Dessins & modèles</span><span class="cr-value">${json.dessins ?? '—'}</span></div>
+           </div>`
+        : `<div class="conn-error">${json.error}</div>`;
+    }
+    if (res.ok) showConnToast('Propriété intellectuelle récupérée.', 'ok');
+  } catch { showConnToast('Backend inaccessible.', 'warn'); }
+  finally { setLoading(btn, false); }
+}
+
+// ── 10. Import documentaire ──────────────────────────────
+async function uploadDoc(input, docType, mod) {
+  const file = input.files[0];
+  if (!file) return;
+  const fd = new FormData();
+  fd.append('file', file);
+  fd.append('type', docType);
+  const statusEl = document.getElementById(`doc-${docType}-${mod}`);
+  if (statusEl) statusEl.textContent = '…';
+  try {
+    const res = await fetch(`${API}/documents/upload`, { method: 'POST', headers: authHeaders(), body: fd });
+    const json = await res.json();
+    if (statusEl) statusEl.textContent = res.ok ? '✓' : '✕';
+    showConnToast(res.ok ? `${file.name} importé.` : json.error, res.ok ? 'ok' : 'warn');
+  } catch {
+    if (statusEl) statusEl.textContent = '✕';
+    showConnToast('Backend inaccessible.', 'warn');
+  }
+}
+
+// ── 11. Questionnaires déclaratifs ───────────────────────
+async function submitQuestionnaire(e, type, mod) {
+  e.preventDefault();
+  let data = {};
+  if (type === 'dirigeant') {
+    data = {
+      semaines_absence: parseFloat(document.getElementById(`q-absence-${mod}`)?.value) || 0,
+      pct_decisions_deleguees: parseFloat(document.getElementById(`q-delegation-${mod}`)?.value) || 0,
+      pct_ca_relation_perso: parseFloat(document.getElementById(`q-ca-perso-${mod}`)?.value) || 0,
+      pct_savoir_faire_documente: parseFloat(document.getElementById(`q-savoir-faire-${mod}`)?.value) || 0,
+    };
+  } else if (type === 'process') {
+    data = {
+      pct_process_cles_documentes: parseFloat(document.getElementById(`q-process-${mod}`)?.value) || 0,
+      a_manuel_onboarding: document.getElementById(`q-onboarding-${mod}`)?.checked || false,
+      pct_rh_formalisee: parseFloat(document.getElementById(`q-rh-${mod}`)?.value) || 0,
+      nb_hommes_cles_non_securises: parseInt(document.getElementById(`q-hc-${mod}`)?.value) || 0,
+    };
+  } else if (type === 'remunerations') {
+    data = {
+      remuneration_dirigeant_actuelle: parseFloat(document.getElementById(`q-rem-actuelle-${mod}`)?.value) || 0,
+      remuneration_dirigeant_normative: parseFloat(document.getElementById(`q-rem-normative-${mod}`)?.value) || 0,
+      loyer_actuel: parseFloat(document.getElementById(`q-loyer-actuel-${mod}`)?.value) || 0,
+      loyer_normatif: parseFloat(document.getElementById(`q-loyer-normatif-${mod}`)?.value) || 0,
+    };
+  }
+  try {
+    const res = await fetch(`${API}/questionnaire/${type}`, {
+      method: 'POST',
+      headers: authHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ mod, ...data }),
+    });
+    const json = await res.json();
+    showConnToast(res.ok ? 'Réponses enregistrées.' : json.error, res.ok ? 'ok' : 'warn');
+  } catch { showConnToast('Backend inaccessible.', 'warn'); }
+}
+
 // ── UTILS ───────────────────────────────────────────────
 function setLoading(btn, loading) {
   if (!btn) return;
@@ -385,6 +492,157 @@ function buildConnexionsHTML(mod) {
       <button id="btn-juridique" class="btn btn-primary btn-sm" onclick="fetchJuridique()">Analyser →</button>
     </div>
     <div id="juridique-result" style="display:none;margin-top:12px;"></div>
+  </div>
+
+  <!-- 8. Stripe / Facturation — CA récurrent -->
+  <div class="conn-section">
+    <div class="conn-section-title">8 — Facturation & CA récurrent (Stripe)</div>
+    <div class="conn-cards-row">
+      <div class="conn-card-sm">
+        <div class="cc-left"><span class="cc-icon"></span><div><h4>Stripe</h4><p>% CA récurrent, MRR, ARR, contrats actifs</p></div></div>
+        <button class="btn btn-outline btn-sm" onclick="connectFacturation('stripe')">Connecter</button>
+      </div>
+      <div class="conn-card-sm">
+        <div class="cc-left"><span class="cc-icon"></span><div><h4>Import contrats</h4><p>Déposez vos contrats-cadres ou bons de commande récurrents</p></div></div>
+        <button class="btn btn-outline btn-sm" onclick="document.getElementById('contrats-file-${mod}').click()">Importer</button>
+        <input id="contrats-file-${mod}" type="file" accept=".pdf,.csv,.xlsx" style="display:none" onchange="uploadContrats(this,'${mod}')" />
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. INPI — Dépôts de marque -->
+  <div class="conn-section">
+    <div class="conn-section-title">9 — Propriété intellectuelle (INPI)</div>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <div style="flex:1;font-size:0.85rem;color:var(--text-muted);">Dépôts de marque, brevets et dessins — alimentés automatiquement par le SIREN (étape 1).</div>
+      <button id="btn-inpi-${mod}" class="btn btn-primary btn-sm" onclick="fetchINPI('${mod}')">Analyser →</button>
+    </div>
+    <div id="inpi-result-${mod}" style="display:none;margin-top:12px;"></div>
+  </div>
+
+  <!-- 10. Import documentaire -->
+  <div class="conn-section">
+    <div class="conn-section-title">10 — Import documentaire</div>
+    <p style="font-size:0.83rem;color:var(--text-muted);margin-bottom:14px;">Déposez vos documents juridiques et contractuels. Ils sont analysés par l'IA pour enrichir le diagnostic.</p>
+    <div class="doc-import-grid">
+      <label class="doc-import-item">
+        <input type="file" accept=".pdf,.docx" style="display:none" onchange="uploadDoc(this,'statuts','${mod}')" />
+        <span class="doc-icon">📄</span>
+        <span class="doc-label">Statuts</span>
+        <span class="doc-status" id="doc-statuts-${mod}">—</span>
+      </label>
+      <label class="doc-import-item">
+        <input type="file" accept=".pdf,.docx" style="display:none" onchange="uploadDoc(this,'cgv','${mod}')" />
+        <span class="doc-icon">📄</span>
+        <span class="doc-label">CGV</span>
+        <span class="doc-status" id="doc-cgv-${mod}">—</span>
+      </label>
+      <label class="doc-import-item">
+        <input type="file" accept=".pdf,.docx" style="display:none" onchange="uploadDoc(this,'baux','${mod}')" />
+        <span class="doc-icon">📄</span>
+        <span class="doc-label">Baux</span>
+        <span class="doc-status" id="doc-baux-${mod}">—</span>
+      </label>
+      <label class="doc-import-item">
+        <input type="file" accept=".pdf,.docx" style="display:none" onchange="uploadDoc(this,'pv_ag','${mod}')" />
+        <span class="doc-icon">📄</span>
+        <span class="doc-label">PV d'AG</span>
+        <span class="doc-status" id="doc-pv_ag-${mod}">—</span>
+      </label>
+      <label class="doc-import-item">
+        <input type="file" accept=".pdf,.docx" style="display:none" onchange="uploadDoc(this,'assurance','${mod}')" />
+        <span class="doc-icon">📄</span>
+        <span class="doc-label">Assurances</span>
+        <span class="doc-status" id="doc-assurance-${mod}">—</span>
+      </label>
+    </div>
+    <div style="font-size:0.75rem;color:var(--text-muted);margin-top:10px;">Fichiers chiffrés AES-256 · Stockage UE · Suppression sur demande</div>
+  </div>
+
+  <!-- 11. Questionnaires déclaratifs -->
+  <div class="conn-section">
+    <div class="conn-section-title">11 — Questionnaires déclaratifs</div>
+
+    <details style="margin-bottom:10px;">
+      <summary style="font-size:0.88rem;font-weight:600;cursor:pointer;padding:10px 0;color:var(--text-white);">Dépendance dirigeant — délégation, absence, relation client</summary>
+      <form class="sirh-manual" onsubmit="submitQuestionnaire(event,'dirigeant','${mod}')" style="margin-top:8px;">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Semaines d'absence sans impact (an)</label>
+            <input type="number" min="0" max="52" placeholder="Ex : 3" id="q-absence-${mod}" />
+          </div>
+          <div class="form-group">
+            <label>% décisions opérationnelles déléguées</label>
+            <input type="number" min="0" max="100" placeholder="Ex : 60" id="q-delegation-${mod}" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>% CA lié à la relation personnelle du dirigeant</label>
+            <input type="number" min="0" max="100" placeholder="Ex : 40" id="q-ca-perso-${mod}" />
+          </div>
+          <div class="form-group">
+            <label>% savoir-faire métier documenté</label>
+            <input type="number" min="0" max="100" placeholder="Ex : 50" id="q-savoir-faire-${mod}" />
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm">Enregistrer →</button>
+      </form>
+    </details>
+
+    <details style="margin-bottom:10px;">
+      <summary style="font-size:0.88rem;font-weight:600;cursor:pointer;padding:10px 0;color:var(--text-white);">Documentation & process internes</summary>
+      <form class="sirh-manual" onsubmit="submitQuestionnaire(event,'process','${mod}')" style="margin-top:8px;">
+        <div class="form-row">
+          <div class="form-group">
+            <label>% process clés documentés</label>
+            <input type="number" min="0" max="100" placeholder="Ex : 40" id="q-process-${mod}" />
+          </div>
+          <div class="form-group" style="display:flex;align-items:center;gap:10px;padding-top:24px;">
+            <input id="q-onboarding-${mod}" type="checkbox" style="width:auto;accent-color:var(--blue-accent);" />
+            <label for="q-onboarding-${mod}" style="font-weight:400;font-size:0.88rem;cursor:pointer;">Manuel d'onboarding existant</label>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>% RH formalisée (fiches de poste, règlement)</label>
+            <input type="number" min="0" max="100" placeholder="Ex : 60" id="q-rh-${mod}" />
+          </div>
+          <div class="form-group">
+            <label>Hommes-clés sans clause de non-concurrence</label>
+            <input type="number" min="0" placeholder="Ex : 2" id="q-hc-${mod}" />
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm">Enregistrer →</button>
+      </form>
+    </details>
+
+    <details>
+      <summary style="font-size:0.88rem;font-weight:600;cursor:pointer;padding:10px 0;color:var(--text-white);">Rémunération & loyer normatifs (retraitements EBE)</summary>
+      <form class="sirh-manual" onsubmit="submitQuestionnaire(event,'remunerations','${mod}')" style="margin-top:8px;">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Rémunération actuelle dirigeant (€ charg. comp.)</label>
+            <input type="number" min="0" placeholder="Ex : 120000" id="q-rem-actuelle-${mod}" />
+          </div>
+          <div class="form-group">
+            <label>Rémunération normative DG équivalent (€)</label>
+            <input type="number" min="0" placeholder="Ex : 80000" id="q-rem-normative-${mod}" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Loyer actuel payé (€/an)</label>
+            <input type="number" min="0" placeholder="Ex : 36000" id="q-loyer-actuel-${mod}" />
+          </div>
+          <div class="form-group">
+            <label>Loyer de marché équivalent (€/an)</label>
+            <input type="number" min="0" placeholder="Ex : 30000" id="q-loyer-normatif-${mod}" />
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm">Enregistrer →</button>
+      </form>
+    </details>
   </div>
 
   <!-- Partenaires -->

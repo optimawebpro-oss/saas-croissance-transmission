@@ -973,6 +973,30 @@ footer {
 .conn-card-sm h4 { font-size: 0.88rem; margin-bottom: 2px; }
 .conn-card-sm p { font-size: 0.78rem; margin: 0; }
 
+/* Import documentaire */
+.doc-import-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+}
+.doc-import-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px 10px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  text-align: center;
+}
+.doc-import-item:hover { border-color: var(--border-blue); }
+.doc-icon { font-size: 1.4rem; }
+.doc-label { font-size: 0.82rem; font-weight: 600; color: var(--text-white); }
+.doc-status { font-size: 0.75rem; color: var(--text-muted); }
+
 /* ===== TOAST ===== */
 .toast {
   position: fixed;

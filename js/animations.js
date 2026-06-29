@@ -427,16 +427,9 @@
     pathSans.style.strokeDashoffset = lenSans;
     pathAvec.style.strokeDashoffset = lenAvec;
 
-    var maxProgress = 0, ticking = false;
     var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
-
-    function computeProgress() {
-      var rect = card.getBoundingClientRect();
-      var vh   = window.innerHeight;
-      return clamp((vh - rect.top) / (vh + rect.height), 0, 1);
-    }
 
     function apply(p) {
       pathSans.style.strokeDashoffset = lenSans * (1 - p);
@@ -454,23 +447,34 @@
       labelAvec.classList.toggle('is-visible', p >= 0.80);
     }
 
-    function onScroll() {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(function () {
-        maxProgress = Math.max(maxProgress, computeProgress());
-        apply(maxProgress);
-        ticking = false;
-      });
-    }
+    if (reduceMotion) { apply(1); return; }
 
-    if (reduceMotion) {
-      apply(1);
-    } else {
-      window.addEventListener('scroll', onScroll, { passive: true });
-      window.addEventListener('resize', onScroll);
-      onScroll();
-    }
+    // IntersectionObserver : déclenche l'animation quand la carte
+    // entre dans le viewport — fiable quel que soit l'endroit sur la page
+    var played = false;
+    var DURATION = 1800; // ms
+
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting && !played) {
+          played = true;
+          observer.disconnect();
+          var startTs = null;
+          function frame(ts) {
+            if (!startTs) startTs = ts;
+            var elapsed = ts - startTs;
+            // ease-out cubic
+            var t = Math.min(elapsed / DURATION, 1);
+            var p = 1 - Math.pow(1 - t, 3);
+            apply(p);
+            if (t < 1) requestAnimationFrame(frame);
+          }
+          requestAnimationFrame(frame);
+        }
+      });
+    }, { threshold: 0.35 });
+
+    observer.observe(card);
   }
 
   function init() {

@@ -241,6 +241,46 @@ async function fetchJuridique() {
   }
 }
 
+// ── Clés API (Pennylane, QuickBooks, Stripe) ─────────────
+function toggleApiKeyForm(provider) {
+  const form = document.getElementById(`form-${provider}`);
+  const btn  = document.getElementById(`btn-${provider}`);
+  if (!form) return;
+  const open = form.style.display === 'none';
+  form.style.display = open ? 'block' : 'none';
+  if (btn) btn.textContent = open ? 'Annuler' : 'Connecter via clé API';
+}
+
+async function saveApiKey(provider, route) {
+  const input = document.getElementById(`key-${provider}`);
+  const apiKey = input?.value?.trim();
+  if (!apiKey) return showConnToast('Veuillez saisir une clé API.', 'warn');
+
+  const endpoint = route === 'facturation'
+    ? `${API}/facturation/stripe/apikey`
+    : `${API}/compta/apikey`;
+
+  const body = route === 'facturation'
+    ? { apiKey }
+    : { provider, apiKey };
+
+  try {
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: authHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(body),
+    });
+    const json = await res.json();
+    if (!res.ok) return showConnToast(json.error, 'warn');
+    showConnToast(json.message, 'ok');
+    toggleApiKeyForm(provider);
+    const btn = document.getElementById(`btn-${provider}`);
+    if (btn) { btn.textContent = '✓ Connecté'; btn.classList.remove('btn-outline'); btn.classList.add('btn-primary'); btn.disabled = true; }
+  } catch {
+    showConnToast('Backend inaccessible.', 'warn');
+  }
+}
+
 // ── 8. Stripe / Facturation ─────────────────────────────
 async function connectFacturation(provider) {
   try {
@@ -388,13 +428,27 @@ function buildConnexionsHTML(mod) {
   <div class="conn-section">
     <div class="conn-section-title">2 — Bilans, comptes de résultat (FEC / API comptable)</div>
     <div class="conn-cards-row" style="margin-bottom:12px;">
-      <div class="conn-card-sm">
+      <div class="conn-card-sm" style="flex-direction:column;align-items:stretch;gap:8px;">
         <div class="cc-left"><span class="cc-icon"></span><div><h4>Pennylane</h4><p>Bilans, P&L, balance comptable</p></div></div>
-        <button class="btn btn-outline btn-sm" onclick="connectCompta('pennylane')">Connecter</button>
+        <div class="apikey-form" id="form-pennylane" style="display:none;">
+          <input type="text" id="key-pennylane" placeholder="Clé API Pennylane" style="flex:1;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;color:var(--text-white);font-size:0.85rem;width:100%;" />
+          <div style="display:flex;gap:6px;margin-top:6px;">
+            <button class="btn btn-primary btn-sm" onclick="saveApiKey('pennylane','compta')">Enregistrer</button>
+            <button class="btn btn-secondary btn-sm" onclick="toggleApiKeyForm('pennylane')">Annuler</button>
+          </div>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="toggleApiKeyForm('pennylane')" id="btn-pennylane">Connecter via clé API</button>
       </div>
-      <div class="conn-card-sm">
+      <div class="conn-card-sm" style="flex-direction:column;align-items:stretch;gap:8px;">
         <div class="cc-left"><span class="cc-icon"></span><div><h4>QuickBooks</h4><p>Comptes de résultat, grand livre</p></div></div>
-        <button class="btn btn-outline btn-sm" onclick="connectCompta('quickbooks')">Connecter</button>
+        <div class="apikey-form" id="form-quickbooks" style="display:none;">
+          <input type="text" id="key-quickbooks" placeholder="Clé API QuickBooks" style="flex:1;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;color:var(--text-white);font-size:0.85rem;width:100%;" />
+          <div style="display:flex;gap:6px;margin-top:6px;">
+            <button class="btn btn-primary btn-sm" onclick="saveApiKey('quickbooks','compta')">Enregistrer</button>
+            <button class="btn btn-secondary btn-sm" onclick="toggleApiKeyForm('quickbooks')">Annuler</button>
+          </div>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="toggleApiKeyForm('quickbooks')" id="btn-quickbooks">Connecter via clé API</button>
       </div>
     </div>
     <div class="fec-drop" id="fec-drop" onclick="document.getElementById('fec-file').click()">
@@ -439,9 +493,17 @@ function buildConnexionsHTML(mod) {
   <div class="conn-section">
     <div class="conn-section-title">5 — % CA récurrent / contrats (Stripe)</div>
     <div class="conn-cards-row">
-      <div class="conn-card-sm">
-        <div class="cc-left"><span class="cc-icon"></span><div><h4>Stripe</h4><p>MRR, ARR, contrats actifs</p></div></div>
-        <button class="btn btn-outline btn-sm" onclick="connectFacturation('stripe')">Connecter</button>
+      <div class="conn-card-sm" style="flex-direction:column;align-items:stretch;gap:8px;">
+        <div class="cc-left"><span class="cc-icon"></span><div><h4>Stripe</h4><p>MRR, ARR, contrats actifs · Clé restreinte (lecture seule)</p></div></div>
+        <div class="apikey-form" id="form-stripe" style="display:none;">
+          <input type="text" id="key-stripe" placeholder="rk_live_..." style="flex:1;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;color:var(--text-white);font-size:0.85rem;width:100%;" />
+          <div style="font-size:0.73rem;color:var(--text-muted);margin-top:4px;">Créez une clé restreinte dans Stripe Dashboard → Développeurs → Clés API → Créer une clé restreinte (lire les abonnements)</div>
+          <div style="display:flex;gap:6px;margin-top:6px;">
+            <button class="btn btn-primary btn-sm" onclick="saveApiKey('stripe','facturation')">Enregistrer & vérifier</button>
+            <button class="btn btn-secondary btn-sm" onclick="toggleApiKeyForm('stripe')">Annuler</button>
+          </div>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="toggleApiKeyForm('stripe')" id="btn-stripe">Connecter via clé API</button>
       </div>
       <div class="conn-card-sm">
         <div class="cc-left"><span class="cc-icon"></span><div><h4>Import contrats</h4><p>Bons de commande récurrents</p></div></div>

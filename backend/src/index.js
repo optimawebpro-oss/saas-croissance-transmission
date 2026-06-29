@@ -150,7 +150,12 @@ app.use('/api/crm',        require('./routes/crm'));
 app.use('/api/sirh',       require('./routes/sirh'));
 app.use('/api/benchmarks', require('./routes/benchmarks'));
 app.use('/api/juridique',  strictLimit, require('./routes/juridique'));
-app.use('/api/rgpd',       strictLimit, require('./routes/rgpd'));
+app.use('/api/rgpd',         strictLimit, require('./routes/rgpd'));
+app.use('/api/compta',       require('./routes/compta'));
+app.use('/api/facturation',  require('./routes/facturation'));
+app.use('/api/inpi',         strictLimit, require('./routes/inpi'));
+app.use('/api/documents',    require('./routes/documents'));
+app.use('/api/questionnaire',require('./routes/questionnaire'));
 
 app.get('/health', (req, res) => res.json({ status: 'ok', env: process.env.NODE_ENV }));
 

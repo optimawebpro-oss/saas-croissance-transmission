@@ -14,9 +14,36 @@
 const router = require('express').Router();
 const https  = require('https');
 const { requireAuth } = require('../middleware/kindeAuth');
-const { requirePlan } = require('../middleware/requirePlan');
+const { getUserPlan } = require('../services/subscriptionDb');
+const { getFreeDiagnosticsUsed, incrementFreeDiagnostics } = require('../services/usageDb');
 const { buildContext } = require('../services/knowledgeBase');
 const { executeToolCall } = require('../services/engine');
+
+const FREE_DIAGNOSTICS_LIMIT = 1;
+
+// Plan gratuit : 1 diagnostic IA à vie. Plans croissance/cession : illimité.
+function checkDiagnosticQuota(req, res, next) {
+  const subscription = getUserPlan(req.user.id);
+  const plan = subscription?.plan || 'gratuit';
+  const status = subscription?.status || 'active';
+
+  if (status === 'cancelled' || status === 'past_due') {
+    return res.status(403).json({ error: 'Abonnement inactif. Veuillez renouveler votre abonnement.', code: 'SUBSCRIPTION_INACTIVE' });
+  }
+
+  if (plan === 'croissance' || plan === 'cession') return next();
+
+  // Plan gratuit
+  const used = getFreeDiagnosticsUsed(req.user.id);
+  if (used >= FREE_DIAGNOSTICS_LIMIT) {
+    return res.status(403).json({
+      error: 'Vous avez déjà utilisé votre diagnostic IA gratuit. Passez à un plan payant pour continuer.',
+      code: 'FREE_DIAGNOSTIC_USED',
+    });
+  }
+  req._consumeFreeDiagnostic = true;
+  next();
+}
 
 const MISTRAL_API_KEY = process.env.MISTRAL_API_KEY;
 const MISTRAL_HOST    = 'api.mistral.ai';
@@ -230,7 +257,7 @@ function mistralStream(payload, res) {
 
 // ── Route principale ─────────────────────────────────────────────────────────
 
-router.post('/chat', requireAuth, requirePlan('croissance'), async (req, res) => {
+router.post('/chat', requireAuth, checkDiagnosticQuota, async (req, res) => {
   const { messages, model, temperature, max_tokens, mod } = req.body;
 
   if (!messages || !Array.isArray(messages)) {
@@ -309,6 +336,8 @@ router.post('/chat', requireAuth, requirePlan('croissance'), async (req, res) =>
     res.setHeader('X-Accel-Buffering', 'no');
 
     await mistralStream(finalPayload, res);
+
+    if (req._consumeFreeDiagnostic) incrementFreeDiagnostics(req.user.id);
 
   } catch (err) {
     if (!res.headersSent) {

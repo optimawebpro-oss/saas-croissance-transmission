@@ -33,7 +33,7 @@ const upload = multer({
 });
 
 // POST /api/documents/upload
-router.post('/upload', requireAuth, requirePlan('croissance'), upload.single('file'), (req, res) => {
+router.post('/upload', requireAuth, upload.single('file'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'Fichier manquant ou format non supporté.' });
   res.json({
     success: true,

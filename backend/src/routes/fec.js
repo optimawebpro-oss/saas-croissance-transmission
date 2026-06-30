@@ -19,7 +19,7 @@ const upload = multer({
 });
 
 // POST /api/fec/upload
-router.post('/upload', requireAuth, requirePlan('croissance'), upload.single('fec'), (req, res, next) => {
+router.post('/upload', requireAuth, upload.single('fec'), (req, res, next) => {
   try {
     if (!req.file) return res.status(400).json({ error: 'Aucun fichier reçu.' });
 

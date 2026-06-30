@@ -25,7 +25,7 @@ function stripeGet(path, secretKey) {
 }
 
 // POST /api/facturation/stripe/apikey — enregistre la clé API Stripe restreinte
-router.post('/stripe/apikey', requireAuth, requirePlan('croissance'), async (req, res) => {
+router.post('/stripe/apikey', requireAuth, async (req, res) => {
   const { apiKey } = req.body;
   if (!apiKey || !apiKey.startsWith('rk_')) {
     return res.status(400).json({ error: 'Clé API Stripe restreinte invalide (doit commencer par rk_).' });
@@ -40,7 +40,7 @@ router.post('/stripe/apikey', requireAuth, requirePlan('croissance'), async (req
 });
 
 // GET /api/facturation/stripe/data — récupère MRR, abonnements actifs
-router.get('/stripe/data', requireAuth, requirePlan('croissance'), async (req, res) => {
+router.get('/stripe/data', requireAuth, async (req, res) => {
   const key = stripeKeys[req.user.id];
   if (!key) return res.status(400).json({ error: 'Stripe non connecté. Enregistrez votre clé API d\'abord.' });
 

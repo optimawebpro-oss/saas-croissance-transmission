@@ -4,7 +4,7 @@ const { requireAuth } = require('../middleware/kindeAuth');
 const { requirePlan } = require('../middleware/requirePlan');
 
 // GET /api/juridique/:siren
-router.get('/:siren', requireAuth, requirePlan('croissance'), async (req, res, next) => {
+router.get('/:siren', requireAuth, async (req, res, next) => {
   try {
     const result = await fetchJuridique(req.params.siren);
     if (!result.ok) return res.status(422).json({ error: result.error });

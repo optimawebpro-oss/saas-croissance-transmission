@@ -6,7 +6,7 @@ const { requireAuth } = require('../middleware/kindeAuth');
 const { requirePlan } = require('../middleware/requirePlan');
 
 // GET /api/sirh/:provider/auth
-router.get('/:provider/auth', requireAuth, requirePlan('croissance'), (req, res, next) => {
+router.get('/:provider/auth', requireAuth, (req, res, next) => {
   try {
     const adapter = getAdapter(req.params.provider);
     res.json({ authUrl: adapter.getAuthUrl(uuid()), state: uuid() });
@@ -24,7 +24,7 @@ router.get('/:provider/callback', async (req, res, next) => {
 });
 
 // GET /api/sirh/:provider/data
-router.get('/:provider/data', requireAuth, requirePlan('croissance'), async (req, res, next) => {
+router.get('/:provider/data', requireAuth, async (req, res, next) => {
   try {
     const accessToken = req.headers['x-sirh-token'];
     if (!accessToken) return res.status(400).json({ error: 'x-sirh-token manquant.' });
@@ -37,7 +37,7 @@ router.get('/:provider/data', requireAuth, requirePlan('croissance'), async (req
 });
 
 // POST /api/sirh/manual
-router.post('/manual', requireAuth, requirePlan('croissance'), (req, res, next) => {
+router.post('/manual', requireAuth, (req, res, next) => {
   try {
     const { effectif, ancienneteMoyenneMois, turnover12mois, hasDirectionN1 } = req.body;
     if (effectif == null) return res.status(400).json({ error: 'effectif requis.' });

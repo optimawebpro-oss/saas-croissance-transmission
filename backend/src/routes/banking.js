@@ -5,7 +5,7 @@ const { requireAuth } = require('../middleware/kindeAuth');
 const { requirePlan } = require('../middleware/requirePlan');
 
 // POST /api/banking/connect
-router.post('/connect', requireAuth, requirePlan('croissance'), async (req, res, next) => {
+router.post('/connect', requireAuth, async (req, res, next) => {
   try {
     const userId = req.user.id; // userId toujours depuis le JWT, jamais du client
     const result = await bridge.createAuthUrl(userId);
@@ -24,7 +24,7 @@ router.get('/callback', async (req, res, next) => {
 });
 
 // GET /api/banking/data
-router.get('/data', requireAuth, requirePlan('croissance'), async (req, res, next) => {
+router.get('/data', requireAuth, async (req, res, next) => {
   try {
     const userId = req.user.id; // ownership : on utilise l'ID du token, jamais d'un header
     const result = await bridge.fetchBankData(userId);
@@ -34,7 +34,7 @@ router.get('/data', requireAuth, requirePlan('croissance'), async (req, res, nex
 });
 
 // DELETE /api/banking/revoke
-router.delete('/revoke', requireAuth, requirePlan('croissance'), async (req, res, next) => {
+router.delete('/revoke', requireAuth, async (req, res, next) => {
   try {
     const userId = req.user.id;
     const result = await bridge.revokeAccess(userId);

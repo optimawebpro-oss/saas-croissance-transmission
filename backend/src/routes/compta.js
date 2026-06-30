@@ -9,7 +9,7 @@ const { requirePlan }  = require('../middleware/requirePlan');
 const apiKeys = {};
 
 // POST /api/compta/apikey — enregistre la clé API du logiciel comptable
-router.post('/apikey', requireAuth, requirePlan('croissance'), (req, res) => {
+router.post('/apikey', requireAuth, (req, res) => {
   const { provider, apiKey } = req.body;
   if (!provider || !apiKey) return res.status(400).json({ error: 'provider et apiKey requis.' });
   const allowed = ['pennylane', 'quickbooks', 'sage'];

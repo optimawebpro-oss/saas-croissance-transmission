@@ -7,7 +7,7 @@ const { requirePlan }  = require('../middleware/requirePlan');
 const answers = {};
 
 // POST /api/questionnaire/:type — sauvegarde les réponses
-router.post('/:type', requireAuth, requirePlan('croissance'), (req, res) => {
+router.post('/:type', requireAuth, (req, res) => {
   const allowed = ['dirigeant', 'process', 'remunerations', 'sirh'];
   if (!allowed.includes(req.params.type)) return res.status(400).json({ error: 'Type invalide.' });
   const key = `${req.user.id}_${req.params.type}`;

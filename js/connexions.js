@@ -545,7 +545,7 @@ function buildConnexionsHTML(mod) {
   <div class="conn-section">
     <div class="conn-section-title">7 — Dépôts de marque (INPI)</div>
     <div style="display:flex;gap:10px;align-items:center;">
-      <div style="flex:1;font-size:0.85rem;color:var(--text-muted);">Marques, brevets, dessins — alimentés par le SIREN (étape 1).</div>
+      <div style="flex:1;font-size:0.85rem;color:var(--text-muted);">Marques, brevets, dessins — alimentés automatiquement à partir du SIRET saisi (étape 1).</div>
       <button id="btn-inpi-${mod}" class="btn btn-primary btn-sm" onclick="fetchINPI('${mod}')">Analyser →</button>
     </div>
     <div id="inpi-result-${mod}" style="display:none;margin-top:12px;"></div>
@@ -555,7 +555,7 @@ function buildConnexionsHTML(mod) {
   <div class="conn-section">
     <div class="conn-section-title">8 — Procédures collectives & contentieux (Infogreffe)</div>
     <div style="display:flex;gap:10px;align-items:center;">
-      <div style="flex:1;font-size:0.85rem;color:var(--text-muted);">Actes déposés, nantissements, procédures — alimentés par le SIREN (étape 1).</div>
+      <div style="flex:1;font-size:0.85rem;color:var(--text-muted);">Actes déposés, nantissements, procédures — alimentés automatiquement à partir du SIRET saisi (étape 1).</div>
       <button id="btn-juridique" class="btn btn-primary btn-sm" onclick="fetchJuridique()">Analyser →</button>
     </div>
     <div id="juridique-result" style="display:none;margin-top:12px;"></div>

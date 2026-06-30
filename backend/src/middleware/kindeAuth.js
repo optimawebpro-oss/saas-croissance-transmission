@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = process.env.SESSION_SECRET || 'evoluty-secret';
+const JWT_SECRET = process.env.SESSION_SECRET || 'apogee-secret';
 
 function requireAuth(req, res, next) {
   const header = req.headers.authorization;

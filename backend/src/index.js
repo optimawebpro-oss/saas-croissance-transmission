@@ -16,7 +16,7 @@ const CLIENT_ID         = process.env.KINDE_CLIENT_ID;
 const CLIENT_SECRET     = process.env.KINDE_CLIENT_SECRET;
 const REDIRECT_URI      = process.env.KINDE_REDIRECT_URI || `http://localhost:${PORT}/callback`;
 const FRONTEND_URL      = process.env.FRONTEND_URL || 'http://localhost:5500';
-const JWT_SECRET        = process.env.SESSION_SECRET || 'evoluty-secret';
+const JWT_SECRET        = process.env.SESSION_SECRET || 'apogee-secret';
 
 // ── Sécurité ─────────────────────────────────────────────
 app.use(helmet({ contentSecurityPolicy: false }));
@@ -165,5 +165,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`✦ Evoluty Backend démarré sur le port ${PORT} [${process.env.NODE_ENV || 'development'}]`);
+  console.log(`✦ Apogée Backend démarré sur le port ${PORT} [${process.env.NODE_ENV || 'development'}]`);
 });

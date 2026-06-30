@@ -1,8 +1,8 @@
-﻿// ===== EVOLUTY — Connexions Frontend =====
+﻿// ===== APOGÉE — Connexions Frontend =====
 const API = 'https://saas-croissance-transmission-production.up.railway.app/api';
 
 function authHeaders(extra) {
-  const token = localStorage.getItem('evoluty_auth_token');
+  const token = localStorage.getItem('apogee_auth_token');
   return { ...(token ? { 'Authorization': 'Bearer ' + token } : {}), ...extra };
 }
 

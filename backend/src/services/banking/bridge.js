@@ -23,7 +23,7 @@ async function createAuthUrl(userId) {
   try {
     // Créer ou récupérer l'utilisateur Bridge
     const userRes = await axios.post(`${BASE}/users`, {
-      email: `${userId}@evoluty.internal`,
+      email: `${userId}@apogee.internal`,
       password: generateTempPassword(userId),
     }, { headers: headers() });
 
@@ -31,7 +31,7 @@ async function createAuthUrl(userId) {
 
     // Créer la session de connexion bancaire
     const sessionRes = await axios.post(`${BASE}/connect/sessions/banks`, {
-      prefill_email: `${userId}@evoluty.internal`,
+      prefill_email: `${userId}@apogee.internal`,
       country: 'fr',
     }, { headers: { ...headers(), 'User-Uuid': bridgeUserId } });
 

@@ -1,7 +1,7 @@
-// ===== EVOLUTY — Auth & Abonnement (Kinde + Stripe JWT) =====
+// ===== APOGÉE — Auth & Abonnement (Kinde + Stripe JWT) =====
 (function () {
-  var BACKEND = (window.EVOLUTY_BACKEND_URL || 'http://localhost:3001');
-  var TOKEN_KEY = 'evoluty_auth_token';
+  var BACKEND = (window.APOGÉE_BACKEND_URL || 'http://localhost:3001');
+  var TOKEN_KEY = 'apogee_auth_token';
 
   var currentUser = null;
   var currentPlan = null;
@@ -140,7 +140,7 @@
 
   function capitalise(str) { return str ? str.charAt(0).toUpperCase() + str.slice(1) : ''; }
 
-  window.EvolutyAuth = {
+  window.ApogeeAuth = {
     subscribeToPlan: subscribeToPlan,
     getUser: function () { return currentUser; },
     getPlan: function () { return currentPlan; },

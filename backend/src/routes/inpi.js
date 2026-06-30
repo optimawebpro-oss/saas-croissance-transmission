@@ -10,7 +10,7 @@ function inpiGet(path) {
       hostname: 'data.inpi.fr',
       path,
       method: 'GET',
-      headers: { Accept: 'application/json', 'User-Agent': 'Evoluty/1.0' },
+      headers: { Accept: 'application/json', 'User-Agent': 'Apogee/1.0' },
     }, res => {
       let raw = '';
       res.on('data', c => raw += c);

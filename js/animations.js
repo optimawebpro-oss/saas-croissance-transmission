@@ -1,4 +1,4 @@
-// ===== EVOLUTY — Animations page d'accueil =====
+// ===== APOGÉE — Animations page d'accueil =====
 (function () {
   var BG = '#08080f';
   var dpr = window.devicePixelRatio || 1;
@@ -106,7 +106,7 @@
         cx.textAlign = 'center';
         cx.font = 'bold ' + Math.round(30 * dpr) + 'px Inter,sans-serif';
         cx.fillStyle = 'rgba(240,240,248,' + to.toFixed(3) + ')';
-        cx.fillText('Evoluty', mx, my + 20 * dpr);
+        cx.fillText('Apogée', mx, my + 20 * dpr);
         cx.font = Math.round(13 * dpr) + 'px Inter,sans-serif';
         cx.fillStyle = 'rgba(78,137,232,' + to.toFixed(3) + ')';
         cx.fillText("Croissance & Cession d'entreprise par l'IA", mx, my + 48 * dpr);

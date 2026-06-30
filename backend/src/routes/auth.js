@@ -3,7 +3,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const { getUserPlan } = require('../services/subscriptionDb');
 
-const JWT_SECRET = process.env.SESSION_SECRET || 'evoluty-secret';
+const JWT_SECRET = process.env.SESSION_SECRET || 'apogee-secret';
 
 // GET /api/auth/me — vérifie le token JWT envoyé en Authorization header
 router.get('/me', (req, res) => {

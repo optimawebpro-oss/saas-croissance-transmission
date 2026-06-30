@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Stripe = require('stripe');
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = process.env.SESSION_SECRET || 'evoluty-secret';
+const JWT_SECRET = process.env.SESSION_SECRET || 'apogee-secret';
 const { setUserPlan, findUserByStripeSubscription, findUserByStripeCustomer } = require('../services/subscriptionDb');
 const { logger } = require('../middleware/audit');
 

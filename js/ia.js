@@ -1,17 +1,17 @@
-// ===== MISTRAL AI — EVOLUTY =====
-const MISTRAL_BACKEND_URL = (window.EVOLUTY_BACKEND_URL || 'http://localhost:3001') + '/api/mistral/chat';
+// ===== MISTRAL AI — APOGÉE =====
+const MISTRAL_BACKEND_URL = (window.APOGÉE_BACKEND_URL || 'http://localhost:3001') + '/api/mistral/chat';
 const MISTRAL_MODEL = 'mistral-large-latest';
 
 // ── Prompts de base (hors plan) ──────────────────────────────────────────────
 const BASE_PROMPTS = {
-  c: `Tu es un conseiller stratégique d'élite spécialisé en croissance d'entreprise, intégré à la plateforme Evoluty.
+  c: `Tu es un conseiller stratégique d'élite spécialisé en croissance d'entreprise, intégré à la plateforme Apogée.
 Tu réalises des diagnostics complets et génères des plans d'action ultra-détaillés pour aider les dirigeants à accélérer, structurer et pérenniser leur développement.
 Ton analyse couvre : finance & rentabilité, stratégie commerciale, organisation & RH, opérations & processus, positionnement marché, gouvernance.
 Tu fournis des conseils concrets, chiffrés et actionnables. Tu poses des questions précises pour affiner ton diagnostic.
 Tu attribues un score de croissance sur 100 après chaque diagnostic complet.
 Réponds toujours en français, de façon structurée, professionnelle et bienveillante.`,
 
-  t: `Tu es un conseiller expert en cession d'entreprise, intégré à la plateforme Evoluty.
+  t: `Tu es un conseiller expert en cession d'entreprise, intégré à la plateforme Apogée.
 Tu réalises des audits de cédabilité complets et génères des plans de préparation à la vente pour maximiser la valeur de cession des entreprises.
 Ton analyse couvre : valorisation financière, récurrence du CA, autonomie de l'entreprise (dépendance au dirigeant), clarté juridique, attractivité du dossier, marché et acquéreurs potentiels.
 Tu identifies les points bloquants pour une cession réussie et proposes des actions concrètes pour les résoudre.
@@ -21,8 +21,8 @@ Réponds toujours en français, de façon structurée, professionnelle et rassur
 
 // ── Prompt génération de plan mensuel ────────────────────────────────────────
 const PLAN_PROMPTS = {
-  c: (mois) => `Tu es un conseiller stratégique d'élite spécialisé en croissance d'entreprise, intégré à la plateforme Evoluty.
-L'entreprise du dirigeant vient de te demander son PLAN MENSUEL EVOLUTY pour ${mois}.
+  c: (mois) => `Tu es un conseiller stratégique d'élite spécialisé en croissance d'entreprise, intégré à la plateforme Apogée.
+L'entreprise du dirigeant vient de te demander son PLAN MENSUEL APOGÉE pour ${mois}.
 
 Tu dois générer un plan mensuel ultra-détaillé, structuré EXACTEMENT comme suit (respecte ces titres de section à la lettre) :
 
@@ -59,7 +59,7 @@ Tu dois générer un plan mensuel ultra-détaillé, structuré EXACTEMENT comme 
 
 Sois précis, concret et actif. Ce plan sera exporté en PDF et utilisé comme référence tout le mois. Réponds uniquement en français.`,
 
-  t: (mois) => `Tu es un conseiller expert en cession d'entreprise, intégré à la plateforme Evoluty.
+  t: (mois) => `Tu es un conseiller expert en cession d'entreprise, intégré à la plateforme Apogée.
 L'entreprise du dirigeant vient de te demander son PLAN MENSUEL DE PRÉPARATION À LA CESSION pour ${mois}.
 
 Tu dois générer un plan mensuel ultra-détaillé, structuré EXACTEMENT comme suit (respecte ces titres de section à la lettre) :
@@ -100,9 +100,9 @@ Sois précis, concret et actif. Ce plan sera exporté en PDF et utilisé comme r
 
 // ── Prompt accompagnement (plan existant) ────────────────────────────────────
 const SUPPORT_PROMPTS = {
-  c: (mois, planText) => `Tu es un conseiller stratégique d'élite spécialisé en croissance d'entreprise, intégré à la plateforme Evoluty.
+  c: (mois, planText) => `Tu es un conseiller stratégique d'élite spécialisé en croissance d'entreprise, intégré à la plateforme Apogée.
 
-Le dirigeant a déjà son PLAN MENSUEL EVOLUTY pour ${mois}. Voici ce plan :
+Le dirigeant a déjà son PLAN MENSUEL APOGÉE pour ${mois}. Voici ce plan :
 
 ---
 ${planText}
@@ -122,7 +122,7 @@ Si le dirigeant te demande à nouveau le plan, rappelle-lui qu'il est déjà gé
 
 Réponds toujours en français, de façon concise, concrète et motivante.`,
 
-  t: (mois, planText) => `Tu es un conseiller expert en cession d'entreprise, intégré à la plateforme Evoluty.
+  t: (mois, planText) => `Tu es un conseiller expert en cession d'entreprise, intégré à la plateforme Apogée.
 
 Le dirigeant a déjà son PLAN MENSUEL DE PRÉPARATION À LA CESSION pour ${mois}. Voici ce plan :
 
@@ -148,7 +148,7 @@ Réponds toujours en français, de façon concise, concrète et rassurante.`
 // ── Gestion du plan mensuel en localStorage ───────────────────────────────────
 function getPlanKey(mod) {
   const d = new Date();
-  return `evoluty_plan_${mod}_${d.getFullYear()}_${String(d.getMonth()).padStart(2, '0')}`;
+  return `apogee_plan_${mod}_${d.getFullYear()}_${String(d.getMonth()).padStart(2, '0')}`;
 }
 
 function getMonthLabel() {
@@ -169,7 +169,7 @@ function isPlanRequest(text) {
   const lower = text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
   const triggers = ['plan du mois', 'plan mensuel', 'mon plan', 'programme du mois', 'objectifs ce mois',
     'objectifs du mois', 'demarre le plan', 'genere le plan', 'cree le plan', 'faire le plan',
-    'plan de ce mois', 'nouveau plan', 'commencer le mois', 'commencer ce mois', 'plan evoluty',
+    'plan de ce mois', 'nouveau plan', 'commencer le mois', 'commencer ce mois', 'plan apogee',
     'plan pour ce mois', 'plan du mois', 'planifie', 'planifier ce mois'];
   return triggers.some(t => lower.includes(t));
 }
@@ -240,7 +240,7 @@ async function sendMessage(mod) {
   appendTyping(mod, typingId);
 
   try {
-    const token = localStorage.getItem('evoluty_auth_token');
+    const token = localStorage.getItem('apogee_auth_token');
     const res = await fetch(MISTRAL_BACKEND_URL, {
       method: 'POST',
       headers: {
@@ -352,7 +352,7 @@ function showPlanSuccess(mod, planText, mois) {
           <button class="btn btn-primary btn-sm" onclick="downloadPlanPDF('${mod}')">Télécharger le plan PDF →</button>
         </div>
       </div>
-      <div class="msg-time">Evoluty IA · maintenant</div>
+      <div class="msg-time">Apogée IA · maintenant</div>
     </div>`;
   chat.appendChild(div);
   scrollChat(mod);
@@ -404,7 +404,7 @@ function generatePDF(mod, planText, mois) {
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(28);
   doc.setTextColor(...WHITE);
-  doc.text('Evoluty', ML, 28);
+  doc.text('Apogée', ML, 28);
   doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(180, 200, 240);
@@ -435,7 +435,7 @@ function generatePDF(mod, planText, mois) {
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(8.5);
   doc.setTextColor(...MUTED);
-  doc.text(`Généré par Evoluty IA (Mistral Large) · ${new Date().toLocaleDateString('fr-FR')}`, ML, 105);
+  doc.text(`Généré par Apogée IA (Mistral Large) · ${new Date().toLocaleDateString('fr-FR')}`, ML, 105);
   doc.text('Ce document est confidentiel et à usage exclusif du dirigeant.', ML, 111);
 
   // Ligne séparatrice
@@ -560,9 +560,9 @@ function generatePDF(mod, planText, mois) {
   doc.setFont('helvetica', 'italic');
   doc.setFontSize(8);
   doc.setTextColor(...MUTED);
-  doc.text('Ce plan a été généré par Evoluty IA (Mistral Large). Il est basé sur les informations fournies par le dirigeant', ML, y);
+  doc.text('Ce plan a été généré par Apogée IA (Mistral Large). Il est basé sur les informations fournies par le dirigeant', ML, y);
   y += 5;
-  doc.text('et doit être adapté à l\'évolution réelle de l\'entreprise. Evoluty · AEL Corporation · RGPD conforme.', ML, y);
+  doc.text('et doit être adapté à l\'évolution réelle de l\'entreprise. Apogée · AEL Corporation · RGPD conforme.', ML, y);
 
   // ── Numérotation des pages ─────────────────────────────────────────────────
   const totalPages = doc.internal.getNumberOfPages();
@@ -571,12 +571,12 @@ function generatePDF(mod, planText, mois) {
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(7.5);
     doc.setTextColor(...MUTED);
-    doc.text(`Evoluty — ${modLabel} — ${mois}`, ML, 291);
+    doc.text(`Apogée — ${modLabel} — ${mois}`, ML, 291);
     doc.text(`${p} / ${totalPages}`, W - MR, 291, { align: 'right' });
   }
 
   // ── Téléchargement ────────────────────────────────────────────────────────
-  const filename = `Evoluty_Plan_${mod === 'c' ? 'Croissance' : 'Cession'}_${mois.replace(' ', '_')}.pdf`;
+  const filename = `Apogée_Plan_${mod === 'c' ? 'Croissance' : 'Cession'}_${mois.replace(' ', '_')}.pdf`;
   doc.save(filename);
 }
 
@@ -594,7 +594,7 @@ function appendMsg(mod, role, text, id) {
     <div class="msg-avatar">${avatar}</div>
     <div>
       <div class="msg-bubble" ${id ? `id="${id}"` : ''}>${role === 'ai' ? formatAIText(text) : escHtml(text)}</div>
-      <div class="msg-time">${role === 'ai' ? 'Evoluty IA' : 'Vous'} · ${time}</div>
+      <div class="msg-time">${role === 'ai' ? 'Apogée IA' : 'Vous'} · ${time}</div>
     </div>`;
   chat.appendChild(div);
   scrollChat(mod);

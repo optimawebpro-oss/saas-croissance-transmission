@@ -1,7 +1,7 @@
 {
-  "name": "evoluty-backend",
+  "name": "apogee-backend",
   "version": "1.0.0",
-  "description": "Backend Evoluty — Connexions, FEC, Open Banking, RGPD",
+  "description": "Backend Apogée — Connexions, FEC, Open Banking, RGPD",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",

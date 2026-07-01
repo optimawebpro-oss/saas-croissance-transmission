@@ -26,4 +26,10 @@ function incrementFreeDiagnostics(userId) {
   writeDb(db);
 }
 
-module.exports = { getFreeDiagnosticsUsed, incrementFreeDiagnostics };
+function deleteUser(userId) {
+  const db = readDb();
+  delete db[userId];
+  writeDb(db);
+}
+
+module.exports = { getFreeDiagnosticsUsed, incrementFreeDiagnostics, deleteUser };

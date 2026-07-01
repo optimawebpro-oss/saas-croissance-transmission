@@ -1,0 +1,23 @@
+# Environnement
+.env
+.env.local
+.env.*.local
+
+# Dépendances
+node_modules/
+
+# Logs
+logs/
+*.log
+
+# Données runtime (ne pas versionner)
+backend/data/subscriptions.json
+backend/data/usage.json
+backend/data/profiles.json
+backend/data/deletion_registry.json
+backend/data/export_tokens.json
+backend/data/documents/
+
+# OS
+.DS_Store
+Thumbs.db

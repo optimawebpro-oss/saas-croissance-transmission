@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = process.env.SESSION_SECRET || 'apogee-secret';
+const JWT_SECRET = process.env.SESSION_SECRET;
+if (!JWT_SECRET) throw new Error('SESSION_SECRET manquant dans les variables d\'environnement.');
 
 function requireAuth(req, res, next) {
   const header = req.headers.authorization;

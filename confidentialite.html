@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Politique de confidentialité — Apogée</title>
+  <meta name="description" content="Politique de confidentialité et de protection des données personnelles d'Apogée, conforme au RGPD." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/png" href="img/ael-logo.png" />
+  <style>
+    .legal-page {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 60px 24px 100px;
+      color: var(--text-primary, #f0f0f8);
+    }
+    .legal-badge {
+      display: inline-block;
+      background: rgba(78,137,232,0.12);
+      border: 1px solid rgba(78,137,232,0.3);
+      color: #4e89e8;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+    .legal-page h1 {
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 700;
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+    .legal-meta {
+      font-size: 0.85rem;
+      color: var(--text-muted, #7a7a9a);
+      margin-bottom: 48px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .legal-toc {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin-bottom: 48px;
+    }
+    .legal-toc h2 {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted, #7a7a9a);
+      margin: 0 0 14px;
+    }
+    .legal-toc ol {
+      margin: 0;
+      padding-left: 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 20px;
+    }
+    .legal-toc li a {
+      color: #4e89e8;
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: opacity .2s;
+    }
+    .legal-toc li a:hover { opacity: 0.75; }
+    .legal-section {
+      margin-bottom: 44px;
+    }
+    .legal-section h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .legal-section h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin: 20px 0 8px;
+      color: #c8c8e8;
+    }
+    .legal-section p, .legal-section li {
+      font-size: 0.9rem;
+      line-height: 1.75;
+      color: #b8b8d0;
+      margin-bottom: 10px;
+    }
+    .legal-section ul, .legal-section ol {
+      padding-left: 22px;
+      margin-bottom: 12px;
+    }
+    .legal-section li { margin-bottom: 4px; }
+    .legal-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      margin: 16px 0;
+    }
+    .legal-table th {
+      background: rgba(255,255,255,0.05);
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 600;
+      color: #f0f0f8;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .legal-table td {
+      padding: 10px 14px;
+      color: #b8b8d0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      vertical-align: top;
+    }
+    .legal-table tr:last-child td { border-bottom: none; }
+    .legal-highlight {
+      background: rgba(78,137,232,0.07);
+      border-left: 3px solid #4e89e8;
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 0.88rem;
+      color: #c0cce8;
+      line-height: 1.65;
+    }
+    .legal-contact-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-top: 16px;
+    }
+    .legal-contact-card p { margin: 0; font-size: 0.88rem; line-height: 1.7; }
+    .legal-contact-card a { color: #4e89e8; }
+    @media (max-width: 640px) {
+      .legal-toc ol { grid-template-columns: 1fr; }
+      .legal-table { font-size: 0.78rem; }
+      .legal-table th, .legal-table td { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="container">
+      <ul class="nav-links">
+        <li><a href="index.html" class="page-link">Accueil</a></li>
+        <li><a href="mon-espace.html" class="page-link">Mon Espace</a></li>
+        <li><a href="tarifs.html" class="page-link">Tarifs</a></li>
+        <li><a href="contact.html" class="page-link">Contact</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="#" class="btn-nav">Se connecter</a>
+        <a href="#" class="btn-nav btn-nav-primary">S'inscrire</a>
+      </div>
+      <a href="index.html" class="nav-logo"><span class="nav-logo-wordmark">A.E.L <span>Corporation</span></span></a>
+      <button class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <main>
+    <div class="legal-page">
+
+      <div class="legal-badge">RGPD · Protection des données</div>
+      <h1>Politique de confidentialité</h1>
+      <p class="legal-meta">
+        A.E.L Corporation — Dernière mise à jour : juillet 2025 · Version 1.2<br/>
+        Cette politique s'applique à la plateforme Apogée et à tous ses services associés.
+      </p>
+
+      <!-- TABLE DES MATIÈRES -->
+      <div class="legal-toc">
+        <h2>Sommaire</h2>
+        <ol>
+          <li><a href="#s1">Responsable du traitement</a></li>
+          <li><a href="#s2">Données collectées</a></li>
+          <li><a href="#s3">Finalités et bases légales</a></li>
+          <li><a href="#s4">Durées de conservation</a></li>
+          <li><a href="#s5">Destinataires et sous-traitants</a></li>
+          <li><a href="#s6">Transferts hors UE</a></li>
+          <li><a href="#s7">Sécurité</a></li>
+          <li><a href="#s8">Cookies</a></li>
+          <li><a href="#s9">Vos droits</a></li>
+          <li><a href="#s10">Contact & réclamations</a></li>
+        </ol>
+      </div>
+
+      <!-- 1 -->
+      <div class="legal-section" id="s1">
+        <h2>1. Responsable du traitement</h2>
+        <p>Le responsable du traitement de vos données personnelles est :</p>
+        <div class="legal-contact-card">
+          <p>
+            <strong>A.E.L Corporation</strong><br/>
+            Plateforme Apogée — Logiciel SaaS de conseil stratégique par l'IA<br/>
+            Email : <a href="mailto:a.e.l.corporation@hotmail.com">a.e.l.corporation@hotmail.com</a><br/>
+            Téléphone : <a href="tel:+33621642329">06 21 64 23 29</a>
+          </p>
+        </div>
+        <p style="margin-top:14px;">Pour toute question relative à la protection de vos données, vous pouvez nous contacter à l'adresse ci-dessus en précisant l'objet « RGPD ».</p>
+      </div>
+
+      <!-- 2 -->
+      <div class="legal-section" id="s2">
+        <h2>2. Données collectées</h2>
+        <p>Selon votre utilisation de la plateforme, nous collectons les catégories de données suivantes :</p>
+
+        <h3>2.1 Données d'identification et de compte</h3>
+        <ul>
+          <li>Nom, prénom</li>
+          <li>Adresse email</li>
+          <li>Numéro de téléphone (facultatif)</li>
+          <li>Nom d'entreprise et poste occupé</li>
+          <li>Identifiant unique de compte (généré automatiquement)</li>
+        </ul>
+
+        <h3>2.2 Données financières et comptables</h3>
+        <ul>
+          <li>Fichiers FEC (Fichier des Écritures Comptables) uploadés pour analyse</li>
+          <li>Données de facturation (plan souscrit, historique d'abonnement) — <em>les coordonnées bancaires sont gérées exclusivement par Stripe et ne sont jamais accessibles par Apogée</em></li>
+          <li>Données bancaires agrégées via Open Banking (soldes, transactions — avec votre consentement explicite)</li>
+        </ul>
+
+        <h3>2.3 Données d'utilisation de l'IA</h3>
+        <ul>
+          <li>Prompts et questions posées à l'assistant IA</li>
+          <li>Réponses générées lors des diagnostics</li>
+          <li>Historique des diagnostics Croissance et Cession</li>
+          <li>Réponses aux questionnaires (dirigeant, process, rémunérations, SIRH)</li>
+        </ul>
+
+        <h3>2.4 Données de connexion tiers (optionnelles)</h3>
+        <ul>
+          <li>Données issues de votre CRM (HubSpot, Pipedrive) si connecté</li>
+          <li>Données SIRH (Lucca, PayFit) si connecté</li>
+          <li>Données INPI / Infogreffe (informations publiques de votre entreprise)</li>
+        </ul>
+
+        <h3>2.5 Données techniques</h3>
+        <ul>
+          <li>Adresse IP</li>
+          <li>Type de navigateur et système d'exploitation (User-Agent)</li>
+          <li>Horodatages de connexion et d'accès</li>
+          <li>Journaux d'audit des actions sur la plateforme</li>
+        </ul>
+      </div>
+
+      <!-- 3 -->
+      <div class="legal-section" id="s3">
+        <h2>3. Finalités et bases légales</h2>
+        <table class="legal-table">
+          <thead>
+            <tr>
+              <th>Finalité</th>
+              <th>Base légale (RGPD)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Création et gestion de votre compte</td>
+              <td>Exécution du contrat (art. 6.1.b)</td>
+            </tr>
+            <tr>
+              <td>Fourniture du diagnostic IA et du plan stratégique</td>
+              <td>Exécution du contrat (art. 6.1.b)</td>
+            </tr>
+            <tr>
+              <td>Traitement des paiements et gestion de l'abonnement</td>
+              <td>Exécution du contrat (art. 6.1.b)</td>
+            </tr>
+            <tr>
+              <td>Analyse des données FEC et financières</td>
+              <td>Exécution du contrat (art. 6.1.b)</td>
+            </tr>
+            <tr>
+              <td>Connexion aux services tiers (CRM, SIRH, Open Banking)</td>
+              <td>Consentement explicite (art. 6.1.a)</td>
+            </tr>
+            <tr>
+              <td>Sécurité de la plateforme et prévention des fraudes</td>
+              <td>Intérêt légitime (art. 6.1.f)</td>
+            </tr>
+            <tr>
+              <td>Journaux d'audit et traçabilité (conformité RGPD art. 32)</td>
+              <td>Obligation légale (art. 6.1.c)</td>
+            </tr>
+            <tr>
+              <td>Conservation des factures</td>
+              <td>Obligation légale — L123-22 Code de commerce (art. 6.1.c)</td>
+            </tr>
+            <tr>
+              <td>Réponse à vos demandes de contact et support</td>
+              <td>Intérêt légitime (art. 6.1.f)</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="legal-highlight">
+          Apogée ne réalise <strong>aucun profilage automatisé à des fins commerciales</strong>, ne revend ni ne partage vos données stratégiques à des tiers à des fins publicitaires.
+        </div>
+      </div>
+
+      <!-- 4 -->
+      <div class="legal-section" id="s4">
+        <h2>4. Durées de conservation</h2>
+        <table class="legal-table">
+          <thead>
+            <tr>
+              <th>Catégorie de données</th>
+              <th>Durée de conservation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Données de compte actif (profil, abonnement)</td>
+              <td>Durée de la relation contractuelle</td>
+            </tr>
+            <tr>
+              <td>Documents et fichiers transmis (FEC, etc.)</td>
+              <td>30 jours après la fin de la mission</td>
+            </tr>
+            <tr>
+              <td>Historique des prompts et réponses IA</td>
+              <td>30 jours après la fin de la mission</td>
+            </tr>
+            <tr>
+              <td>Données de prospects</td>
+              <td>3 ans après le dernier contact</td>
+            </tr>
+            <tr>
+              <td>Données des comptes clôturés</td>
+              <td>Suppression complète 30 jours après clôture</td>
+            </tr>
+            <tr>
+              <td>Journaux de connexion et d'audit</td>
+              <td>12 mois</td>
+            </tr>
+            <tr>
+              <td>Factures et justificatifs comptables</td>
+              <td><strong>10 ans</strong> (obligation légale — L123-22 Code de commerce) — anonymisées après clôture</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>La suppression des données est automatisée par un système de purge qui s'exécute quotidiennement et vérifie le respect de ces durées.</p>
+      </div>
+
+      <!-- 5 -->
+      <div class="legal-section" id="s5">
+        <h2>5. Destinataires et sous-traitants</h2>
+        <p>Vos données sont susceptibles d'être transmises aux sous-traitants suivants, dans le strict cadre de la fourniture du service :</p>
+        <table class="legal-table">
+          <thead>
+            <tr>
+              <th>Sous-traitant</th>
+              <th>Rôle</th>
+              <th>Localisation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Kinde</strong></td>
+              <td>Authentification et gestion des comptes utilisateurs</td>
+              <td>Australie (données UE sur serveurs EU)</td>
+            </tr>
+            <tr>
+              <td><strong>Stripe</strong></td>
+              <td>Traitement des paiements et gestion des abonnements</td>
+              <td>États-Unis (clauses contractuelles types)</td>
+            </tr>
+            <tr>
+              <td><strong>Mistral AI</strong></td>
+              <td>Génération des diagnostics et plans stratégiques par IA</td>
+              <td>France (UE)</td>
+            </tr>
+            <tr>
+              <td><strong>Railway</strong></td>
+              <td>Hébergement du backend applicatif</td>
+              <td>États-Unis (clauses contractuelles types)</td>
+            </tr>
+            <tr>
+              <td><strong>Scaleway / OVH</strong></td>
+              <td>Hébergement des données (selon configuration)</td>
+              <td>France (UE)</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>Aucune donnée n'est vendue, louée ou cédée à des tiers à des fins commerciales ou publicitaires.</p>
+      </div>
+
+      <!-- 6 -->
+      <div class="legal-section" id="s6">
+        <h2>6. Transferts hors Union européenne</h2>
+        <p>Certains de nos sous-traitants (Stripe, Railway) sont établis hors de l'Union européenne. Ces transferts sont encadrés par :</p>
+        <ul>
+          <li>Des <strong>clauses contractuelles types</strong> approuvées par la Commission européenne (décision d'exécution 2021/914)</li>
+          <li>Des <strong>mesures techniques complémentaires</strong> (chiffrement des données en transit et au repos)</li>
+        </ul>
+        <p>Vous pouvez obtenir une copie des garanties mises en place en nous contactant à l'adresse indiquée à la section 10.</p>
+      </div>
+
+      <!-- 7 -->
+      <div class="legal-section" id="s7">
+        <h2>7. Sécurité des données</h2>
+        <p>Apogée met en œuvre les mesures techniques et organisationnelles suivantes, conformément à l'article 32 du RGPD :</p>
+        <ul>
+          <li><strong>Chiffrement en transit</strong> : toutes les communications utilisent HTTPS/TLS</li>
+          <li><strong>Chiffrement au repos</strong> : les données sensibles (identifiants Stripe, tokens) sont chiffrées en base</li>
+          <li><strong>Authentification sécurisée</strong> : gestion des accès via Kinde (OAuth 2.0 / OpenID Connect)</li>
+          <li><strong>Journaux d'audit</strong> : chaque accès et modification de données personnelles est enregistré avec horodatage, identifiant utilisateur et nature de l'action</li>
+          <li><strong>Limitation des accès</strong> : principe du moindre privilège — chaque composant n'accède qu'aux données strictement nécessaires</li>
+          <li><strong>Purge automatique</strong> : suppression automatique des données selon les durées de conservation</li>
+          <li><strong>Protection des APIs</strong> : rate limiting, validation des entrées, protection contre les injections</li>
+        </ul>
+        <div class="legal-highlight">
+          En cas de violation de données susceptible d'engendrer un risque pour vos droits et libertés, vous serez notifié dans les <strong>72 heures</strong> suivant la découverte de l'incident, conformément à l'article 34 du RGPD.
+        </div>
+      </div>
+
+      <!-- 8 -->
+      <div class="legal-section" id="s8">
+        <h2>8. Cookies et traceurs</h2>
+        <p>Apogée utilise un nombre minimal de technologies de stockage local :</p>
+        <table class="legal-table">
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Type</th>
+              <th>Finalité</th>
+              <th>Durée</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>apogee_auth_token</code></td>
+              <td>localStorage</td>
+              <td>Maintien de votre session authentifiée (JWT)</td>
+              <td>7 jours</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>Apogée <strong>n'utilise pas de cookies publicitaires, de pistage ou d'analyse comportementale</strong>. Aucun cookie tiers à des fins marketing n'est déposé sur votre navigateur.</p>
+      </div>
+
+      <!-- 9 -->
+      <div class="legal-section" id="s9">
+        <h2>9. Vos droits</h2>
+        <p>Conformément au RGPD (articles 15 à 22), vous disposez des droits suivants sur vos données personnelles :</p>
+        <table class="legal-table">
+          <thead>
+            <tr>
+              <th>Droit</th>
+              <th>Description</th>
+              <th>Comment l'exercer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Accès</strong> (art. 15)</td>
+              <td>Obtenir une copie de toutes vos données personnelles</td>
+              <td>Mon Espace → Mon Compte → Exporter mes données</td>
+            </tr>
+            <tr>
+              <td><strong>Rectification</strong> (art. 16)</td>
+              <td>Corriger vos données inexactes ou incomplètes</td>
+              <td>Mon Espace → Mon Compte → Mes informations</td>
+            </tr>
+            <tr>
+              <td><strong>Effacement</strong> (art. 17)</td>
+              <td>Demander la suppression de votre compte et de vos données</td>
+              <td>Mon Espace → Mon Compte → Supprimer mon compte</td>
+            </tr>
+            <tr>
+              <td><strong>Limitation</strong> (art. 18)</td>
+              <td>Restreindre temporairement l'utilisation de vos données</td>
+              <td>Contacter <a href="mailto:a.e.l.corporation@hotmail.com">a.e.l.corporation@hotmail.com</a></td>
+            </tr>
+            <tr>
+              <td><strong>Portabilité</strong> (art. 20)</td>
+              <td>Recevoir vos données dans un format structuré (JSON)</td>
+              <td>Mon Espace → Mon Compte → Exporter mes données</td>
+            </tr>
+            <tr>
+              <td><strong>Opposition</strong> (art. 21)</td>
+              <td>S'opposer à un traitement fondé sur l'intérêt légitime</td>
+              <td>Contacter <a href="mailto:a.e.l.corporation@hotmail.com">a.e.l.corporation@hotmail.com</a></td>
+            </tr>
+            <tr>
+              <td><strong>Retrait du consentement</strong></td>
+              <td>Révoquer un consentement donné (ex : Open Banking, CRM)</td>
+              <td>Mon Espace → Connexions → Déconnecter le service</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>Nous nous engageons à répondre à toute demande d'exercice de droits dans un délai maximum d'<strong>un mois</strong> à compter de la réception (art. 12 RGPD). Ce délai peut être prolongé de deux mois supplémentaires en cas de complexité ou de nombre important de demandes, avec information préalable.</p>
+        <div class="legal-highlight">
+          Les droits d'accès, de rectification et d'effacement sont directement accessibles depuis votre espace personnel, sans avoir à nous contacter.
+        </div>
+      </div>
+
+      <!-- 10 -->
+      <div class="legal-section" id="s10">
+        <h2>10. Contact et réclamations</h2>
+        <p>Pour toute question relative à la présente politique ou à l'exercice de vos droits :</p>
+        <div class="legal-contact-card">
+          <p>
+            <strong>A.E.L Corporation — Délégué à la protection des données</strong><br/>
+            Email : <a href="mailto:a.e.l.corporation@hotmail.com">a.e.l.corporation@hotmail.com</a><br/>
+            Objet : <em>« RGPD — [Votre demande] »</em><br/>
+            Téléphone : <a href="tel:+33621642329">06 21 64 23 29</a>
+          </p>
+        </div>
+        <h3>Droit de réclamation auprès de la CNIL</h3>
+        <p>Si vous estimez que vos droits ne sont pas respectés, vous avez le droit d'introduire une réclamation auprès de l'autorité de contrôle compétente :</p>
+        <div class="legal-contact-card">
+          <p>
+            <strong>Commission Nationale de l'Informatique et des Libertés (CNIL)</strong><br/>
+            3 Place de Fontenoy — TSA 80715 — 75334 Paris Cedex 07<br/>
+            <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer">www.cnil.fr</a> · Téléphone : 01 53 73 22 22
+          </p>
+        </div>
+        <p style="margin-top:28px;font-size:0.82rem;color:var(--text-muted,#7a7a9a);">
+          La présente politique peut être mise à jour pour refléter les évolutions légales ou les changements de nos pratiques. La date de dernière mise à jour est indiquée en haut de ce document. En cas de modification substantielle, vous serez informé par email ou par une notification sur la plateforme.
+        </p>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col footer-brand">
+          <div class="footer-logo">A.E.L <span>Corporation</span></div>
+          <p>La plateforme stratégique IA pour les dirigeants qui veulent piloter leur croissance ou préparer leur cession.</p>
+          <div style="margin-top:16px;"><span class="badge badge-blue">RGPD</span></div>
+        </div>
+        <div class="footer-col">
+          <h5>Produit</h5>
+          <a href="mon-espace.html">Mon Espace</a>
+          <a href="mon-espace.html">Module Croissance</a>
+          <a href="mon-espace.html">Module Cession</a>
+          <a href="tarifs.html">Tarifs</a>
+        </div>
+        <div class="footer-col">
+          <h5>Entreprise</h5>
+          <a href="index.html">À propos</a>
+          <a href="contact.html">Contact</a>
+          <a href="#">Mentions légales</a>
+          <a href="confidentialite.html" aria-current="page">Politique de confidentialité</a>
+        </div>
+        <div class="footer-col">
+          <h5>Contact</h5>
+          <a href="mailto:a.e.l.corporation@hotmail.com">a.e.l.corporation@hotmail.com</a>
+          <a href="tel:+33621642329">06 21 64 23 29</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2025 A.E.L Corporation — Tous droits réservés</span>
+        <span><a href="#">Mentions légales</a> · <a href="confidentialite.html">RGPD</a> · <a href="#">CGU</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/auth.js?v=2"></script>
+  <script src="js/page-transition.js"></script>
+</body>
+</html>

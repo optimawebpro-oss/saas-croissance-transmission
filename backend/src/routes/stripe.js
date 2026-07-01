@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Stripe = require('stripe');
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = process.env.SESSION_SECRET || 'apogee-secret';
+const JWT_SECRET = process.env.SESSION_SECRET;
+if (!JWT_SECRET) throw new Error('SESSION_SECRET manquant dans les variables d\'environnement.');
 const { setUserPlan, findUserByStripeSubscription, findUserByStripeCustomer } = require('../services/subscriptionDb');
 const { logger } = require('../middleware/audit');
 

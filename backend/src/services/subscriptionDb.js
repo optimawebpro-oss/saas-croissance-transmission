@@ -47,14 +47,19 @@ function getUserPlan(kindeUserId) {
 }
 
 function setUserPlan(kindeUserId, { plan, billing, status, stripeSubscriptionId, stripeCustomerId }) {
-  const db = readDb();
+  const db  = readDb();
+  const prev = db[kindeUserId] || {};
+  const now  = new Date().toISOString();
+
   db[kindeUserId] = {
     plan,
     billing: billing || null,
     status: status || 'active',
     stripeSubscriptionId: stripeSubscriptionId || null,
     stripeCustomerId: stripeCustomerId || null,
-    updatedAt: new Date().toISOString(),
+    updatedAt: now,
+    // Trace la date de clôture pour la purge R3 (30j après cancelledAt)
+    cancelledAt: (status === 'cancelled' && !prev.cancelledAt) ? now : (prev.cancelledAt || null),
   };
   writeDb(db);
   return db[kindeUserId];

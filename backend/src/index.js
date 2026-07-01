@@ -16,7 +16,8 @@ const CLIENT_ID         = process.env.KINDE_CLIENT_ID;
 const CLIENT_SECRET     = process.env.KINDE_CLIENT_SECRET;
 const REDIRECT_URI      = process.env.KINDE_REDIRECT_URI || `http://localhost:${PORT}/callback`;
 const FRONTEND_URL      = process.env.FRONTEND_URL || 'http://localhost:5500';
-const JWT_SECRET        = process.env.SESSION_SECRET || 'apogee-secret';
+const JWT_SECRET        = process.env.SESSION_SECRET;
+if (!JWT_SECRET) throw new Error('SESSION_SECRET manquant dans les variables d\'environnement.');
 
 // ── Sécurité ─────────────────────────────────────────────
 app.use(helmet({ contentSecurityPolicy: false }));
@@ -139,6 +140,7 @@ app.get('/logout', (req, res) => {
 
 // ── API Routes ───────────────────────────────────────────
 app.use('/api/auth',    require('./routes/auth'));
+app.use('/api/profil',  require('./routes/profil'));
 app.use('/api/stripe',  require('./routes/stripe'));
 app.use('/api/mistral', require('./routes/mistral'));
 
@@ -156,6 +158,7 @@ app.use('/api/facturation',  require('./routes/facturation'));
 app.use('/api/inpi',         strictLimit, require('./routes/inpi'));
 app.use('/api/documents',    require('./routes/documents'));
 app.use('/api/questionnaire',require('./routes/questionnaire'));
+app.use('/api/admin',        require('./routes/admin'));
 
 app.get('/health', (req, res) => res.json({ status: 'ok', env: process.env.NODE_ENV }));
 
@@ -166,4 +169,6 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(`✦ Apogée Backend démarré sur le port ${PORT} [${process.env.NODE_ENV || 'development'}]`);
+  // Démarrage du scheduler de purge RGPD
+  require('./services/purgeScheduler').startPurgeScheduler();
 });

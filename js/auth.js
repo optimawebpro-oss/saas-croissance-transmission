@@ -1,6 +1,6 @@
 // ===== APOGÉE — Auth & Abonnement (Kinde + Stripe JWT) =====
 (function () {
-  var BACKEND = (window.APOGÉE_BACKEND_URL || 'http://localhost:3001');
+  var BACKEND = (window.APOGEE_BACKEND_URL || 'http://localhost:3001');
   var TOKEN_KEY = 'apogee_auth_token';
 
   var currentUser = null;

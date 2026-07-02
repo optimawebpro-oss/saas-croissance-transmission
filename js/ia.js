@@ -1,5 +1,5 @@
 // ===== MISTRAL AI — APOGÉE =====
-const MISTRAL_BACKEND_URL = (window.APOGÉE_BACKEND_URL || 'http://localhost:3001') + '/api/mistral/chat';
+const MISTRAL_BACKEND_URL = (window.APOGEE_BACKEND_URL || 'http://localhost:3001') + '/api/mistral/chat';
 const MISTRAL_MODEL = 'mistral-large-latest';
 
 // ── Prompts de base (hors plan) ──────────────────────────────────────────────

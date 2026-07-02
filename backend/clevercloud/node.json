@@ -1,0 +1,12 @@
+{
+  "build": {
+    "folder": "",
+    "cmd": "npm install --production"
+  },
+  "deploy": {
+    "goal": "start"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

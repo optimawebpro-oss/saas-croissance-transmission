@@ -8,7 +8,8 @@ const { buildExport, createExportToken, resolveExportToken } = require('../servi
 const { runPurge }                                   = require('../services/purgeScheduler');
 const fs   = require('fs');
 const path = require('path');
-const PURGE_LOG = path.join(__dirname, '../../logs/purge.log');
+const { LOGS_DIR } = require('../config/storage');
+const PURGE_LOG = path.join(LOGS_DIR, 'purge.log');
 
 // ── GET /api/rgpd/export — Génère un lien de téléchargement temporaire (7j) ──
 router.get('/export', requireAuth, (req, res, next) => {
@@ -73,7 +74,7 @@ router.get('/export/direct', requireAuth, (req, res, next) => {
 router.post('/admin/purge', requireAuth, async (req, res, next) => {
   try {
     const adminKey = process.env.ADMIN_PURGE_KEY;
-    if (adminKey && req.headers['x-admin-key'] !== adminKey) {
+    if (!adminKey || req.headers['x-admin-key'] !== adminKey) {
       return res.status(403).json({ error: 'Clé admin incorrecte.' });
     }
     logger.info({ event: 'PURGE_MANUAL_TRIGGER', userId: req.user.id, timestamp: new Date().toISOString() });
@@ -86,7 +87,7 @@ router.post('/admin/purge', requireAuth, async (req, res, next) => {
 router.get('/admin/purge-logs', requireAuth, (req, res, next) => {
   try {
     const adminKey = process.env.ADMIN_PURGE_KEY;
-    if (adminKey && req.headers['x-admin-key'] !== adminKey) {
+    if (!adminKey || req.headers['x-admin-key'] !== adminKey) {
       return res.status(403).json({ error: 'Clé admin incorrecte.' });
     }
     if (!fs.existsSync(PURGE_LOG)) return res.json({ logs: [] });
@@ -143,7 +144,9 @@ router.delete('/entreprise/:entrepriseId', requireAuth, async (req, res, next) =
 
     logger.info({ event: 'RGPD_ERASURE', entrepriseId, requestedBy: req.user.id, requestedByEmail: req.user.email, timestamp: new Date().toISOString() });
 
-    res.json({ success: true, message: 'Toutes les données associées à votre compte ont été supprimées.', timestamp: new Date().toISOString() });
+    const result = await deleteAccount(entrepriseId, req.user.email);
+
+    res.status(result.success ? 200 : 207).json(result);
   } catch (err) { next(err); }
 });
 

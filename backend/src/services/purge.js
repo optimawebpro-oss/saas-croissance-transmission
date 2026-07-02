@@ -15,8 +15,7 @@ const fs   = require('fs');
 const path = require('path');
 
 // ── Chemins ──────────────────────────────────────────────
-const DATA_DIR        = path.join(__dirname, '../../data');
-const LOGS_DIR        = path.join(__dirname, '../../logs');
+const { DATA_DIR, LOGS_DIR } = require('../config/storage');
 const SUBSCRIPTIONS   = path.join(DATA_DIR, 'subscriptions.json');
 const USAGE_DB        = path.join(DATA_DIR, 'usage.json');
 const DOCUMENTS_DIR   = path.join(DATA_DIR, 'documents');

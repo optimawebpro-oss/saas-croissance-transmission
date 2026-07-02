@@ -6,8 +6,9 @@ const { deleteUser: deleteSubscription } = require('./subscriptionDb');
 const { deleteUser: deleteUsage }        = require('./usageDb');
 const { deleteKindeUser }                = require('./kindeManagement');
 
-const DELETION_REGISTRY = path.join(__dirname, '../../data/deletion_registry.json');
-const DOCUMENTS_DIR     = path.join(__dirname, '../../data/documents');
+const { DATA_DIR } = require('../config/storage');
+const DELETION_REGISTRY = path.join(DATA_DIR, 'deletion_registry.json');
+const DOCUMENTS_DIR     = path.join(DATA_DIR, 'documents');
 
 function deleteUserDocuments(userId) {
   const userDir = path.join(DOCUMENTS_DIR, userId);

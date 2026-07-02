@@ -5,9 +5,10 @@ const path = require('path');
 const { getUserPlan }            = require('./subscriptionDb');
 const { getFreeDiagnosticsUsed } = require('./usageDb');
 
-const DOCUMENTS_DIR     = path.join(__dirname, '../../data/documents');
-const AUDIT_LOG_PATH    = path.join(__dirname, '../../logs/audit.log');
-const EXPORT_TOKENS_PATH = path.join(__dirname, '../../data/export_tokens.json');
+const { DATA_DIR, LOGS_DIR } = require('../config/storage');
+const DOCUMENTS_DIR     = path.join(DATA_DIR, 'documents');
+const AUDIT_LOG_PATH    = path.join(LOGS_DIR, 'audit.log');
+const EXPORT_TOKENS_PATH = path.join(DATA_DIR, 'export_tokens.json');
 
 // ── Tokens temporaires (7 jours) ─────────────────────────
 
@@ -61,12 +62,12 @@ function getUserAuditLogs(userId) {
     try {
       const entry = JSON.parse(line);
       // Inclure les entrées qui concernent cet utilisateur
-      if (entry.userId === userId || entry.requestedBy === userId) {
+      if (entry.userId === userId) {
         logs.push({
           date:      entry.timestamp,
-          evenement: entry.event || entry.message,
-          methode:   entry.method,
-          chemin:    entry.path,
+          evenement: entry.action,
+          ressource: entry.resource,
+          code_http: entry.statusCode,
           ip:        entry.ip,
         });
       }

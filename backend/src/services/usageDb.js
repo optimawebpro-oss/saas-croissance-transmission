@@ -1,7 +1,8 @@
 const fs = require('fs');
 const path = require('path');
+const { DATA_DIR } = require('../config/storage');
 
-const DB_PATH = path.join(__dirname, '../../data/usage.json');
+const DB_PATH = path.join(DATA_DIR, 'usage.json');
 
 function readDb() {
   if (!fs.existsSync(DB_PATH)) return {};

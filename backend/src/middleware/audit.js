@@ -44,13 +44,15 @@ function auditMiddleware(req, res, next) {
 
   // Hook sur res.end pour capturer le statusCode réel
   const originalEnd = res.end.bind(res);
+  let logged = false;
   res.end = function (...args) {
-    originalEnd(...args);
-
-    // Contexte additionnel selon la route
-    const details = buildDetails(req);
-
-    audit.fromRequest(req, res.statusCode, details);
+    const result = originalEnd(...args);
+    if (!logged) {
+      logged = true;
+      const details = buildDetails(req);
+      audit.fromRequest(req, res.statusCode, details);
+    }
+    return result;
   };
 
   next();
@@ -99,13 +101,14 @@ function buildDetails(req) {
 // ── Logger Winston conservé pour rétro-compatibilité ─────
 // (stripe.js et quelques routes l'importent encore directement)
 const { createLogger, format, transports } = require('winston');
+const { LOGS_DIR } = require('../config/storage');
 const path = require('path');
 
 const logger = createLogger({
   level: 'info',
   format: format.combine(format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }), format.json()),
   transports: [
-    new transports.File({ filename: path.join(__dirname, '../../logs/app.log') }),
+    new transports.File({ filename: path.join(LOGS_DIR, 'app.log') }),
     new transports.Console({ format: format.simple() }),
   ],
 });

@@ -1,8 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 const { encrypt, decrypt } = require('./encryption');
+const { DATA_DIR } = require('../config/storage');
 
-const DB_PATH = path.join(__dirname, '../../data/subscriptions.json');
+const DB_PATH = path.join(DATA_DIR, 'subscriptions.json');
 
 // Champs sensibles chiffrés au repos (IDs Stripe permettent d'identifier les clients)
 const SENSITIVE_FIELDS = ['stripeSubscriptionId', 'stripeCustomerId'];

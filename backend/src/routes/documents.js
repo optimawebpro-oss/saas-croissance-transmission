@@ -7,7 +7,8 @@ const fs      = require('fs');
 const { requireAuth } = require('../middleware/kindeAuth');
 const { requirePlan }  = require('../middleware/requirePlan');
 
-const UPLOAD_DIR = path.join(__dirname, '../../data/documents');
+const { DATA_DIR } = require('../config/storage');
+const UPLOAD_DIR = path.join(DATA_DIR, 'documents');
 if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
 const storage = multer.diskStorage({

@@ -25,7 +25,8 @@ const fs   = require('fs');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 
-const AUDIT_FILE = path.join(__dirname, '../../logs/audit.log');
+const { LOGS_DIR } = require('../config/storage');
+const AUDIT_FILE = path.join(LOGS_DIR, 'audit.log');
 
 // ── Actions normalisées ───────────────────────────────────
 const ACTION = {

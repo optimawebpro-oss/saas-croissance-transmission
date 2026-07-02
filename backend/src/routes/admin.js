@@ -19,7 +19,8 @@ const audit = require('../services/auditTrail');
 const fs    = require('fs');
 const path  = require('path');
 
-const AUDIT_FILE = path.join(__dirname, '../../logs/audit.log');
+const { LOGS_DIR } = require('../config/storage');
+const AUDIT_FILE = path.join(LOGS_DIR, 'audit.log');
 
 // ── Middleware admin ──────────────────────────────────────
 function requireAdmin(req, res, next) {

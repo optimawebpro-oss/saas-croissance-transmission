@@ -3,8 +3,9 @@
 const fs   = require('fs');
 const path = require('path');
 
-const PROFILES_PATH    = path.join(__dirname, '../../data/profiles.json');
-const PROFILE_AUDIT    = path.join(__dirname, '../../logs/profile_audit.log');
+const { DATA_DIR, LOGS_DIR } = require('../config/storage');
+const PROFILES_PATH    = path.join(DATA_DIR, 'profiles.json');
+const PROFILE_AUDIT    = path.join(LOGS_DIR, 'profile_audit.log');
 
 // ── CRUD profil ───────────────────────────────────────────
 

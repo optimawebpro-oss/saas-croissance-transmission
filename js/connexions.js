@@ -1,5 +1,5 @@
 ﻿// ===== APOGÉE — Connexions Frontend =====
-const API = 'https://saas-croissance-transmission-production.up.railway.app/api';
+const API = (window.APOGEE_BACKEND_URL || 'http://localhost:3001') + '/api';
 
 function authHeaders(extra) {
   const token = localStorage.getItem('apogee_auth_token');
